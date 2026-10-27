@@ -22,5 +22,5 @@ copyDependencies.enabled = false
 
 // Release zips carry only what Ghidra loads; generators and test suites stay in the repository.
 buildExtension {
-	exclude 'test/**', 'example/**', 'images/**'
+	exclude 'test/**', 'tools/**', 'example/**', 'images/**'
 }

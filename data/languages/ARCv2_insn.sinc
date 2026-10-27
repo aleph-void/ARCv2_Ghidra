@@ -7,6 +7,9 @@
 # against GNU objdump 2.45 output (black box); see GHIDRA-RARE.md.
 
 
+# Calls with a delay slot: in Ghidra, inst_next of an instruction with a delay slot is the address
+# after the delay-slot instruction, which is the return address.
+
 # Auxiliary registers used by the instructions below (number * 4 in AUX_REGS_BASE)
 #   0x02 LP_START, 0x03 LP_END, 0x0a STATUS32, 0x290 JLI_BASE, 0x291 LDI_BASE, 0x292 EI_BASE
 
@@ -70,9 +73,10 @@ bl25: tgt is l_s9lo & l_s10mid & l_s4hi [ tgt = (inst_start & ~3) + ((l_s4hi << 
 :bl^ccx^".d" bl21 is l_major=1 & l_bit16=0 & l_bit17=0 & l_N=1 & ccx & bl21 {
   local t:1 = ccx;
   delayslot(1);
-  if (!t) goto inst_next2;
-  blink = inst_next2;
+  if (!t) goto <skip>;
+  blink = inst_next;
   call bl21;
+<skip>
 }
 :bl bl21 is l_major=1 & l_bit16=0 & l_bit17=0 & l_N=0 & l_cond=0 & bl21 {
   blink = inst_next;
@@ -80,7 +84,7 @@ bl25: tgt is l_s9lo & l_s10mid & l_s4hi [ tgt = (inst_start & ~3) + ((l_s4hi << 
 }
 :bl.d bl21 is l_major=1 & l_bit16=0 & l_bit17=0 & l_N=1 & l_cond=0 & bl21 {
   delayslot(1);
-  blink = inst_next2;
+  blink = inst_next;
   call bl21;
 }
 :bl bl25 is l_major=1 & l_bit16=0 & l_bit17=1 & l_N=0 & bl25 {
@@ -89,7 +93,7 @@ bl25: tgt is l_s9lo & l_s10mid & l_s4hi [ tgt = (inst_start & ~3) + ((l_s4hi << 
 }
 :bl.d bl25 is l_major=1 & l_bit16=0 & l_bit17=1 & l_N=1 & bl25 {
   delayslot(1);
-  blink = inst_next2;
+  blink = inst_next;
   call bl25;
 }
 
@@ -440,15 +444,17 @@ jsrcd: jsrc is (l_fmt=0 | (l_fmt=3 & l_M=0)) & l_c!=62 & jsrc { export jsrc; }
   local t:1 = ccx;
   local tgt:4 = jsrcd;
   delayslot(1);
-  if (!t) goto inst_next2;
+  if (!t) goto <skip>;
   goto [tgt];
+<skip>
 }
 :j^ccx^".d" "[blink]" is l_major=4 & l_sub6=0x21 & l_fmt=3 & l_M=0 & l_c=31 & ccx {
   local t:1 = ccx;
   local tgt:4 = blink;
   delayslot(1);
-  if (!t) goto inst_next2;
+  if (!t) goto <skip>;
   return [tgt];
+<skip>
 }
 
 :jl jsrc is l_major=4 & l_sub6=0x22 & l_fmt!=3 & jsrc {
@@ -472,16 +478,17 @@ jsrcd: jsrc is (l_fmt=0 | (l_fmt=3 & l_M=0)) & l_c!=62 & jsrc { export jsrc; }
 :jl.d jsrcd is l_major=4 & l_sub6=0x23 & l_fmt!=3 & jsrcd {
   local tgt:4 = jsrcd;
   delayslot(1);
-  blink = inst_next2;
+  blink = inst_next;
   call [tgt];
 }
 :jl^ccx^".d" jsrcd is l_major=4 & l_sub6=0x23 & l_fmt=3 & ccx & jsrcd {
   local t:1 = ccx;
   local tgt:4 = jsrcd;
   delayslot(1);
-  if (!t) goto inst_next2;
-  blink = inst_next2;
+  if (!t) goto <skip>;
+  blink = inst_next;
   call [tgt];
+<skip>
 }
 
 # bi [c] / bih [c]: branch to the next instruction + c * 4 (bih: c * 2), a branch table
@@ -766,7 +773,7 @@ s3: v is s_op3hi [ v = s_op3hi - (((s_op3hi + 1) >> 3) << 3); ] { export *[const
 :jl_s.d [s_b_r] is s_major=0x0f & s_op5=0 & s_sub7_5=3 & s_b_r {
   local tgt:4 = s_b_r;
   delayslot(1);
-  blink = inst_next2;
+  blink = inst_next;
   call [tgt];
 }
 :sub_s.ne s_b_r, s_b_r2, s_b_r3 is s_major=0x0f & s_op5=0 & s_sub7_5=6 & s_b_r & s_b_r2 & s_b_r3 {

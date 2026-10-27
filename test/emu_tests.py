@@ -110,6 +110,10 @@ T = [
     ("delay_slot", "mov r3,2f\n b.d 1f\n mov r1,5\n mov r2,6\n1: j_s.d [r3]\n add r4,r1,1\n mov r5,7\n2:",
      {}, {"r1": 5, "r2": 0, "r4": 6, "r5": 0}),
     ("call_return", "bl 1f\n mov r2,1\n b 2f\n1: mov r1,9\n j_s [blink]\n2:", {}, {"r1": 9, "r2": 1}),
+    # calls with a delay slot return after the delay-slot instruction (16- and 32-bit slots)
+    ("delay_calls", "mov r3,3f\n bl.d 1f\n mov_s r1,1\n mov r2,1\n jl.d [r3]\n mov r4,1\n mov r5,1\n"
+     " cmp r0,0\n jleq.d [r3]\n add_s r6,r6,1\n add r7,r7,1\n b 4f\n1: j_s [blink]\n3: j_s [blink]\n4:",
+     {}, {"r1": 1, "r2": 1, "r4": 1, "r5": 1, "r6": 1, "r7": 1}),
     ("jl_limm", "jl 1f\n b 2f\n1: mov r1,3\n j [blink]\n2:", {}, {"r1": 3}),
     ("loop", "mov lp_count,4\n mov r1,0\n lp 1f\n add r1,r1,3\n add r2,r2,1\n1: mov r3,r1",
      {}, {"r1": 12, "r2": 4, "r3": 12, "lp_count": 0}),
