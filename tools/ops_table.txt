@@ -1,0 +1,2103 @@
+4 00 - 0 0 add|A,B,C|hs
+4 00 - 0 1 add|A,B,n|hs
+4 00 - 0 2 add|B,B,n|hs
+4 00 - 0 3r add.eq|B,B,C|hs
+4 00 - 0 3u add.eq|B,B,n|hs
+4 00 - 1 0 add.f|A,B,C|hs
+4 00 - 1 1 add.f|A,B,n|hs
+4 00 - 1 2 add.f|B,B,n|hs
+4 00 - 1 3r add.f.eq|B,B,C|hs
+4 00 - 1 3u add.f.eq|B,B,n|hs
+4 01 - 0 0 adc|A,B,C|hs
+4 01 - 0 1 adc|A,B,n|hs
+4 01 - 0 2 adc|B,B,n|hs
+4 01 - 0 3r adc.eq|B,B,C|hs
+4 01 - 0 3u adc.eq|B,B,n|hs
+4 01 - 1 0 adc.f|A,B,C|hs
+4 01 - 1 1 adc.f|A,B,n|hs
+4 01 - 1 2 adc.f|B,B,n|hs
+4 01 - 1 3r adc.f.eq|B,B,C|hs
+4 01 - 1 3u adc.f.eq|B,B,n|hs
+4 02 - 0 0 sub|A,B,C|hs
+4 02 - 0 1 sub|A,B,n|hs
+4 02 - 0 2 sub|B,B,n|hs
+4 02 - 0 3r sub.eq|B,B,C|hs
+4 02 - 0 3u sub.eq|B,B,n|hs
+4 02 - 1 0 sub.f|A,B,C|hs
+4 02 - 1 1 sub.f|A,B,n|hs
+4 02 - 1 2 sub.f|B,B,n|hs
+4 02 - 1 3r sub.f.eq|B,B,C|hs
+4 02 - 1 3u sub.f.eq|B,B,n|hs
+4 03 - 0 0 sbc|A,B,C|hs
+4 03 - 0 1 sbc|A,B,n|hs
+4 03 - 0 2 sbc|B,B,n|hs
+4 03 - 0 3r sbc.eq|B,B,C|hs
+4 03 - 0 3u sbc.eq|B,B,n|hs
+4 03 - 1 0 sbc.f|A,B,C|hs
+4 03 - 1 1 sbc.f|A,B,n|hs
+4 03 - 1 2 sbc.f|B,B,n|hs
+4 03 - 1 3r sbc.f.eq|B,B,C|hs
+4 03 - 1 3u sbc.f.eq|B,B,n|hs
+4 04 - 0 0 and|A,B,C|hs
+4 04 - 0 1 and|A,B,n|hs
+4 04 - 0 2 and|B,B,n|hs
+4 04 - 0 3r and.eq|B,B,C|hs
+4 04 - 0 3u and.eq|B,B,n|hs
+4 04 - 1 0 and.f|A,B,C|hs
+4 04 - 1 1 and.f|A,B,n|hs
+4 04 - 1 2 and.f|B,B,n|hs
+4 04 - 1 3r and.f.eq|B,B,C|hs
+4 04 - 1 3u and.f.eq|B,B,n|hs
+4 05 - 0 0 or|A,B,C|hs
+4 05 - 0 1 or|A,B,n|hs
+4 05 - 0 2 or|B,B,n|hs
+4 05 - 0 3r or.eq|B,B,C|hs
+4 05 - 0 3u or.eq|B,B,n|hs
+4 05 - 1 0 or.f|A,B,C|hs
+4 05 - 1 1 or.f|A,B,n|hs
+4 05 - 1 2 or.f|B,B,n|hs
+4 05 - 1 3r or.f.eq|B,B,C|hs
+4 05 - 1 3u or.f.eq|B,B,n|hs
+4 06 - 0 0 bic|A,B,C|hs
+4 06 - 0 1 bic|A,B,n|hs
+4 06 - 0 2 bic|B,B,n|hs
+4 06 - 0 3r bic.eq|B,B,C|hs
+4 06 - 0 3u bic.eq|B,B,n|hs
+4 06 - 1 0 bic.f|A,B,C|hs
+4 06 - 1 1 bic.f|A,B,n|hs
+4 06 - 1 2 bic.f|B,B,n|hs
+4 06 - 1 3r bic.f.eq|B,B,C|hs
+4 06 - 1 3u bic.f.eq|B,B,n|hs
+4 07 - 0 0 xor|A,B,C|hs
+4 07 - 0 1 xor|A,B,n|hs
+4 07 - 0 2 xor|B,B,n|hs
+4 07 - 0 3r xor.eq|B,B,C|hs
+4 07 - 0 3u xor.eq|B,B,n|hs
+4 07 - 1 0 xor.f|A,B,C|hs
+4 07 - 1 1 xor.f|A,B,n|hs
+4 07 - 1 2 xor.f|B,B,n|hs
+4 07 - 1 3r xor.f.eq|B,B,C|hs
+4 07 - 1 3u xor.f.eq|B,B,n|hs
+4 08 - 0 0 max|A,B,C|hs
+4 08 - 0 1 max|A,B,n|hs
+4 08 - 0 2 max|B,B,n|hs
+4 08 - 0 3r max.eq|B,B,C|hs
+4 08 - 0 3u max.eq|B,B,n|hs
+4 08 - 1 0 max.f|A,B,C|hs
+4 08 - 1 1 max.f|A,B,n|hs
+4 08 - 1 2 max.f|B,B,n|hs
+4 08 - 1 3r max.f.eq|B,B,C|hs
+4 08 - 1 3u max.f.eq|B,B,n|hs
+4 09 - 0 0 min|A,B,C|hs
+4 09 - 0 1 min|A,B,n|hs
+4 09 - 0 2 min|B,B,n|hs
+4 09 - 0 3r min.eq|B,B,C|hs
+4 09 - 0 3u min.eq|B,B,n|hs
+4 09 - 1 0 min.f|A,B,C|hs
+4 09 - 1 1 min.f|A,B,n|hs
+4 09 - 1 2 min.f|B,B,n|hs
+4 09 - 1 3r min.f.eq|B,B,C|hs
+4 09 - 1 3u min.f.eq|B,B,n|hs
+4 0a - 0 0 mov|B,C|hs
+4 0a - 0 1 mov|B,n|hs
+4 0a - 0 2 mov|B,n|hs
+4 0a - 0 3r mov.eq|B,C|hs
+4 0a - 0 3u mov.eq|B,n|hs
+4 0a - 1 0 mov.f|B,C|hs
+4 0a - 1 1 mov.f|B,n|hs
+4 0a - 1 2 mov.f|B,n|hs
+4 0a - 1 3r mov.f.eq|B,C|hs
+4 0a - 1 3u mov.f.eq|B,n|hs
+4 0b - 1 0 tst|B,C|hs
+4 0b - 1 1 tst|B,n|hs
+4 0b - 1 2 tst|B,n|hs
+4 0b - 1 3r tst.eq|B,C|hs
+4 0b - 1 3u tst.eq|B,n|hs
+4 0c - 0 2 dbnz|B,n ;n|hs
+4 0c - 1 0 cmp|B,C|hs
+4 0c - 1 1 cmp|B,n|hs
+4 0c - 1 2 cmp|B,n|hs
+4 0c - 1 3r cmp.eq|B,C|hs
+4 0c - 1 3u cmp.eq|B,n|hs
+4 0d - 0 2 dbnz.d|B,n ;n|hs
+4 0d - 1 0 rcmp|B,C|hs
+4 0d - 1 1 rcmp|B,n|hs
+4 0d - 1 2 rcmp|B,n|hs
+4 0d - 1 3r rcmp.eq|B,C|hs
+4 0d - 1 3u rcmp.eq|B,n|hs
+4 0e - 0 0 rsub|A,B,C|hs
+4 0e - 0 1 rsub|A,B,n|hs
+4 0e - 0 2 rsub|B,B,n|hs
+4 0e - 0 3r rsub.eq|B,B,C|hs
+4 0e - 0 3u rsub.eq|B,B,n|hs
+4 0e - 1 0 rsub.f|A,B,C|hs
+4 0e - 1 1 rsub.f|A,B,n|hs
+4 0e - 1 2 rsub.f|B,B,n|hs
+4 0e - 1 3r rsub.f.eq|B,B,C|hs
+4 0e - 1 3u rsub.f.eq|B,B,n|hs
+4 0f - 0 0 bset|A,B,C|hs
+4 0f - 0 1 bset|A,B,n|hs
+4 0f - 0 2 bset|B,B,n|hs
+4 0f - 0 3r bset.eq|B,B,C|hs
+4 0f - 0 3u bset.eq|B,B,n|hs
+4 0f - 1 0 bset.f|A,B,C|hs
+4 0f - 1 1 bset.f|A,B,n|hs
+4 0f - 1 2 bset.f|B,B,n|hs
+4 0f - 1 3r bset.f.eq|B,B,C|hs
+4 0f - 1 3u bset.f.eq|B,B,n|hs
+4 10 - 0 0 bclr|A,B,C|hs
+4 10 - 0 1 bclr|A,B,n|hs
+4 10 - 0 2 bclr|B,B,n|hs
+4 10 - 0 3r bclr.eq|B,B,C|hs
+4 10 - 0 3u bclr.eq|B,B,n|hs
+4 10 - 1 0 bclr.f|A,B,C|hs
+4 10 - 1 1 bclr.f|A,B,n|hs
+4 10 - 1 2 bclr.f|B,B,n|hs
+4 10 - 1 3r bclr.f.eq|B,B,C|hs
+4 10 - 1 3u bclr.f.eq|B,B,n|hs
+4 11 - 1 0 btst|B,C|hs
+4 11 - 1 1 btst|B,n|hs
+4 11 - 1 2 btst|B,n|hs
+4 11 - 1 3r btst.eq|B,C|hs
+4 11 - 1 3u btst.eq|B,n|hs
+4 12 - 0 0 bxor|A,B,C|hs
+4 12 - 0 1 bxor|A,B,n|hs
+4 12 - 0 2 bxor|B,B,n|hs
+4 12 - 0 3r bxor.eq|B,B,C|hs
+4 12 - 0 3u bxor.eq|B,B,n|hs
+4 12 - 1 0 bxor.f|A,B,C|hs
+4 12 - 1 1 bxor.f|A,B,n|hs
+4 12 - 1 2 bxor.f|B,B,n|hs
+4 12 - 1 3r bxor.f.eq|B,B,C|hs
+4 12 - 1 3u bxor.f.eq|B,B,n|hs
+4 13 - 0 0 bmsk|A,B,C|hs
+4 13 - 0 1 bmsk|A,B,n|hs
+4 13 - 0 2 bmsk|B,B,n|hs
+4 13 - 0 3r bmsk.eq|B,B,C|hs
+4 13 - 0 3u bmsk.eq|B,B,n|hs
+4 13 - 1 0 bmsk.f|A,B,C|hs
+4 13 - 1 1 bmsk.f|A,B,n|hs
+4 13 - 1 2 bmsk.f|B,B,n|hs
+4 13 - 1 3r bmsk.f.eq|B,B,C|hs
+4 13 - 1 3u bmsk.f.eq|B,B,n|hs
+4 14 - 0 0 add1|A,B,C|hs
+4 14 - 0 1 add1|A,B,n|hs
+4 14 - 0 2 add1|B,B,n|hs
+4 14 - 0 3r add1.eq|B,B,C|hs
+4 14 - 0 3u add1.eq|B,B,n|hs
+4 14 - 1 0 add1.f|A,B,C|hs
+4 14 - 1 1 add1.f|A,B,n|hs
+4 14 - 1 2 add1.f|B,B,n|hs
+4 14 - 1 3r add1.f.eq|B,B,C|hs
+4 14 - 1 3u add1.f.eq|B,B,n|hs
+4 15 - 0 0 add2|A,B,C|hs
+4 15 - 0 1 add2|A,B,n|hs
+4 15 - 0 2 add2|B,B,n|hs
+4 15 - 0 3r add2.eq|B,B,C|hs
+4 15 - 0 3u add2.eq|B,B,n|hs
+4 15 - 1 0 add2.f|A,B,C|hs
+4 15 - 1 1 add2.f|A,B,n|hs
+4 15 - 1 2 add2.f|B,B,n|hs
+4 15 - 1 3r add2.f.eq|B,B,C|hs
+4 15 - 1 3u add2.f.eq|B,B,n|hs
+4 16 - 0 0 add3|A,B,C|hs
+4 16 - 0 1 add3|A,B,n|hs
+4 16 - 0 2 add3|B,B,n|hs
+4 16 - 0 3r add3.eq|B,B,C|hs
+4 16 - 0 3u add3.eq|B,B,n|hs
+4 16 - 1 0 add3.f|A,B,C|hs
+4 16 - 1 1 add3.f|A,B,n|hs
+4 16 - 1 2 add3.f|B,B,n|hs
+4 16 - 1 3r add3.f.eq|B,B,C|hs
+4 16 - 1 3u add3.f.eq|B,B,n|hs
+4 17 - 0 0 sub1|A,B,C|hs
+4 17 - 0 1 sub1|A,B,n|hs
+4 17 - 0 2 sub1|B,B,n|hs
+4 17 - 0 3r sub1.eq|B,B,C|hs
+4 17 - 0 3u sub1.eq|B,B,n|hs
+4 17 - 1 0 sub1.f|A,B,C|hs
+4 17 - 1 1 sub1.f|A,B,n|hs
+4 17 - 1 2 sub1.f|B,B,n|hs
+4 17 - 1 3r sub1.f.eq|B,B,C|hs
+4 17 - 1 3u sub1.f.eq|B,B,n|hs
+4 18 - 0 0 sub2|A,B,C|hs
+4 18 - 0 1 sub2|A,B,n|hs
+4 18 - 0 2 sub2|B,B,n|hs
+4 18 - 0 3r sub2.eq|B,B,C|hs
+4 18 - 0 3u sub2.eq|B,B,n|hs
+4 18 - 1 0 sub2.f|A,B,C|hs
+4 18 - 1 1 sub2.f|A,B,n|hs
+4 18 - 1 2 sub2.f|B,B,n|hs
+4 18 - 1 3r sub2.f.eq|B,B,C|hs
+4 18 - 1 3u sub2.f.eq|B,B,n|hs
+4 19 - 0 0 sub3|A,B,C|hs
+4 19 - 0 1 sub3|A,B,n|hs
+4 19 - 0 2 sub3|B,B,n|hs
+4 19 - 0 3r sub3.eq|B,B,C|hs
+4 19 - 0 3u sub3.eq|B,B,n|hs
+4 19 - 1 0 sub3.f|A,B,C|hs
+4 19 - 1 1 sub3.f|A,B,n|hs
+4 19 - 1 2 sub3.f|B,B,n|hs
+4 19 - 1 3r sub3.f.eq|B,B,C|hs
+4 19 - 1 3u sub3.f.eq|B,B,n|hs
+4 1a - 0 0 mpy|A,B,C|hs
+4 1a - 0 1 mpy|A,B,n|hs
+4 1a - 0 2 mpy|B,B,n|hs
+4 1a - 0 3r mpy.eq|B,B,C|hs
+4 1a - 0 3u mpy.eq|B,B,n|hs
+4 1a - 1 0 mpy.f|A,B,C|hs
+4 1a - 1 1 mpy.f|A,B,n|hs
+4 1a - 1 2 mpy.f|B,B,n|hs
+4 1a - 1 3r mpy.f.eq|B,B,C|hs
+4 1a - 1 3u mpy.f.eq|B,B,n|hs
+4 1b - 0 0 mpym|A,B,C|hs
+4 1b - 0 1 mpym|A,B,n|hs
+4 1b - 0 2 mpym|B,B,n|hs
+4 1b - 0 3r mpym.eq|B,B,C|hs
+4 1b - 0 3u mpym.eq|B,B,n|hs
+4 1b - 1 0 mpym.f|A,B,C|hs
+4 1b - 1 1 mpym.f|A,B,n|hs
+4 1b - 1 2 mpym.f|B,B,n|hs
+4 1b - 1 3r mpym.f.eq|B,B,C|hs
+4 1b - 1 3u mpym.f.eq|B,B,n|hs
+4 1c - 0 0 mpymu|A,B,C|hs
+4 1c - 0 1 mpymu|A,B,n|hs
+4 1c - 0 2 mpymu|B,B,n|hs
+4 1c - 0 3r mpymu.eq|B,B,C|hs
+4 1c - 0 3u mpymu.eq|B,B,n|hs
+4 1c - 1 0 mpymu.f|A,B,C|hs
+4 1c - 1 1 mpymu.f|A,B,n|hs
+4 1c - 1 2 mpymu.f|B,B,n|hs
+4 1c - 1 3r mpymu.f.eq|B,B,C|hs
+4 1c - 1 3u mpymu.f.eq|B,B,n|hs
+4 1d - 0 0 mpyu|A,B,C|hs
+4 1d - 0 1 mpyu|A,B,n|hs
+4 1d - 0 2 mpyu|B,B,n|hs
+4 1d - 0 3r mpyu.eq|B,B,C|hs
+4 1d - 0 3u mpyu.eq|B,B,n|hs
+4 1d - 1 0 mpyu.f|A,B,C|hs
+4 1d - 1 1 mpyu.f|A,B,n|hs
+4 1d - 1 2 mpyu.f|B,B,n|hs
+4 1d - 1 3r mpyu.f.eq|B,B,C|hs
+4 1d - 1 3u mpyu.f.eq|B,B,n|hs
+4 1e - 0 0 mpyw|A,B,C|hs
+4 1e - 0 1 mpyw|A,B,n|hs
+4 1e - 0 2 mpyw|B,B,n|hs
+4 1e - 0 3r mpyw.eq|B,B,C|hs
+4 1e - 0 3u mpyw.eq|B,B,n|hs
+4 1e - 1 0 mpyw.f|A,B,C|hs
+4 1e - 1 1 mpyw.f|A,B,n|hs
+4 1e - 1 2 mpyw.f|B,B,n|hs
+4 1e - 1 3r mpyw.f.eq|B,B,C|hs
+4 1e - 1 3u mpyw.f.eq|B,B,n|hs
+4 1f - 0 0 mpyuw|A,B,C|hs
+4 1f - 0 1 mpyuw|A,B,n|hs
+4 1f - 0 2 mpyuw|B,B,n|hs
+4 1f - 0 3r mpyuw.eq|B,B,C|hs
+4 1f - 0 3u mpyuw.eq|B,B,n|hs
+4 1f - 1 0 mpyuw.f|A,B,C|hs
+4 1f - 1 1 mpyuw.f|A,B,n|hs
+4 1f - 1 2 mpyuw.f|B,B,n|hs
+4 1f - 1 3r mpyuw.f.eq|B,B,C|hs
+4 1f - 1 3u mpyuw.f.eq|B,B,n|hs
+4 20 - 0 0 j|[C]|hs
+4 20 - 0 1 j|n|hs
+4 20 - 0 2 j|n|hs
+4 20 - 0 3r jeq|[C]|hs
+4 20 - 0 3u jeq|n|hs
+4 20 - 1 0 j|[C]|hs
+4 20 - 1 1 j|n|hs
+4 20 - 1 2 j|n|hs
+4 20 - 1 3r jeq|[C]|hs
+4 20 - 1 3u jeq|n|hs
+4 21 - 0 0 j.d|[C]|hs
+4 21 - 0 1 j.d|n|hs
+4 21 - 0 2 j.d|n|hs
+4 21 - 0 3r jeq.d|[C]|hs
+4 21 - 0 3u jeq.d|n|hs
+4 21 - 1 0 j.d|[C]|hs
+4 21 - 1 1 j.d|n|hs
+4 21 - 1 2 j.d|n|hs
+4 21 - 1 3r jeq.d|[C]|hs
+4 21 - 1 3u jeq.d|n|hs
+4 22 - 0 0 jl|[C]|hs
+4 22 - 0 1 jl|n|hs
+4 22 - 0 2 jl|n|hs
+4 22 - 0 3r jleq|[C]|hs
+4 22 - 0 3u jleq|n|hs
+4 22 - 1 0 jl|[C]|hs
+4 22 - 1 1 jl|n|hs
+4 22 - 1 2 jl|n|hs
+4 22 - 1 3r jleq|[C]|hs
+4 22 - 1 3u jleq|n|hs
+4 23 - 0 0 jl.d|[C]|hs
+4 23 - 0 1 jl.d|n|hs
+4 23 - 0 2 jl.d|n|hs
+4 23 - 0 3r jleq.d|[C]|hs
+4 23 - 0 3u jleq.d|n|hs
+4 23 - 1 0 jl.d|[C]|hs
+4 23 - 1 1 jl.d|n|hs
+4 23 - 1 2 jl.d|n|hs
+4 23 - 1 3r jleq.d|[C]|hs
+4 23 - 1 3u jleq.d|n|hs
+4 24 - 0 0 bi|[C]|hs
+4 25 - 0 0 bih|[C]|hs
+4 26 - 0 0 ldi|B,[C]|hs
+4 26 - 0 2 ldi|B,[aux]|hs
+4 26 - 0 3u ldi.eq|B,[aux]|em
+4 26 - 0 1z ldi|B,[aux]|hs
+4 26 - 1 0 ldi|B,[C]|hs
+4 26 - 1 2 ldi|B,[aux]|hs
+4 26 - 1 3u ldi.eq|B,[aux]|em
+4 26 - 1 1z ldi|B,[aux]|hs
+4 27 - 0 0 aex|B,[C]|hs
+4 27 - 0 1 aex|B,[aux]|hs
+4 27 - 0 2 aex|B,[aux]|hs
+4 27 - 0 3r aex.eq|B,[C]|hs
+4 27 - 0 3u aex.eq|B,[aux]|hs
+4 27 - 1 0 aex|B,[C]|hs
+4 27 - 1 1 aex|B,[aux]|hs
+4 27 - 1 2 aex|B,[aux]|hs
+4 27 - 1 3r aex.eq|B,[C]|hs
+4 27 - 1 3u aex.eq|B,[aux]|hs
+4 28 - 0 1 lp|n ;n|hs
+4 28 - 0 2 lp|n ;n|hs
+4 28 - 0 3u lpeq|n ;n|hs
+4 28 - 1 1 lp|n ;n|hs
+4 28 - 1 2 lp|n ;n|hs
+4 28 - 1 3u lpeq|n ;n|hs
+4 29 - 0 0 flag|C|hs
+4 29 - 0 1 flag|n|hs
+4 29 - 0 2 flag|n|hs
+4 29 - 0 3r flag.eq|C|hs
+4 29 - 0 3u flag.eq|n|hs
+4 29 - 1 0 kflag|C|hs
+4 29 - 1 1 kflag|n|hs
+4 29 - 1 2 kflag|n|hs
+4 29 - 1 3r kflag.eq|C|hs
+4 29 - 1 3u kflag.eq|n|hs
+4 2a - 0 0 lr|B,[C]|hs
+4 2a - 0 2 lr|B,[aux]|hs
+4 2a - 0 1z lr|B,[aux]|hs
+4 2a - 1 0 lr|B,[C]|hs
+4 2a - 1 2 lr|B,[aux]|hs
+4 2a - 1 1z lr|B,[aux]|hs
+4 2b - 0 0 sr|B,[C]|hs
+4 2b - 0 2 sr|B,[aux]|hs
+4 2b - 0 1z sr|B,[aux]|hs
+4 2b - 1 0 sr|B,[C]|hs
+4 2b - 1 2 sr|B,[aux]|hs
+4 2b - 1 1z sr|B,[aux]|hs
+4 2c - 0 0 bmskn|A,B,C|hs
+4 2c - 0 1 bmskn|A,B,n|hs
+4 2c - 0 2 bmskn|B,B,n|hs
+4 2c - 0 3r bmskn.eq|B,B,C|hs
+4 2c - 0 3u bmskn.eq|B,B,n|hs
+4 2c - 1 0 bmskn.f|A,B,C|hs
+4 2c - 1 1 bmskn.f|A,B,n|hs
+4 2c - 1 2 bmskn.f|B,B,n|hs
+4 2c - 1 3r bmskn.f.eq|B,B,C|hs
+4 2c - 1 3u bmskn.f.eq|B,B,n|hs
+4 2d - 0 0 xbfu|A,B,C|hs
+4 2d - 0 1 xbfu|A,B,n|hs
+4 2d - 0 2 xbfu|B,B,n|hs
+4 2d - 0 3r xbfu.eq|B,B,C|hs
+4 2d - 0 3u xbfu.eq|B,B,n|hs
+4 2d - 1 0 xbfu.f|A,B,C|hs
+4 2d - 1 1 xbfu.f|A,B,n|hs
+4 2d - 1 2 xbfu.f|B,B,n|hs
+4 2d - 1 3r xbfu.f.eq|B,B,C|hs
+4 2d - 1 3u xbfu.f.eq|B,B,n|hs
+4 2f sop00 0 0 asl|B,C|hs
+4 2f sop00 0 1 asl|B,n|hs
+4 2f sop00 1 0 asl.f|B,C|hs
+4 2f sop00 1 1 asl.f|B,n|hs
+4 2f sop01 0 0 asr|B,C|hs
+4 2f sop01 0 1 asr|B,n|hs
+4 2f sop01 1 0 asr.f|B,C|hs
+4 2f sop01 1 1 asr.f|B,n|hs
+4 2f sop02 0 0 lsr|B,C|hs
+4 2f sop02 0 1 lsr|B,n|hs
+4 2f sop02 1 0 lsr.f|B,C|hs
+4 2f sop02 1 1 lsr.f|B,n|hs
+4 2f sop03 0 0 ror|B,C|hs
+4 2f sop03 0 1 ror|B,n|hs
+4 2f sop03 1 0 ror.f|B,C|hs
+4 2f sop03 1 1 ror.f|B,n|hs
+4 2f sop04 0 0 rrc|B,C|hs
+4 2f sop04 0 1 rrc|B,n|hs
+4 2f sop04 1 0 rrc.f|B,C|hs
+4 2f sop04 1 1 rrc.f|B,n|hs
+4 2f sop05 0 0 sexb|B,C|hs
+4 2f sop05 0 1 sexb|B,n|hs
+4 2f sop05 1 0 sexb.f|B,C|hs
+4 2f sop05 1 1 sexb.f|B,n|hs
+4 2f sop06 0 0 sexh|B,C|hs
+4 2f sop06 0 1 sexh|B,n|hs
+4 2f sop06 1 0 sexh.f|B,C|hs
+4 2f sop06 1 1 sexh.f|B,n|hs
+4 2f sop07 0 0 extb|B,C|hs
+4 2f sop07 0 1 extb|B,n|hs
+4 2f sop07 1 0 extb.f|B,C|hs
+4 2f sop07 1 1 extb.f|B,n|hs
+4 2f sop08 0 0 exth|B,C|hs
+4 2f sop08 0 1 exth|B,n|hs
+4 2f sop08 1 0 exth.f|B,C|hs
+4 2f sop08 1 1 exth.f|B,n|hs
+4 2f sop09 0 0 abs|B,C|hs
+4 2f sop09 0 1 abs|B,n|hs
+4 2f sop09 1 0 abs.f|B,C|hs
+4 2f sop09 1 1 abs.f|B,n|hs
+4 2f sop0a 0 0 not|B,C|hs
+4 2f sop0a 0 1 not|B,n|hs
+4 2f sop0a 1 0 not.f|B,C|hs
+4 2f sop0a 1 1 not.f|B,n|hs
+4 2f sop0b 0 0 rlc|B,C|hs
+4 2f sop0b 0 1 rlc|B,n|hs
+4 2f sop0b 1 0 rlc.f|B,C|hs
+4 2f sop0b 1 1 rlc.f|B,n|hs
+4 2f sop0c 0 0 ex|B,[C]|hs
+4 2f sop0c 0 1 ex|B,[aux]|hs
+4 2f sop0c 1 0 ex.di|B,[C]|hs
+4 2f sop0c 1 1 ex.di|B,[aux]|hs
+4 2f sop0d 0 0 rol|B,C|hs
+4 2f sop0d 0 1 rol|B,n|hs
+4 2f sop0d 1 0 rol.f|B,C|hs
+4 2f sop0d 1 1 rol.f|B,n|hs
+4 2f sop10 0 0 llock|B,[C]|hs
+4 2f sop10 0 1 llock|B,[aux]|hs
+4 2f sop10 1 0 llock.di|B,[C]|hs
+4 2f sop10 1 1 llock.di|B,[aux]|hs
+4 2f sop11 0 0 scond|B,[C]|hs
+4 2f sop11 0 1 scond|B,[aux]|hs
+4 2f sop11 1 0 scond.di|B,[C]|hs
+4 2f sop11 1 1 scond.di|B,[aux]|hs
+4 2f sop12 0 0 llockd|B,[C]|hs
+4 2f sop12 0 1 llockd|B,[aux]|hs
+4 2f sop12 1 0 llockd.di|B,[C]|hs
+4 2f sop12 1 1 llockd.di|B,[aux]|hs
+4 2f sop13 0 0 scondd|B,[C]|hs
+4 2f sop13 0 1 scondd|B,[aux]|hs
+4 2f sop13 1 0 scondd.di|B,[C]|hs
+4 2f sop13 1 1 scondd.di|B,[aux]|hs
+4 2f zop01 0 0 sleep|C|hs
+4 2f zop01 0 1 sleep|n|hs
+4 2f zop06 0 0 seti|C|hs
+4 2f zop06 0 1 seti|n|hs
+4 2f zop07 0 0 clri|C|hs
+4 2f zop07 0 1 clri|n|hs
+4 2f zop08 0 0 wevt|C|hs
+4 2f zop08 0 1 wevt|n|hs
+4 2f zop09 0 0 wlfc|C|hs
+4 2f zop09 0 1 wlfc|n|hs
+4 2f zop0a 0 1 dsync||hs
+4 2f zop0b 0 1 dmb||hs
+4 2f zop18 0 0 nexttask|C|em
+4 2f zop18 0 1 nexttask|n|em
+4 30 - 0 0 ld|A,[B,C]|hs
+4 30 - 0 1 ld.aw|A,[B,C]|hs
+4 30 - 0 2 ld.ab|A,[B,C]|hs
+4 30 - 0 3r ld.as|rn,[B,C]|hs
+4 30 - 0 3u ld.as|rn,[B,C]|hs
+4 30 - 1 0 ld.di|A,[B,C]|hs
+4 30 - 1 1 ld.di.aw|A,[B,C]|hs
+4 30 - 1 2 ld.di.ab|A,[B,C]|hs
+4 30 - 1 3r ld.di.as|rn,[B,C]|hs
+4 30 - 1 3u ld.di.as|rn,[B,C]|hs
+4 31 - 0 0 ld.x|A,[B,C]|hs
+4 31 - 0 1 ld.aw.x|A,[B,C]|hs
+4 31 - 0 2 ld.ab.x|A,[B,C]|hs
+4 31 - 0 3r ld.as.x|rn,[B,C]|hs
+4 31 - 0 3u ld.as.x|rn,[B,C]|hs
+4 31 - 1 0 ld.di.x|A,[B,C]|hs
+4 31 - 1 1 ld.di.aw.x|A,[B,C]|hs
+4 31 - 1 2 ld.di.ab.x|A,[B,C]|hs
+4 31 - 1 3r ld.di.as.x|rn,[B,C]|hs
+4 31 - 1 3u ld.di.as.x|rn,[B,C]|hs
+4 32 - 0 0 ldb|A,[B,C]|hs
+4 32 - 0 1 ldb.aw|A,[B,C]|hs
+4 32 - 0 2 ldb.ab|A,[B,C]|hs
+4 32 - 0 3r ldb.as|rn,[B,C]|hs
+4 32 - 0 3u ldb.as|rn,[B,C]|hs
+4 32 - 1 0 ldb.di|A,[B,C]|hs
+4 32 - 1 1 ldb.di.aw|A,[B,C]|hs
+4 32 - 1 2 ldb.di.ab|A,[B,C]|hs
+4 32 - 1 3r ldb.di.as|rn,[B,C]|hs
+4 32 - 1 3u ldb.di.as|rn,[B,C]|hs
+4 33 - 0 0 ldb.x|A,[B,C]|hs
+4 33 - 0 1 ldb.aw.x|A,[B,C]|hs
+4 33 - 0 2 ldb.ab.x|A,[B,C]|hs
+4 33 - 0 3r ldb.as.x|rn,[B,C]|hs
+4 33 - 0 3u ldb.as.x|rn,[B,C]|hs
+4 33 - 1 0 ldb.di.x|A,[B,C]|hs
+4 33 - 1 1 ldb.di.aw.x|A,[B,C]|hs
+4 33 - 1 2 ldb.di.ab.x|A,[B,C]|hs
+4 33 - 1 3r ldb.di.as.x|rn,[B,C]|hs
+4 33 - 1 3u ldb.di.as.x|rn,[B,C]|hs
+4 34 - 0 0 ldh|A,[B,C]|hs
+4 34 - 0 1 ldh.aw|A,[B,C]|hs
+4 34 - 0 2 ldh.ab|A,[B,C]|hs
+4 34 - 0 3r ldh.as|rn,[B,C]|hs
+4 34 - 0 3u ldh.as|rn,[B,C]|hs
+4 34 - 1 0 ldh.di|A,[B,C]|hs
+4 34 - 1 1 ldh.di.aw|A,[B,C]|hs
+4 34 - 1 2 ldh.di.ab|A,[B,C]|hs
+4 34 - 1 3r ldh.di.as|rn,[B,C]|hs
+4 34 - 1 3u ldh.di.as|rn,[B,C]|hs
+4 35 - 0 0 ldh.x|A,[B,C]|hs
+4 35 - 0 1 ldh.aw.x|A,[B,C]|hs
+4 35 - 0 2 ldh.ab.x|A,[B,C]|hs
+4 35 - 0 3r ldh.as.x|rn,[B,C]|hs
+4 35 - 0 3u ldh.as.x|rn,[B,C]|hs
+4 35 - 1 0 ldh.di.x|A,[B,C]|hs
+4 35 - 1 1 ldh.di.aw.x|A,[B,C]|hs
+4 35 - 1 2 ldh.di.ab.x|A,[B,C]|hs
+4 35 - 1 3r ldh.di.as.x|rn,[B,C]|hs
+4 35 - 1 3u ldh.di.as.x|rn,[B,C]|hs
+4 36 - 0 0 ldd|AA,[B,C]|hs
+4 36 - 0 1 ldd.aw|AA,[B,C]|hs
+4 36 - 0 2 ldd.ab|AA,[B,C]|hs
+4 36 - 0 3r ldd.as|rn Warning: illegal use of double register pair. ,[B,C]|hs
+4 36 - 0 3u ldd.as|rn Warning: illegal use of double register pair. ,[B,C]|hs
+4 36 - 0 0z ldd|rnrn,[B,C]|hs
+4 36 - 0 1z ldd.aw|rnrn,[B,C]|hs
+4 36 - 1 0 ldd.di|AA,[B,C]|hs
+4 36 - 1 1 ldd.di.aw|AA,[B,C]|hs
+4 36 - 1 2 ldd.di.ab|AA,[B,C]|hs
+4 36 - 1 3r ldd.di.as|rn Warning: illegal use of double register pair. ,[B,C]|hs
+4 36 - 1 3u ldd.di.as|rn Warning: illegal use of double register pair. ,[B,C]|hs
+4 36 - 1 0z ldd.di|rnrn,[B,C]|hs
+4 36 - 1 1z ldd.di.aw|rnrn,[B,C]|hs
+4 38 - 0 0 seteq|A,B,C|hs
+4 38 - 0 1 seteq|A,B,n|hs
+4 38 - 0 2 seteq|B,B,n|hs
+4 38 - 0 3r seteq.eq|B,B,C|hs
+4 38 - 0 3u seteq.eq|B,B,n|hs
+4 38 - 1 0 seteq.f|A,B,C|hs
+4 38 - 1 1 seteq.f|A,B,n|hs
+4 38 - 1 2 seteq.f|B,B,n|hs
+4 38 - 1 3r seteq.f.eq|B,B,C|hs
+4 38 - 1 3u seteq.f.eq|B,B,n|hs
+4 39 - 0 0 setne|A,B,C|hs
+4 39 - 0 1 setne|A,B,n|hs
+4 39 - 0 2 setne|B,B,n|hs
+4 39 - 0 3r setne.eq|B,B,C|hs
+4 39 - 0 3u setne.eq|B,B,n|hs
+4 39 - 1 0 setne.f|A,B,C|hs
+4 39 - 1 1 setne.f|A,B,n|hs
+4 39 - 1 2 setne.f|B,B,n|hs
+4 39 - 1 3r setne.f.eq|B,B,C|hs
+4 39 - 1 3u setne.f.eq|B,B,n|hs
+4 3a - 0 0 setlt|A,B,C|hs
+4 3a - 0 1 setlt|A,B,n|hs
+4 3a - 0 2 setlt|B,B,n|hs
+4 3a - 0 3r setlt.eq|B,B,C|hs
+4 3a - 0 3u setlt.eq|B,B,n|hs
+4 3a - 1 0 setlt.f|A,B,C|hs
+4 3a - 1 1 setlt.f|A,B,n|hs
+4 3a - 1 2 setlt.f|B,B,n|hs
+4 3a - 1 3r setlt.f.eq|B,B,C|hs
+4 3a - 1 3u setlt.f.eq|B,B,n|hs
+4 3b - 0 0 setge|A,B,C|hs
+4 3b - 0 1 setge|A,B,n|hs
+4 3b - 0 2 setge|B,B,n|hs
+4 3b - 0 3r setge.eq|B,B,C|hs
+4 3b - 0 3u setge.eq|B,B,n|hs
+4 3b - 1 0 setge.f|A,B,C|hs
+4 3b - 1 1 setge.f|A,B,n|hs
+4 3b - 1 2 setge.f|B,B,n|hs
+4 3b - 1 3r setge.f.eq|B,B,C|hs
+4 3b - 1 3u setge.f.eq|B,B,n|hs
+4 3c - 0 0 setlo|A,B,C|hs
+4 3c - 0 1 setlo|A,B,n|hs
+4 3c - 0 2 setlo|B,B,n|hs
+4 3c - 0 3r setlo.eq|B,B,C|hs
+4 3c - 0 3u setlo.eq|B,B,n|hs
+4 3c - 1 0 setlo.f|A,B,C|hs
+4 3c - 1 1 setlo.f|A,B,n|hs
+4 3c - 1 2 setlo.f|B,B,n|hs
+4 3c - 1 3r setlo.f.eq|B,B,C|hs
+4 3c - 1 3u setlo.f.eq|B,B,n|hs
+4 3d - 0 0 seths|A,B,C|hs
+4 3d - 0 1 seths|A,B,n|hs
+4 3d - 0 2 seths|B,B,n|hs
+4 3d - 0 3r seths.eq|B,B,C|hs
+4 3d - 0 3u seths.eq|B,B,n|hs
+4 3d - 1 0 seths.f|A,B,C|hs
+4 3d - 1 1 seths.f|A,B,n|hs
+4 3d - 1 2 seths.f|B,B,n|hs
+4 3d - 1 3r seths.f.eq|B,B,C|hs
+4 3d - 1 3u seths.f.eq|B,B,n|hs
+4 3e - 0 0 setle|A,B,C|hs
+4 3e - 0 1 setle|A,B,n|hs
+4 3e - 0 2 setle|B,B,n|hs
+4 3e - 0 3r setle.eq|B,B,C|hs
+4 3e - 0 3u setle.eq|B,B,n|hs
+4 3e - 1 0 setle.f|A,B,C|hs
+4 3e - 1 1 setle.f|A,B,n|hs
+4 3e - 1 2 setle.f|B,B,n|hs
+4 3e - 1 3r setle.f.eq|B,B,C|hs
+4 3e - 1 3u setle.f.eq|B,B,n|hs
+4 3f - 0 0 setgt|A,B,C|hs
+4 3f - 0 1 setgt|A,B,n|hs
+4 3f - 0 2 setgt|B,B,n|hs
+4 3f - 0 3r setgt.eq|B,B,C|hs
+4 3f - 0 3u setgt.eq|B,B,n|hs
+4 3f - 1 0 setgt.f|A,B,C|hs
+4 3f - 1 1 setgt.f|A,B,n|hs
+4 3f - 1 2 setgt.f|B,B,n|hs
+4 3f - 1 3r setgt.f.eq|B,B,C|hs
+4 3f - 1 3u setgt.f.eq|B,B,n|hs
+5 00 - 0 0 asl|A,B,C|hs
+5 00 - 0 1 asl|A,B,n|hs
+5 00 - 0 2 asl|B,B,n|hs
+5 00 - 0 3r asl.eq|B,B,C|hs
+5 00 - 0 3u asl.eq|B,B,n|hs
+5 00 - 1 0 asl.f|A,B,C|hs
+5 00 - 1 1 asl.f|A,B,n|hs
+5 00 - 1 2 asl.f|B,B,n|hs
+5 00 - 1 3r asl.f.eq|B,B,C|hs
+5 00 - 1 3u asl.f.eq|B,B,n|hs
+5 01 - 0 0 lsr|A,B,C|hs
+5 01 - 0 1 lsr|A,B,n|hs
+5 01 - 0 2 lsr|B,B,n|hs
+5 01 - 0 3r lsr.eq|B,B,C|hs
+5 01 - 0 3u lsr.eq|B,B,n|hs
+5 01 - 1 0 lsr.f|A,B,C|hs
+5 01 - 1 1 lsr.f|A,B,n|hs
+5 01 - 1 2 lsr.f|B,B,n|hs
+5 01 - 1 3r lsr.f.eq|B,B,C|hs
+5 01 - 1 3u lsr.f.eq|B,B,n|hs
+5 02 - 0 0 asr|A,B,C|hs
+5 02 - 0 1 asr|A,B,n|hs
+5 02 - 0 2 asr|B,B,n|hs
+5 02 - 0 3r asr.eq|B,B,C|hs
+5 02 - 0 3u asr.eq|B,B,n|hs
+5 02 - 1 0 asr.f|A,B,C|hs
+5 02 - 1 1 asr.f|A,B,n|hs
+5 02 - 1 2 asr.f|B,B,n|hs
+5 02 - 1 3r asr.f.eq|B,B,C|hs
+5 02 - 1 3u asr.f.eq|B,B,n|hs
+5 03 - 0 0 ror|A,B,C|hs
+5 03 - 0 1 ror|A,B,n|hs
+5 03 - 0 2 ror|B,B,n|hs
+5 03 - 0 3r ror.eq|B,B,C|hs
+5 03 - 0 3u ror.eq|B,B,n|hs
+5 03 - 1 0 ror.f|A,B,C|hs
+5 03 - 1 1 ror.f|A,B,n|hs
+5 03 - 1 2 ror.f|B,B,n|hs
+5 03 - 1 3r ror.f.eq|B,B,C|hs
+5 03 - 1 3u ror.f.eq|B,B,n|hs
+5 04 - 0 0 div|A,B,C|hs
+5 04 - 0 1 div|A,B,n|hs
+5 04 - 0 2 div|B,B,n|hs
+5 04 - 0 3r div.eq|B,B,C|hs
+5 04 - 0 3u div.eq|B,B,n|hs
+5 04 - 1 0 div.f|A,B,C|hs
+5 04 - 1 1 div.f|A,B,n|hs
+5 04 - 1 2 div.f|B,B,n|hs
+5 04 - 1 3r div.f.eq|B,B,C|hs
+5 04 - 1 3u div.f.eq|B,B,n|hs
+5 05 - 0 0 divu|A,B,C|hs
+5 05 - 0 1 divu|A,B,n|hs
+5 05 - 0 2 divu|B,B,n|hs
+5 05 - 0 3r divu.eq|B,B,C|hs
+5 05 - 0 3u divu.eq|B,B,n|hs
+5 05 - 1 0 divu.f|A,B,C|hs
+5 05 - 1 1 divu.f|A,B,n|hs
+5 05 - 1 2 divu.f|B,B,n|hs
+5 05 - 1 3r divu.f.eq|B,B,C|hs
+5 05 - 1 3u divu.f.eq|B,B,n|hs
+5 06 - 0 0 adds|A,B,C|hs
+5 06 - 0 1 adds|A,B,n|hs
+5 06 - 0 2 adds|B,B,n|hs
+5 06 - 0 3r adds.eq|B,B,C|hs
+5 06 - 0 3u adds.eq|B,B,n|hs
+5 06 - 1 0 adds.f|A,B,C|hs
+5 06 - 1 1 adds.f|A,B,n|hs
+5 06 - 1 2 adds.f|B,B,n|hs
+5 06 - 1 3r adds.f.eq|B,B,C|hs
+5 06 - 1 3u adds.f.eq|B,B,n|hs
+5 07 - 0 0 subs|A,B,C|hs
+5 07 - 0 1 subs|A,B,n|hs
+5 07 - 0 2 subs|B,B,n|hs
+5 07 - 0 3r subs.eq|B,B,C|hs
+5 07 - 0 3u subs.eq|B,B,n|hs
+5 07 - 1 0 subs.f|A,B,C|hs
+5 07 - 1 1 subs.f|A,B,n|hs
+5 07 - 1 2 subs.f|B,B,n|hs
+5 07 - 1 3r subs.f.eq|B,B,C|hs
+5 07 - 1 3u subs.f.eq|B,B,n|hs
+5 08 - 0 0 rem|A,B,C|hs
+5 08 - 0 1 rem|A,B,n|hs
+5 08 - 0 2 rem|B,B,n|hs
+5 08 - 0 3r rem.eq|B,B,C|hs
+5 08 - 0 3u rem.eq|B,B,n|hs
+5 08 - 1 0 rem.f|A,B,C|hs
+5 08 - 1 1 rem.f|A,B,n|hs
+5 08 - 1 2 rem.f|B,B,n|hs
+5 08 - 1 3r rem.f.eq|B,B,C|hs
+5 08 - 1 3u rem.f.eq|B,B,n|hs
+5 09 - 0 0 remu|A,B,C|hs
+5 09 - 0 1 remu|A,B,n|hs
+5 09 - 0 2 remu|B,B,n|hs
+5 09 - 0 3r remu.eq|B,B,C|hs
+5 09 - 0 3u remu.eq|B,B,n|hs
+5 09 - 1 0 remu.f|A,B,C|hs
+5 09 - 1 1 remu.f|A,B,n|hs
+5 09 - 1 2 remu.f|B,B,n|hs
+5 09 - 1 3r remu.f.eq|B,B,C|hs
+5 09 - 1 3u remu.f.eq|B,B,n|hs
+5 0a - 0 0 asls|A,B,C|hs
+5 0a - 0 1 asls|A,B,n|hs
+5 0a - 0 2 asls|B,B,n|hs
+5 0a - 0 3r asls.eq|B,B,C|hs
+5 0a - 0 3u asls.eq|B,B,n|hs
+5 0a - 1 0 asls.f|A,B,C|hs
+5 0a - 1 1 asls.f|A,B,n|hs
+5 0a - 1 2 asls.f|B,B,n|hs
+5 0a - 1 3r asls.f.eq|B,B,C|hs
+5 0a - 1 3u asls.f.eq|B,B,n|hs
+5 0b - 0 0 asrs|A,B,C|hs
+5 0b - 0 1 asrs|A,B,n|hs
+5 0b - 0 2 asrs|B,B,n|hs
+5 0b - 0 3r asrs.eq|B,B,C|hs
+5 0b - 0 3u asrs.eq|B,B,n|hs
+5 0b - 1 0 asrs.f|A,B,C|hs
+5 0b - 1 1 asrs.f|A,B,n|hs
+5 0b - 1 2 asrs.f|B,B,n|hs
+5 0b - 1 3r asrs.f.eq|B,B,C|hs
+5 0b - 1 3u asrs.f.eq|B,B,n|hs
+5 0c - 0 0 asrsr|A,B,C|hs
+5 0c - 0 1 asrsr|A,B,n|hs
+5 0c - 0 2 asrsr|B,B,n|hs
+5 0c - 0 3r asrsr.eq|B,B,C|hs
+5 0c - 0 3u asrsr.eq|B,B,n|hs
+5 0c - 1 0 asrsr.f|A,B,C|hs
+5 0c - 1 1 asrsr.f|A,B,n|hs
+5 0c - 1 2 asrsr.f|B,B,n|hs
+5 0c - 1 3r asrsr.f.eq|B,B,C|hs
+5 0c - 1 3u asrsr.f.eq|B,B,n|hs
+5 0d - 0 0 valgn2h|A,B,C|hs
+5 0d - 0 1 valgn2h|A,B,n|hs
+5 0d - 0 2 valgn2h|B,B,n|hs
+5 0d - 0 3r valgn2h.eq|B,B,C|hs
+5 0d - 0 3u valgn2h.eq|B,B,n|hs
+5 0d - 1 0 setacc|A,B,C|hs
+5 0d - 1 1 setacc|A,B,n|hs
+5 0d - 1 2 setacc|B,B,n|hs
+5 0d - 1 3r setacc.eq|B,B,C|hs
+5 0d - 1 3u setacc.eq|B,B,n|hs
+5 0e - 0 0 mac|A,B,C|hs
+5 0e - 0 1 mac|A,B,n|hs
+5 0e - 0 2 mac|B,B,n|hs
+5 0e - 0 3r mac.eq|B,B,C|hs
+5 0e - 0 3u mac.eq|B,B,n|hs
+5 0e - 1 0 mac.f|A,B,C|hs
+5 0e - 1 1 mac.f|A,B,n|hs
+5 0e - 1 2 mac.f|B,B,n|hs
+5 0e - 1 3r mac.f.eq|B,B,C|hs
+5 0e - 1 3u mac.f.eq|B,B,n|hs
+5 0f - 0 0 macu|A,B,C|hs
+5 0f - 0 1 macu|A,B,n|hs
+5 0f - 0 2 macu|B,B,n|hs
+5 0f - 0 3r macu.eq|B,B,C|hs
+5 0f - 0 3u macu.eq|B,B,n|hs
+5 0f - 1 0 macu.f|A,B,C|hs
+5 0f - 1 1 macu.f|A,B,n|hs
+5 0f - 1 2 macu.f|B,B,n|hs
+5 0f - 1 3r macu.f.eq|B,B,C|hs
+5 0f - 1 3u macu.f.eq|B,B,n|hs
+5 10 - 0 0 dmpyh|A,B,C|hs
+5 10 - 0 1 dmpyh|A,B,n|hs
+5 10 - 0 2 dmpyh|B,B,n|hs
+5 10 - 0 3r dmpyh.eq|B,B,C|hs
+5 10 - 0 3u dmpyh.eq|B,B,n|hs
+5 10 - 1 0 dmpyh.f|A,B,C|hs
+5 10 - 1 1 dmpyh.f|A,B,n|hs
+5 10 - 1 2 dmpyh.f|B,B,n|hs
+5 10 - 1 3r dmpyh.f.eq|B,B,C|hs
+5 10 - 1 3u dmpyh.f.eq|B,B,n|hs
+5 11 - 0 0 dmpyhu|A,B,C|hs
+5 11 - 0 1 dmpyhu|A,B,n|hs
+5 11 - 0 2 dmpyhu|B,B,n|hs
+5 11 - 0 3r dmpyhu.eq|B,B,C|hs
+5 11 - 0 3u dmpyhu.eq|B,B,n|hs
+5 11 - 1 0 dmpyhu.f|A,B,C|hs
+5 11 - 1 1 dmpyhu.f|A,B,n|hs
+5 11 - 1 2 dmpyhu.f|B,B,n|hs
+5 11 - 1 3r dmpyhu.f.eq|B,B,C|hs
+5 11 - 1 3u dmpyhu.f.eq|B,B,n|hs
+5 12 - 0 0 dmach|A,B,C|hs
+5 12 - 0 1 dmach|A,B,n|hs
+5 12 - 0 2 dmach|B,B,n|hs
+5 12 - 0 3r dmach.eq|B,B,C|hs
+5 12 - 0 3u dmach.eq|B,B,n|hs
+5 12 - 1 0 dmach.f|A,B,C|hs
+5 12 - 1 1 dmach.f|A,B,n|hs
+5 12 - 1 2 dmach.f|B,B,n|hs
+5 12 - 1 3r dmach.f.eq|B,B,C|hs
+5 12 - 1 3u dmach.f.eq|B,B,n|hs
+5 13 - 0 0 dmachu|A,B,C|hs
+5 13 - 0 1 dmachu|A,B,n|hs
+5 13 - 0 2 dmachu|B,B,n|hs
+5 13 - 0 3r dmachu.eq|B,B,C|hs
+5 13 - 0 3u dmachu.eq|B,B,n|hs
+5 13 - 1 0 dmachu.f|A,B,C|hs
+5 13 - 1 1 dmachu.f|A,B,n|hs
+5 13 - 1 2 dmachu.f|B,B,n|hs
+5 13 - 1 3r dmachu.f.eq|B,B,C|hs
+5 13 - 1 3u dmachu.f.eq|B,B,n|hs
+5 14 - 0 0 vadd2h|A,B,C|hs
+5 14 - 0 1 vadd2h|A,B,n|hs
+5 14 - 0 2 vadd2h|B,B,n|hs
+5 14 - 0 3r vadd2h.eq|B,B,C|hs
+5 14 - 0 3u vadd2h.eq|B,B,n|hs
+5 15 - 0 0 vsub2h|A,B,C|hs
+5 15 - 0 1 vsub2h|A,B,n|hs
+5 15 - 0 2 vsub2h|B,B,n|hs
+5 15 - 0 3r vsub2h.eq|B,B,C|hs
+5 15 - 0 3u vsub2h.eq|B,B,n|hs
+5 16 - 0 0 vaddsub2h|A,B,C|hs
+5 16 - 0 1 vaddsub2h|A,B,n|hs
+5 16 - 0 2 vaddsub2h|B,B,n|hs
+5 16 - 0 3r vaddsub2h.eq|B,B,C|hs
+5 16 - 0 3u vaddsub2h.eq|B,B,n|hs
+5 17 - 0 0 vsubadd2h|A,B,C|hs
+5 17 - 0 1 vsubadd2h|A,B,n|hs
+5 17 - 0 2 vsubadd2h|B,B,n|hs
+5 17 - 0 3r vsubadd2h.eq|B,B,C|hs
+5 17 - 0 3u vsubadd2h.eq|B,B,n|hs
+5 18 - 0 0 mpyd|A,B,C|hs
+5 18 - 0 1 mpyd|A,B,n|hs
+5 18 - 0 2 mpyd|B,B,n|hs
+5 18 - 0 3r mpyd.eq|B,B,C|hs
+5 18 - 0 3u mpyd.eq|B,B,n|hs
+5 18 - 1 0 mpyd.f|A,B,C|hs
+5 18 - 1 1 mpyd.f|A,B,n|hs
+5 18 - 1 2 mpyd.f|B,B,n|hs
+5 18 - 1 3r mpyd.f.eq|B,B,C|hs
+5 18 - 1 3u mpyd.f.eq|B,B,n|hs
+5 19 - 0 0 mpydu|A,B,C|hs
+5 19 - 0 1 mpydu|A,B,n|hs
+5 19 - 0 2 mpydu|B,B,n|hs
+5 19 - 0 3r mpydu.eq|B,B,C|hs
+5 19 - 0 3u mpydu.eq|B,B,n|hs
+5 19 - 1 0 mpydu.f|A,B,C|hs
+5 19 - 1 1 mpydu.f|A,B,n|hs
+5 19 - 1 2 mpydu.f|B,B,n|hs
+5 19 - 1 3r mpydu.f.eq|B,B,C|hs
+5 19 - 1 3u mpydu.f.eq|B,B,n|hs
+5 1a - 0 0 macd|A,B,C|hs
+5 1a - 0 1 macd|A,B,n|hs
+5 1a - 0 2 macd|B,B,n|hs
+5 1a - 0 3r macd.eq|B,B,C|hs
+5 1a - 0 3u macd.eq|B,B,n|hs
+5 1a - 1 0 macd.f|A,B,C|hs
+5 1a - 1 1 macd.f|A,B,n|hs
+5 1a - 1 2 macd.f|B,B,n|hs
+5 1a - 1 3r macd.f.eq|B,B,C|hs
+5 1a - 1 3u macd.f.eq|B,B,n|hs
+5 1b - 0 0 macdu|A,B,C|hs
+5 1b - 0 1 macdu|A,B,n|hs
+5 1b - 0 2 macdu|B,B,n|hs
+5 1b - 0 3r macdu.eq|B,B,C|hs
+5 1b - 0 3u macdu.eq|B,B,n|hs
+5 1b - 1 0 macdu.f|A,B,C|hs
+5 1b - 1 1 macdu.f|A,B,n|hs
+5 1b - 1 2 macdu.f|B,B,n|hs
+5 1b - 1 3r macdu.f.eq|B,B,C|hs
+5 1b - 1 3u macdu.f.eq|B,B,n|hs
+5 1c - 0 0 vmpy2h|AA,B,C|hs
+5 1c - 0 1 vmpy2h|AA,B,n|hs
+5 1c - 0 2 vmpy2h|BB,B,n|hs
+5 1c - 0 3r vmpy2h.eq|BB,B,C|hs
+5 1c - 0 3u vmpy2h.eq|BB,B,n|hs
+5 1c - 0 0z vmpy2h|rnrn,B,C|hs
+5 1c - 0 1z vmpy2h|rnrn,B,n|hs
+5 1c - 1 0 vmpy2hf|A,B,C|hs
+5 1c - 1 1 vmpy2hf|A,B,n|hs
+5 1c - 1 2 vmpy2hf|B,B,n|hs
+5 1c - 1 3r vmpy2hf.eq|B,B,C|hs
+5 1c - 1 3u vmpy2hf.eq|B,B,n|hs
+5 1d - 0 0 vmpy2hu|A,B,C|hs
+5 1d - 0 1 vmpy2hu|A,B,n|hs
+5 1d - 0 2 vmpy2hu|B,B,n|hs
+5 1d - 0 3r vmpy2hu.eq|B,B,C|hs
+5 1d - 0 3u vmpy2hu.eq|B,B,n|hs
+5 1d - 1 0 vmpy2hfr|A,B,C|hs
+5 1d - 1 1 vmpy2hfr|A,B,n|hs
+5 1d - 1 2 vmpy2hfr|B,B,n|hs
+5 1d - 1 3r vmpy2hfr.eq|B,B,C|hs
+5 1d - 1 3u vmpy2hfr.eq|B,B,n|hs
+5 1e - 0 0 vmac2h|AA,B,C|hs
+5 1e - 0 1 vmac2h|AA,B,n|hs
+5 1e - 0 2 vmac2h|BB,B,n|hs
+5 1e - 0 3r vmac2h.eq|BB,B,C|hs
+5 1e - 0 3u vmac2h.eq|BB,B,n|hs
+5 1e - 0 0z vmac2h|rnrn,B,C|hs
+5 1e - 0 1z vmac2h|rnrn,B,n|hs
+5 1e - 1 0 vmac2hf|A,B,C|hs
+5 1e - 1 1 vmac2hf|A,B,n|hs
+5 1e - 1 2 vmac2hf|B,B,n|hs
+5 1e - 1 3r vmac2hf.eq|B,B,C|hs
+5 1e - 1 3u vmac2hf.eq|B,B,n|hs
+5 1f - 0 0 vmac2hu|A,B,C|hs
+5 1f - 0 1 vmac2hu|A,B,n|hs
+5 1f - 0 2 vmac2hu|B,B,n|hs
+5 1f - 0 3r vmac2hu.eq|B,B,C|hs
+5 1f - 0 3u vmac2hu.eq|B,B,n|hs
+5 1f - 1 0 vmac2hfr|A,B,C|hs
+5 1f - 1 1 vmac2hfr|A,B,n|hs
+5 1f - 1 2 vmac2hfr|B,B,n|hs
+5 1f - 1 3r vmac2hfr.eq|B,B,C|hs
+5 1f - 1 3u vmac2hfr.eq|B,B,n|hs
+5 20 - 0 0 vmpy2hwf|A,B,C|hs
+5 20 - 0 1 vmpy2hwf|A,B,n|hs
+5 20 - 0 2 vmpy2hwf|B,B,n|hs
+5 20 - 0 3r vmpy2hwf.eq|B,B,C|hs
+5 20 - 0 3u vmpy2hwf.eq|B,B,n|hs
+5 21 - 0 0 vasl2h|A,B,C|hs
+5 21 - 0 1 vasl2h|A,B,n|hs
+5 21 - 0 2 vasl2h|B,B,n|hs
+5 21 - 0 3r vasl2h.eq|B,B,C|hs
+5 21 - 0 3u vasl2h.eq|B,B,n|hs
+5 21 - 1 0 vasls2h|A,B,C|hs
+5 21 - 1 1 vasls2h|A,B,n|hs
+5 21 - 1 2 vasls2h|B,B,n|hs
+5 21 - 1 3r vasls2h.eq|B,B,C|hs
+5 21 - 1 3u vasls2h.eq|B,B,n|hs
+5 22 - 0 0 vasr2h|A,B,C|hs
+5 22 - 0 1 vasr2h|A,B,n|hs
+5 22 - 0 2 vasr2h|B,B,n|hs
+5 22 - 0 3r vasr2h.eq|B,B,C|hs
+5 22 - 0 3u vasr2h.eq|B,B,n|hs
+5 22 - 1 0 vasrs2h|A,B,C|hs
+5 22 - 1 1 vasrs2h|A,B,n|hs
+5 22 - 1 2 vasrs2h|B,B,n|hs
+5 22 - 1 3r vasrs2h.eq|B,B,C|hs
+5 22 - 1 3u vasrs2h.eq|B,B,n|hs
+5 23 - 0 0 vlsr2h|A,B,C|hs
+5 23 - 0 1 vlsr2h|A,B,n|hs
+5 23 - 0 2 vlsr2h|B,B,n|hs
+5 23 - 0 3r vlsr2h.eq|B,B,C|hs
+5 23 - 0 3u vlsr2h.eq|B,B,n|hs
+5 23 - 1 0 vasrsr2h|A,B,C|hs
+5 23 - 1 1 vasrsr2h|A,B,n|hs
+5 23 - 1 2 vasrsr2h|B,B,n|hs
+5 23 - 1 3r vasrsr2h.eq|B,B,C|hs
+5 23 - 1 3u vasrsr2h.eq|B,B,n|hs
+5 24 - 0 0 vadd4b|A,B,C|hs
+5 24 - 0 1 vadd4b|A,B,n|hs
+5 24 - 0 2 vadd4b|B,B,n|hs
+5 24 - 0 3r vadd4b.eq|B,B,C|hs
+5 24 - 0 3u vadd4b.eq|B,B,n|hs
+5 24 - 1 0 vmax2h|A,B,C|hs
+5 24 - 1 1 vmax2h|A,B,n|hs
+5 24 - 1 2 vmax2h|B,B,n|hs
+5 24 - 1 3r vmax2h.eq|B,B,C|hs
+5 24 - 1 3u vmax2h.eq|B,B,n|hs
+5 25 - 0 0 vsub4b|A,B,C|hs
+5 25 - 0 1 vsub4b|A,B,n|hs
+5 25 - 0 2 vsub4b|B,B,n|hs
+5 25 - 0 3r vsub4b.eq|B,B,C|hs
+5 25 - 0 3u vsub4b.eq|B,B,n|hs
+5 25 - 1 0 vmin2h|A,B,C|hs
+5 25 - 1 1 vmin2h|A,B,n|hs
+5 25 - 1 2 vmin2h|B,B,n|hs
+5 25 - 1 3r vmin2h.eq|B,B,C|hs
+5 25 - 1 3u vmin2h.eq|B,B,n|hs
+5 26 - 0 0 adcs|A,B,C|hs
+5 26 - 0 1 adcs|A,B,n|hs
+5 26 - 0 2 adcs|B,B,n|hs
+5 26 - 0 3r adcs.eq|B,B,C|hs
+5 26 - 0 3u adcs.eq|B,B,n|hs
+5 26 - 1 0 adcs.f|A,B,C|hs
+5 26 - 1 1 adcs.f|A,B,n|hs
+5 26 - 1 2 adcs.f|B,B,n|hs
+5 26 - 1 3r adcs.f.eq|B,B,C|hs
+5 26 - 1 3u adcs.f.eq|B,B,n|hs
+5 27 - 0 0 sbcs|A,B,C|hs
+5 27 - 0 1 sbcs|A,B,n|hs
+5 27 - 0 2 sbcs|B,B,n|hs
+5 27 - 0 3r sbcs.eq|B,B,C|hs
+5 27 - 0 3u sbcs.eq|B,B,n|hs
+5 27 - 1 0 sbcs.f|A,B,C|hs
+5 27 - 1 1 sbcs.f|A,B,n|hs
+5 27 - 1 2 sbcs.f|B,B,n|hs
+5 27 - 1 3r sbcs.f.eq|B,B,C|hs
+5 27 - 1 3u sbcs.f.eq|B,B,n|hs
+5 28 - 0 0 dmpyhwf|A,B,C|hs
+5 28 - 0 1 dmpyhwf|A,B,n|hs
+5 28 - 0 2 dmpyhwf|B,B,n|hs
+5 28 - 0 3r dmpyhwf.eq|B,B,C|hs
+5 28 - 0 3u dmpyhwf.eq|B,B,n|hs
+5 28 - 1 0 dmpyhwf.f|A,B,C|hs
+5 28 - 1 1 dmpyhwf.f|A,B,n|hs
+5 28 - 1 2 dmpyhwf.f|B,B,n|hs
+5 28 - 1 3r dmpyhwf.f.eq|B,B,C|hs
+5 28 - 1 3u dmpyhwf.f.eq|B,B,n|hs
+5 29 - 0 0 vpack2hl|A,B,C|hs
+5 29 - 0 1 vpack2hl|A,B,n|hs
+5 29 - 0 2 vpack2hl|B,B,n|hs
+5 29 - 0 3r vpack2hl.eq|B,B,C|hs
+5 29 - 0 3u vpack2hl.eq|B,B,n|hs
+5 29 - 1 0 vpack2hm|A,B,C|hs
+5 29 - 1 1 vpack2hm|A,B,n|hs
+5 29 - 1 2 vpack2hm|B,B,n|hs
+5 29 - 1 3r vpack2hm.eq|B,B,C|hs
+5 29 - 1 3u vpack2hm.eq|B,B,n|hs
+5 2a - 0 0 dmpyhf|A,B,C|hs
+5 2a - 0 1 dmpyhf|A,B,n|hs
+5 2a - 0 2 dmpyhf|B,B,n|hs
+5 2a - 0 3r dmpyhf.eq|B,B,C|hs
+5 2a - 0 3u dmpyhf.eq|B,B,n|hs
+5 2a - 1 0 dmpyhf.f|A,B,C|hs
+5 2a - 1 1 dmpyhf.f|A,B,n|hs
+5 2a - 1 2 dmpyhf.f|B,B,n|hs
+5 2a - 1 3r dmpyhf.f.eq|B,B,C|hs
+5 2a - 1 3u dmpyhf.f.eq|B,B,n|hs
+5 2b - 0 0 dmpyhfr|A,B,C|hs
+5 2b - 0 1 dmpyhfr|A,B,n|hs
+5 2b - 0 2 dmpyhfr|B,B,n|hs
+5 2b - 0 3r dmpyhfr.eq|B,B,C|hs
+5 2b - 0 3u dmpyhfr.eq|B,B,n|hs
+5 2b - 1 0 dmpyhfr.f|A,B,C|hs
+5 2b - 1 1 dmpyhfr.f|A,B,n|hs
+5 2b - 1 2 dmpyhfr.f|B,B,n|hs
+5 2b - 1 3r dmpyhfr.f.eq|B,B,C|hs
+5 2b - 1 3u dmpyhfr.f.eq|B,B,n|hs
+5 2c - 0 0 dmachf|A,B,C|hs
+5 2c - 0 1 dmachf|A,B,n|hs
+5 2c - 0 2 dmachf|B,B,n|hs
+5 2c - 0 3r dmachf.eq|B,B,C|hs
+5 2c - 0 3u dmachf.eq|B,B,n|hs
+5 2c - 1 0 dmachf.f|A,B,C|hs
+5 2c - 1 1 dmachf.f|A,B,n|hs
+5 2c - 1 2 dmachf.f|B,B,n|hs
+5 2c - 1 3r dmachf.f.eq|B,B,C|hs
+5 2c - 1 3u dmachf.f.eq|B,B,n|hs
+5 2d - 0 0 dmachfr|A,B,C|hs
+5 2d - 0 1 dmachfr|A,B,n|hs
+5 2d - 0 2 dmachfr|B,B,n|hs
+5 2d - 0 3r dmachfr.eq|B,B,C|hs
+5 2d - 0 3u dmachfr.eq|B,B,n|hs
+5 2d - 1 0 dmachfr.f|A,B,C|hs
+5 2d - 1 1 dmachfr.f|A,B,n|hs
+5 2d - 1 2 dmachfr.f|B,B,n|hs
+5 2d - 1 3r dmachfr.f.eq|B,B,C|hs
+5 2d - 1 3u dmachfr.f.eq|B,B,n|hs
+5 2e - 0 0 vperm|A,B,C|hs
+5 2e - 0 1 vperm|A,B,n|hs
+5 2e - 0 2 vperm|B,B,n|hs
+5 2e - 0 3r vperm.eq|B,B,C|hs
+5 2e - 0 3u vperm.eq|B,B,n|hs
+5 2e - 1 0 bspush|A,B,C|em
+5 2e - 1 1 bspush|A,B,n|em
+5 2e - 1 2 bspush|B,B,n|em
+5 2e - 1 3r bspush.eq|B,B,C|em
+5 2e - 1 3u bspush.eq|B,B,n|em
+5 2f sop00 0 0 swap|B,C|hs
+5 2f sop00 0 1 swap|B,n|hs
+5 2f sop00 1 0 swap.f|B,C|hs
+5 2f sop00 1 1 swap.f|B,n|hs
+5 2f sop01 0 0 norm|B,C|hs
+5 2f sop01 0 1 norm|B,n|hs
+5 2f sop01 1 0 norm.f|B,C|hs
+5 2f sop01 1 1 norm.f|B,n|hs
+5 2f sop02 0 0 sath|B,C|hs
+5 2f sop02 0 1 sath|B,n|hs
+5 2f sop02 1 0 sath.f|B,C|hs
+5 2f sop02 1 1 sath.f|B,n|hs
+5 2f sop03 0 0 rndh|B,C|hs
+5 2f sop03 0 1 rndh|B,n|hs
+5 2f sop03 1 0 rndh.f|B,C|hs
+5 2f sop03 1 1 rndh.f|B,n|hs
+5 2f sop04 0 0 abssh|B,C|hs
+5 2f sop04 0 1 abssh|B,n|hs
+5 2f sop04 1 0 abssh.f|B,C|hs
+5 2f sop04 1 1 abssh.f|B,n|hs
+5 2f sop05 0 0 abss|B,C|hs
+5 2f sop05 0 1 abss|B,n|hs
+5 2f sop05 1 0 abss.f|B,C|hs
+5 2f sop05 1 1 abss.f|B,n|hs
+5 2f sop06 0 0 negsh|B,C|hs
+5 2f sop06 0 1 negsh|B,n|hs
+5 2f sop06 1 0 negsh.f|B,C|hs
+5 2f sop06 1 1 negsh.f|B,n|hs
+5 2f sop07 0 0 negs|B,C|hs
+5 2f sop07 0 1 negs|B,n|hs
+5 2f sop07 1 0 negs.f|B,C|hs
+5 2f sop07 1 1 negs.f|B,n|hs
+5 2f sop08 0 0 normh|B,C|hs
+5 2f sop08 0 1 normh|B,n|hs
+5 2f sop08 1 0 normh.f|B,C|hs
+5 2f sop08 1 1 normh.f|B,n|hs
+5 2f sop09 0 0 swape|B,C|hs
+5 2f sop09 0 1 swape|B,n|hs
+5 2f sop09 1 0 swape.f|B,C|hs
+5 2f sop09 1 1 swape.f|B,n|hs
+5 2f sop0a 0 0 lsl16|B,C|hs
+5 2f sop0a 0 1 lsl16|B,n|hs
+5 2f sop0a 1 0 lsl16.f|B,C|hs
+5 2f sop0a 1 1 lsl16.f|B,n|hs
+5 2f sop0b 0 0 lsr16|B,C|hs
+5 2f sop0b 0 1 lsr16|B,n|hs
+5 2f sop0b 1 0 lsr16.f|B,C|hs
+5 2f sop0b 1 1 lsr16.f|B,n|hs
+5 2f sop0c 0 0 asr16|B,C|hs
+5 2f sop0c 0 1 asr16|B,n|hs
+5 2f sop0c 1 0 asr16.f|B,C|hs
+5 2f sop0c 1 1 asr16.f|B,n|hs
+5 2f sop0d 0 0 asr8|B,C|hs
+5 2f sop0d 0 1 asr8|B,n|hs
+5 2f sop0d 1 0 asr8.f|B,C|hs
+5 2f sop0d 1 1 asr8.f|B,n|hs
+5 2f sop0e 0 0 lsr8|B,C|hs
+5 2f sop0e 0 1 lsr8|B,n|hs
+5 2f sop0e 1 0 lsr8.f|B,C|hs
+5 2f sop0e 1 1 lsr8.f|B,n|hs
+5 2f sop0f 0 0 lsl8|B,C|hs
+5 2f sop0f 0 1 lsl8|B,n|hs
+5 2f sop0f 1 0 lsl8.f|B,C|hs
+5 2f sop0f 1 1 lsl8.f|B,n|hs
+5 2f sop10 0 0 rol8|B,C|hs
+5 2f sop10 0 1 rol8|B,n|hs
+5 2f sop10 1 0 rol8.f|B,C|hs
+5 2f sop10 1 1 rol8.f|B,n|hs
+5 2f sop11 0 0 ror8|B,C|hs
+5 2f sop11 0 1 ror8|B,n|hs
+5 2f sop11 1 0 ror8.f|B,C|hs
+5 2f sop11 1 1 ror8.f|B,n|hs
+5 2f sop12 0 0 ffs|B,C|hs
+5 2f sop12 0 1 ffs|B,n|hs
+5 2f sop12 1 0 ffs.f|B,C|hs
+5 2f sop12 1 1 ffs.f|B,n|hs
+5 2f sop13 0 0 fls|B,C|hs
+5 2f sop13 0 1 fls|B,n|hs
+5 2f sop13 1 0 fls.f|B,C|hs
+5 2f sop13 1 1 fls.f|B,n|hs
+5 2f sop18 0 0 getacc|B,C|hs
+5 2f sop18 0 1 getacc|B,n|hs
+5 2f sop19 0 0 normacc|B,C|hs
+5 2f sop19 0 1 normacc|B,n|hs
+5 2f sop1a 0 0 satf|B,C|hs
+5 2f sop1a 0 1 satf|B,n|hs
+5 2f sop1a 1 0 satf.f|B,C|hs
+5 2f sop1a 1 1 satf.f|B,n|hs
+5 2f sop1c 0 0 vpack2hbl|B,C|hs
+5 2f sop1c 0 1 vpack2hbl|B,n|hs
+5 2f sop1d 0 0 vpack2hbm|B,C|hs
+5 2f sop1d 0 1 vpack2hbm|B,n|hs
+5 2f sop1e 0 0 vpack2hblf|B,C|hs
+5 2f sop1e 0 1 vpack2hblf|B,n|hs
+5 2f sop1f 0 0 vpack2hbmf|B,C|hs
+5 2f sop1f 0 1 vpack2hbmf|B,n|hs
+5 2f sop20 0 0 vext2bhlf|B,C|hs
+5 2f sop20 0 1 vext2bhlf|B,n|hs
+5 2f sop21 0 0 vext2bhmf|B,C|hs
+5 2f sop21 0 1 vext2bhmf|B,n|hs
+5 2f sop22 0 0 vrep2hl|B,C|hs
+5 2f sop22 0 1 vrep2hl|B,n|hs
+5 2f sop23 0 0 vrep2hm|B,C|hs
+5 2f sop23 0 1 vrep2hm|B,n|hs
+5 2f sop24 0 0 vext2bhl|B,C|hs
+5 2f sop24 0 1 vext2bhl|B,n|hs
+5 2f sop25 0 0 vext2bhm|B,C|hs
+5 2f sop25 0 1 vext2bhm|B,n|hs
+5 2f sop26 0 0 vsext2bhl|B,C|hs
+5 2f sop26 0 1 vsext2bhl|B,n|hs
+5 2f sop27 0 0 vsext2bhm|B,C|hs
+5 2f sop27 0 1 vsext2bhm|B,n|hs
+5 2f sop28 0 0 vabs2h|B,C|hs
+5 2f sop28 0 1 vabs2h|B,n|hs
+5 2f sop29 0 0 vabss2h|B,C|hs
+5 2f sop29 0 1 vabss2h|B,n|hs
+5 2f sop2a 0 0 vneg2h|B,C|hs
+5 2f sop2a 0 1 vneg2h|B,n|hs
+5 2f sop2b 0 0 vnegs2h|B,C|hs
+5 2f sop2b 0 1 vnegs2h|B,n|hs
+5 2f sop2c 0 0 vnorm2h|B,C|hs
+5 2f sop2c 0 1 vnorm2h|B,n|hs
+5 2f sop2e 0 0 bspeek|B,C|em
+5 2f sop2e 0 1 bspeek|B,n|em
+5 2f sop2e 1 0 bspeek.f|B,C|em
+5 2f sop2e 1 1 bspeek.f|B,n|em
+5 2f sop2f 0 0 bspop|B,C|em
+5 2f sop2f 0 1 bspop|B,n|em
+5 2f sop2f 1 0 bspop.f|B,C|em
+5 2f sop2f 1 1 bspop.f|B,n|em
+5 2f sop30 0 0 sqrt|B,C|hs
+5 2f sop30 0 1 sqrt|B,n|hs
+5 2f sop30 1 0 sqrt.f|B,C|hs
+5 2f sop30 1 1 sqrt.f|B,n|hs
+5 2f sop31 0 0 sqrtf|B,C|hs
+5 2f sop31 0 1 sqrtf|B,n|hs
+5 2f sop31 1 0 sqrtf.f|B,C|hs
+5 2f sop31 1 1 sqrtf.f|B,n|hs
+5 2f sop3e 0 0 modapp|B,C|em
+5 2f sop3e 0 1 modapp|B,n|em
+5 2f zop00 0 0 aslacc|C|hs
+5 2f zop00 0 1 aslacc|n|hs
+5 2f zop01 0 0 aslsacc|C|hs
+5 2f zop01 0 1 aslsacc|n|hs
+5 2f zop02 0 0 sqrtacc|C|em
+5 2f zop02 0 1 sqrtacc|n|em
+5 2f zop03 0 0 divacc|C|em
+5 2f zop03 0 1 divacc|n|em
+5 2f zop04 1 0 flagacc|C|hs
+5 2f zop04 1 1 flagacc|n|hs
+5 2f zop05 0 0 modif|C|em
+5 2f zop05 0 1 modif|n|em
+5 30 - 0 0 qmpyh|A,B,C|hs
+5 30 - 0 1 qmpyh|A,B,n|hs
+5 30 - 0 2 qmpyh|B,B,n|hs
+5 30 - 0 3r qmpyh.eq|B,B,C|hs
+5 30 - 0 3u qmpyh.eq|B,B,n|hs
+5 30 - 1 0 qmpyh.f|A,B,C|hs
+5 30 - 1 1 qmpyh.f|A,B,n|hs
+5 30 - 1 2 qmpyh.f|B,B,n|hs
+5 30 - 1 3r qmpyh.f.eq|B,B,C|hs
+5 30 - 1 3u qmpyh.f.eq|B,B,n|hs
+5 31 - 0 0 qmpyhu|A,B,C|hs
+5 31 - 0 1 qmpyhu|A,B,n|hs
+5 31 - 0 2 qmpyhu|B,B,n|hs
+5 31 - 0 3r qmpyhu.eq|B,B,C|hs
+5 31 - 0 3u qmpyhu.eq|B,B,n|hs
+5 31 - 1 0 qmpyhu.f|A,B,C|hs
+5 31 - 1 1 qmpyhu.f|A,B,n|hs
+5 31 - 1 2 qmpyhu.f|B,B,n|hs
+5 31 - 1 3r qmpyhu.f.eq|B,B,C|hs
+5 31 - 1 3u qmpyhu.f.eq|B,B,n|hs
+5 32 - 0 0 dmpywh|A,B,C|hs
+5 32 - 0 1 dmpywh|A,B,n|hs
+5 32 - 0 2 dmpywh|B,B,n|hs
+5 32 - 0 3r dmpywh.eq|B,B,C|hs
+5 32 - 0 3u dmpywh.eq|B,B,n|hs
+5 32 - 1 0 dmpywh.f|A,B,C|hs
+5 32 - 1 1 dmpywh.f|A,B,n|hs
+5 32 - 1 2 dmpywh.f|B,B,n|hs
+5 32 - 1 3r dmpywh.f.eq|B,B,C|hs
+5 32 - 1 3u dmpywh.f.eq|B,B,n|hs
+5 33 - 0 0 dmpywhu|A,B,C|hs
+5 33 - 0 1 dmpywhu|A,B,n|hs
+5 33 - 0 2 dmpywhu|B,B,n|hs
+5 33 - 0 3r dmpywhu.eq|B,B,C|hs
+5 33 - 0 3u dmpywhu.eq|B,B,n|hs
+5 33 - 1 0 dmpywhu.f|A,B,C|hs
+5 33 - 1 1 dmpywhu.f|A,B,n|hs
+5 33 - 1 2 dmpywhu.f|B,B,n|hs
+5 33 - 1 3r dmpywhu.f.eq|B,B,C|hs
+5 33 - 1 3u dmpywhu.f.eq|B,B,n|hs
+5 34 - 0 0 qmach|A,B,C|hs
+5 34 - 0 1 qmach|A,B,n|hs
+5 34 - 0 2 qmach|B,B,n|hs
+5 34 - 0 3r qmach.eq|B,B,C|hs
+5 34 - 0 3u qmach.eq|B,B,n|hs
+5 34 - 1 0 qmach.f|A,B,C|hs
+5 34 - 1 1 qmach.f|A,B,n|hs
+5 34 - 1 2 qmach.f|B,B,n|hs
+5 34 - 1 3r qmach.f.eq|B,B,C|hs
+5 34 - 1 3u qmach.f.eq|B,B,n|hs
+5 35 - 0 0 qmachu|A,B,C|hs
+5 35 - 0 1 qmachu|A,B,n|hs
+5 35 - 0 2 qmachu|B,B,n|hs
+5 35 - 0 3r qmachu.eq|B,B,C|hs
+5 35 - 0 3u qmachu.eq|B,B,n|hs
+5 35 - 1 0 qmachu.f|A,B,C|hs
+5 35 - 1 1 qmachu.f|A,B,n|hs
+5 35 - 1 2 qmachu.f|B,B,n|hs
+5 35 - 1 3r qmachu.f.eq|B,B,C|hs
+5 35 - 1 3u qmachu.f.eq|B,B,n|hs
+5 36 - 0 0 dmacwh|A,B,C|hs
+5 36 - 0 1 dmacwh|A,B,n|hs
+5 36 - 0 2 dmacwh|B,B,n|hs
+5 36 - 0 3r dmacwh.eq|B,B,C|hs
+5 36 - 0 3u dmacwh.eq|B,B,n|hs
+5 36 - 1 0 dmacwh.f|A,B,C|hs
+5 36 - 1 1 dmacwh.f|A,B,n|hs
+5 36 - 1 2 dmacwh.f|B,B,n|hs
+5 36 - 1 3r dmacwh.f.eq|B,B,C|hs
+5 36 - 1 3u dmacwh.f.eq|B,B,n|hs
+5 37 - 0 0 dmacwhu|A,B,C|hs
+5 37 - 0 1 dmacwhu|A,B,n|hs
+5 37 - 0 2 dmacwhu|B,B,n|hs
+5 37 - 0 3r dmacwhu.eq|B,B,C|hs
+5 37 - 0 3u dmacwhu.eq|B,B,n|hs
+5 37 - 1 0 dmacwhu.f|A,B,C|hs
+5 37 - 1 1 dmacwhu.f|A,B,n|hs
+5 37 - 1 2 dmacwhu.f|B,B,n|hs
+5 37 - 1 3r dmacwhu.f.eq|B,B,C|hs
+5 37 - 1 3u dmacwhu.f.eq|B,B,n|hs
+5 38 - 0 0 vadd4h|AA,BB,CC|hs
+5 38 - 0 1 vadd4h|AA,BB,n|hs
+5 38 - 0 2 vadd4h|BB,BB,n|hs
+5 38 - 0 3r vadd4h.eq|BB,BB,CC|hs
+5 38 - 0 3u vadd4h.eq|BB,BB,n|hs
+5 38 - 0 0z vadd4h|rnrn,BB,CC|hs
+5 38 - 0 1z vadd4h|rnrn,BB,n|hs
+5 39 - 0 0 vsub4h|AA,BB,CC|hs
+5 39 - 0 1 vsub4h|AA,BB,n|hs
+5 39 - 0 2 vsub4h|BB,BB,n|hs
+5 39 - 0 3r vsub4h.eq|BB,BB,CC|hs
+5 39 - 0 3u vsub4h.eq|BB,BB,n|hs
+5 39 - 0 0z vsub4h|rnrn,BB,CC|hs
+5 39 - 0 1z vsub4h|rnrn,BB,n|hs
+5 3a - 0 0 vaddsub4h|A,B,C|hs
+5 3a - 0 1 vaddsub4h|A,B,n|hs
+5 3a - 0 2 vaddsub4h|B,B,n|hs
+5 3a - 0 3r vaddsub4h.eq|B,B,C|hs
+5 3a - 0 3u vaddsub4h.eq|B,B,n|hs
+5 3b - 0 0 vsubadd4h|A,B,C|hs
+5 3b - 0 1 vsubadd4h|A,B,n|hs
+5 3b - 0 2 vsubadd4h|B,B,n|hs
+5 3b - 0 3r vsubadd4h.eq|B,B,C|hs
+5 3b - 0 3u vsubadd4h.eq|B,B,n|hs
+5 3c - 0 0 vadd2|AA,BB,CC|hs
+5 3c - 0 1 vadd2|AA,BB,n|hs
+5 3c - 0 2 vadd2|BB,BB,n|hs
+5 3c - 0 3r vadd2.eq|BB,BB,C|hs
+5 3c - 0 3u vadd2.eq|BB,BB,n|hs
+5 3c - 0 0z vadd2|rnrn,BB,CC|hs
+5 3c - 0 1z vadd2|rnrn,BB,n|hs
+5 3d - 0 0 vsub2|A,B,C|hs
+5 3d - 0 1 vsub2|A,B,n|hs
+5 3d - 0 2 vsub2|B,B,n|hs
+5 3d - 0 3r vsub2.eq|B,B,C|hs
+5 3d - 0 3u vsub2.eq|B,B,n|hs
+5 3e - 0 0 vaddsub|A,B,C|hs
+5 3e - 0 1 vaddsub|A,B,n|hs
+5 3e - 0 2 vaddsub|B,B,n|hs
+5 3e - 0 3r vaddsub.eq|B,B,C|hs
+5 3e - 0 3u vaddsub.eq|B,B,n|hs
+5 3f - 0 0 vsubadd|A,B,C|hs
+5 3f - 0 1 vsubadd|A,B,n|hs
+5 3f - 0 2 vsubadd|B,B,n|hs
+5 3f - 0 3r vsubadd.eq|B,B,C|hs
+5 3f - 0 3u vsubadd.eq|B,B,n|hs
+6 00 - 0 0 fsmul|A,B,C|hs
+6 00 - 0 1 fsmul|A,B,n|hs
+6 00 - 0 2 fsmul|B,B,n|hs
+6 00 - 0 3r fsmul.eq|B,B,C|hs
+6 00 - 0 3u fsmul.eq|B,B,n|hs
+6 00 - 1 0 cmpyhnfr|A,B,C|hs W
+6 00 - 1 1 cmpychnfr|A,B,n|hs W
+6 00 - 1 2 cmpychnfr|B,B,n|hs W
+6 00 - 1 3r cmpychnfr.eq|B,B,C|hs W
+6 00 - 1 3u cmpychnfr.eq|B,B,n|hs W
+6 01 - 0 0 fsadd|A,B,C|hs
+6 01 - 0 1 fsadd|A,B,n|hs
+6 01 - 0 2 fsadd|B,B,n|hs
+6 01 - 0 3r fsadd.eq|B,B,C|hs
+6 01 - 0 3u fsadd.eq|B,B,n|hs
+6 01 - 1 0 cmpyhfr|A,B,C|hs W
+6 01 - 1 1 cmpyhfr|A,B,n|hs W
+6 01 - 1 2 cmpyhfr|B,B,n|hs W
+6 01 - 1 3r cmpyhfr.eq|B,B,C|hs W
+6 01 - 1 3u cmpyhfr.eq|B,B,n|hs W
+6 02 - 0 0 fssub|A,B,C|hs
+6 02 - 0 1 fssub|A,B,n|hs
+6 02 - 0 2 fssub|B,B,n|hs
+6 02 - 0 3r fssub.eq|B,B,C|hs
+6 02 - 0 3u fssub.eq|B,B,n|hs
+6 02 - 1 0 cmpychnfr|A,B,C|hs W
+6 02 - 1 1 cmpyhnfr|A,B,n|hs W
+6 02 - 1 2 cmpyhnfr|B,B,n|hs W
+6 02 - 1 3r cmpyhnfr.eq|B,B,C|hs W
+6 02 - 1 3u cmpyhnfr.eq|B,B,n|hs W
+6 03 - 0 0 vmsub2hfr|A,B,C|hs W
+6 03 - 0 1 vmsub2hfr|A,B,n|hs W
+6 03 - 0 2 vmsub2hfr|B,B,n|hs W
+6 03 - 0 3r vmsub2hfr.eq|B,B,C|hs W
+6 03 - 0 3u vmsub2hfr.eq|B,B,n|hs W
+6 03 - 1 2 fscmp|B,n|hs
+6 03 - 1 3r fscmp.eq|B,C|hs
+6 03 - 1 3u fscmp.eq|B,n|hs
+6 03 - 1 0z fscmp|B,C|hs
+6 03 - 1 1z fscmp|B,n|hs
+6 04 - 0 0 vmsub2hf|A,B,C|hs W
+6 04 - 0 1 vmsub2hf|A,B,n|hs W
+6 04 - 0 2 vmsub2hf|B,B,n|hs W
+6 04 - 0 3r vmsub2hf.eq|B,B,C|hs W
+6 04 - 0 3u vmsub2hf.eq|B,B,n|hs W
+6 04 - 1 2 fscmpf|B,n|hs
+6 04 - 1 3r fscmpf.eq|B,C|hs
+6 04 - 1 3u fscmpf.eq|B,n|hs
+6 04 - 1 0z fscmpf|B,C|hs
+6 04 - 1 1z fscmpf|B,n|hs
+6 05 - 0 0 fsmadd|A,B,C|hs
+6 05 - 0 1 fsmadd|A,B,n|hs
+6 05 - 0 2 fsmadd|B,B,n|hs
+6 05 - 0 3r fsmadd.eq|B,B,C|hs
+6 05 - 0 3u fsmadd.eq|B,B,n|hs
+6 05 - 1 0 cmpychfr|A,B,C|hs W
+6 05 - 1 1 cmpychfr|A,B,n|hs W
+6 05 - 1 2 cmpychfr|B,B,n|hs W
+6 05 - 1 3r cmpychfr.eq|B,B,C|hs W
+6 05 - 1 3u cmpychfr.eq|B,B,n|hs W
+6 06 - 0 0 fsmsub|A,B,C|hs
+6 06 - 0 1 fsmsub|A,B,n|hs
+6 06 - 0 2 fsmsub|B,B,n|hs
+6 06 - 0 3r fsmsub.eq|B,B,C|hs
+6 06 - 0 3u fsmsub.eq|B,B,n|hs
+6 06 - 1 0 cmachnfr|A,B,C|hs W
+6 06 - 1 1 cmachnfr|A,B,n|hs W
+6 06 - 1 2 cmachnfr|B,B,n|hs W
+6 06 - 1 3r cmachnfr.eq|B,B,C|hs W
+6 06 - 1 3u cmachnfr.eq|B,B,n|hs W
+6 07 - 0 0 fsdiv|A,B,C|hs
+6 07 - 0 1 fsdiv|A,B,n|hs
+6 07 - 0 2 fsdiv|B,B,n|hs
+6 07 - 0 3r fsdiv.eq|B,B,C|hs
+6 07 - 0 3u fsdiv.eq|B,B,n|hs
+6 07 - 1 0 cmachfr|A,B,C|hs W
+6 07 - 1 1 cmachfr|A,B,n|hs W
+6 07 - 1 2 cmachfr|B,B,n|hs W
+6 07 - 1 3r cmachfr.eq|B,B,C|hs W
+6 07 - 1 3u cmachfr.eq|B,B,n|hs W
+6 08 - 0 0 fcvt32|A,B,C|hs
+6 08 - 0 1 fcvt32|A,B,n|hs
+6 08 - 0 2 fcvt32|B,B,n|hs
+6 08 - 0 3r fcvt32.eq|B,B,C|hs
+6 08 - 0 3u fcvt32.eq|B,B,n|hs
+6 08 - 1 0 cmacchnfr|A,B,C|hs W
+6 08 - 1 1 cmacchnfr|A,B,n|hs W
+6 08 - 1 2 cmacchnfr|B,B,n|hs W
+6 08 - 1 3r cmacchnfr.eq|B,B,C|hs W
+6 08 - 1 3u cmacchnfr.eq|B,B,n|hs W
+6 09 - 0 0 fcvt32_64|A,B,C|hs
+6 09 - 0 1 fcvt32_64|A,B,n|hs
+6 09 - 0 2 fcvt32_64|B,B,n|hs
+6 09 - 0 3r fcvt32_64.eq|B,B,C|hs
+6 09 - 0 3u fcvt32_64.eq|B,B,n|hs
+6 09 - 1 0 cmacchfr|A,B,C|hs W
+6 09 - 1 1 cmacchfr|A,B,n|hs W
+6 09 - 1 2 cmacchfr|B,B,n|hs W
+6 09 - 1 3r cmacchfr.eq|B,B,C|hs W
+6 09 - 1 3u cmacchfr.eq|B,B,n|hs W
+6 0a - 0 0 mpyf|A,B,C|hs W
+6 0a - 0 1 mpyf|A,B,n|hs W
+6 0a - 0 2 mpyf|B,B,n|hs W
+6 0a - 0 3r mpyf.eq|B,B,C|hs W
+6 0a - 0 3u mpyf.eq|B,B,n|hs W
+6 0a - 1 0 mpyf.f|A,B,C|hs W
+6 0a - 1 1 mpyf.f|A,B,n|hs W
+6 0a - 1 2 mpyf.f|B,B,n|hs W
+6 0a - 1 3r mpyf.f.eq|B,B,C|hs W
+6 0a - 1 3u mpyf.f.eq|B,B,n|hs W
+6 0b - 0 0 mpyfr|A,B,C|hs W
+6 0b - 0 1 mpyfr|A,B,n|hs W
+6 0b - 0 2 mpyfr|B,B,n|hs W
+6 0b - 0 3r mpyfr.eq|B,B,C|hs W
+6 0b - 0 3u mpyfr.eq|B,B,n|hs W
+6 0b - 1 0 mpyfr.f|A,B,C|hs W
+6 0b - 1 1 mpyfr.f|A,B,n|hs W
+6 0b - 1 2 mpyfr.f|B,B,n|hs W
+6 0b - 1 3r mpyfr.f.eq|B,B,C|hs W
+6 0b - 1 3u mpyfr.f.eq|B,B,n|hs W
+6 0c - 0 0 macf|A,B,C|hs W
+6 0c - 0 1 macf|A,B,n|hs W
+6 0c - 0 2 macf|B,B,n|hs W
+6 0c - 0 3r macf.eq|B,B,C|hs W
+6 0c - 0 3u macf.eq|B,B,n|hs W
+6 0c - 1 0 macf.f|A,B,C|hs W
+6 0c - 1 1 macf.f|A,B,n|hs W
+6 0c - 1 2 macf.f|B,B,n|hs W
+6 0c - 1 3r macf.f.eq|B,B,C|hs W
+6 0c - 1 3u macf.f.eq|B,B,n|hs W
+6 0d - 0 0 macfr|A,B,C|hs W
+6 0d - 0 1 macfr|A,B,n|hs W
+6 0d - 0 2 macfr|B,B,n|hs W
+6 0d - 0 3r macfr.eq|B,B,C|hs W
+6 0d - 0 3u macfr.eq|B,B,n|hs W
+6 0d - 1 0 macfr.f|A,B,C|hs W
+6 0d - 1 1 macfr.f|A,B,n|hs W
+6 0d - 1 2 macfr.f|B,B,n|hs W
+6 0d - 1 3r macfr.f.eq|B,B,C|hs W
+6 0d - 1 3u macfr.f.eq|B,B,n|hs W
+6 0e - 0 0 msubf|A,B,C|hs W
+6 0e - 0 1 msubf|A,B,n|hs W
+6 0e - 0 2 msubf|B,B,n|hs W
+6 0e - 0 3r msubf.eq|B,B,C|hs W
+6 0e - 0 3u msubf.eq|B,B,n|hs W
+6 0e - 1 0 msubf.f|A,B,C|hs W
+6 0e - 1 1 msubf.f|A,B,n|hs W
+6 0e - 1 2 msubf.f|B,B,n|hs W
+6 0e - 1 3r msubf.f.eq|B,B,C|hs W
+6 0e - 1 3u msubf.f.eq|B,B,n|hs W
+6 0f - 0 0 msubfr|A,B,C|hs W
+6 0f - 0 1 msubfr|A,B,n|hs W
+6 0f - 0 2 msubfr|B,B,n|hs W
+6 0f - 0 3r msubfr.eq|B,B,C|hs W
+6 0f - 0 3u msubfr.eq|B,B,n|hs W
+6 0f - 1 0 msubfr.f|A,B,C|hs W
+6 0f - 1 1 msubfr.f|A,B,n|hs W
+6 0f - 1 2 msubfr.f|B,B,n|hs W
+6 0f - 1 3r msubfr.f.eq|B,B,C|hs W
+6 0f - 1 3u msubfr.f.eq|B,B,n|hs W
+6 10 - 0 0 divf|A,B,C|hs W
+6 10 - 0 1 divf|A,B,n|hs W
+6 10 - 0 2 divf|B,B,n|hs W
+6 10 - 0 3r divf.eq|B,B,C|hs W
+6 10 - 0 3u divf.eq|B,B,n|hs W
+6 10 - 1 0 divf.f|A,B,C|hs W
+6 10 - 1 1 divf.f|A,B,n|hs W
+6 10 - 1 2 divf.f|B,B,n|hs W
+6 10 - 1 3r divf.f.eq|B,B,C|hs W
+6 10 - 1 3u divf.f.eq|B,B,n|hs W
+6 11 - 0 0 vmac2hnfr|A,B,C|hs W
+6 11 - 0 1 vmac2hnfr|A,B,n|hs W
+6 11 - 0 2 vmac2hnfr|B,B,n|hs W
+6 11 - 0 3r vmac2hnfr.eq|B,B,C|hs W
+6 11 - 0 3u vmac2hnfr.eq|B,B,n|hs W
+6 11 - 1 0 vmsub2hnfr|A,B,C|hs W
+6 11 - 1 1 vmsub2hnfr|A,B,n|hs W
+6 11 - 1 2 vmsub2hnfr|B,B,n|hs W
+6 11 - 1 3r vmsub2hnfr.eq|B,B,C|hs W
+6 11 - 1 3u vmsub2hnfr.eq|B,B,n|hs W
+6 12 - 0 0 mpydf|A,B,C|hs W
+6 12 - 0 1 mpydf|A,B,n|hs W
+6 12 - 0 2 mpydf|B,B,n|hs W
+6 12 - 0 3r mpydf.eq|B,B,C|hs W
+6 12 - 0 3u mpydf.eq|B,B,n|hs W
+6 12 - 1 0 mpydf.f|A,B,C|hs W
+6 12 - 1 1 mpydf.f|A,B,n|hs W
+6 12 - 1 2 mpydf.f|B,B,n|hs W
+6 12 - 1 3r mpydf.f.eq|B,B,C|hs W
+6 12 - 1 3u mpydf.f.eq|B,B,n|hs W
+6 13 - 0 0 macdf|A,B,C|hs W
+6 13 - 0 1 macdf|A,B,n|hs W
+6 13 - 0 2 macdf|B,B,n|hs W
+6 13 - 0 3r macdf.eq|B,B,C|hs W
+6 13 - 0 3u macdf.eq|B,B,n|hs W
+6 13 - 1 0 macdf.f|A,B,C|hs W
+6 13 - 1 1 macdf.f|A,B,n|hs W
+6 13 - 1 2 macdf.f|B,B,n|hs W
+6 13 - 1 3r macdf.f.eq|B,B,C|hs W
+6 13 - 1 3u macdf.f.eq|B,B,n|hs W
+6 14 - 0 0 msubwhfl|A,B,C|hs W
+6 14 - 0 1 msubwhfl|A,B,n|hs W
+6 14 - 0 2 msubwhfl|B,B,n|hs W
+6 14 - 0 3r msubwhfl.eq|B,B,C|hs W
+6 14 - 0 3u msubwhfl.eq|B,B,n|hs W
+6 14 - 1 0 msubwhfl.f|A,B,C|hs W
+6 14 - 1 1 msubwhfl.f|A,B,n|hs W
+6 14 - 1 2 msubwhfl.f|B,B,n|hs W
+6 14 - 1 3r msubwhfl.f.eq|B,B,C|hs W
+6 14 - 1 3u msubwhfl.f.eq|B,B,n|hs W
+6 15 - 0 0 msubdf|A,B,C|hs W
+6 15 - 0 1 msubdf|A,B,n|hs W
+6 15 - 0 2 msubdf|B,B,n|hs W
+6 15 - 0 3r msubdf.eq|B,B,C|hs W
+6 15 - 0 3u msubdf.eq|B,B,n|hs W
+6 15 - 1 0 msubdf.f|A,B,C|hs W
+6 15 - 1 1 msubdf.f|A,B,n|hs W
+6 15 - 1 2 msubdf.f|B,B,n|hs W
+6 15 - 1 3r msubdf.f.eq|B,B,C|hs W
+6 15 - 1 3u msubdf.f.eq|B,B,n|hs W
+6 16 - 0 0 dmpyhbl|A,B,C|hs W
+6 16 - 0 1 dmpyhbl|A,B,n|hs W
+6 16 - 0 2 dmpyhbl|B,B,n|hs W
+6 16 - 0 3r dmpyhbl.eq|B,B,C|hs W
+6 16 - 0 3u dmpyhbl.eq|B,B,n|hs W
+6 16 - 1 0 dmpyhbl.f|A,B,C|hs W
+6 16 - 1 1 dmpyhbl.f|A,B,n|hs W
+6 16 - 1 2 dmpyhbl.f|B,B,n|hs W
+6 16 - 1 3r dmpyhbl.f.eq|B,B,C|hs W
+6 16 - 1 3u dmpyhbl.f.eq|B,B,n|hs W
+6 17 - 0 0 dmpyhbm|A,B,C|hs W
+6 17 - 0 1 dmpyhbm|A,B,n|hs W
+6 17 - 0 2 dmpyhbm|B,B,n|hs W
+6 17 - 0 3r dmpyhbm.eq|B,B,C|hs W
+6 17 - 0 3u dmpyhbm.eq|B,B,n|hs W
+6 17 - 1 0 dmpyhbm.f|A,B,C|hs W
+6 17 - 1 1 dmpyhbm.f|A,B,n|hs W
+6 17 - 1 2 dmpyhbm.f|B,B,n|hs W
+6 17 - 1 3r dmpyhbm.f.eq|B,B,C|hs W
+6 17 - 1 3u dmpyhbm.f.eq|B,B,n|hs W
+6 18 - 0 0 dmachbl|A,B,C|hs W
+6 18 - 0 1 dmachbl|A,B,n|hs W
+6 18 - 0 2 dmachbl|B,B,n|hs W
+6 18 - 0 3r dmachbl.eq|B,B,C|hs W
+6 18 - 0 3u dmachbl.eq|B,B,n|hs W
+6 18 - 1 0 dmachbl.f|A,B,C|hs W
+6 18 - 1 1 dmachbl.f|A,B,n|hs W
+6 18 - 1 2 dmachbl.f|B,B,n|hs W
+6 18 - 1 3r dmachbl.f.eq|B,B,C|hs W
+6 18 - 1 3u dmachbl.f.eq|B,B,n|hs W
+6 19 - 0 0 dmachbm|A,B,C|hs W
+6 19 - 0 1 dmachbm|A,B,n|hs W
+6 19 - 0 2 dmachbm|B,B,n|hs W
+6 19 - 0 3r dmachbm.eq|B,B,C|hs W
+6 19 - 0 3u dmachbm.eq|B,B,n|hs W
+6 19 - 1 0 dmachbm.f|A,B,C|hs W
+6 19 - 1 1 dmachbm.f|A,B,n|hs W
+6 19 - 1 2 dmachbm.f|B,B,n|hs W
+6 19 - 1 3r dmachbm.f.eq|B,B,C|hs W
+6 19 - 1 3u dmachbm.f.eq|B,B,n|hs W
+6 1a - 0 0 msubwhflr|A,B,C|hs W
+6 1a - 0 1 msubwhflr|A,B,n|hs W
+6 1a - 0 2 msubwhflr|B,B,n|hs W
+6 1a - 0 3r msubwhflr.eq|B,B,C|hs W
+6 1a - 0 3u msubwhflr.eq|B,B,n|hs W
+6 1a - 1 0 msubwhflr.f|A,B,C|hs W
+6 1a - 1 1 msubwhflr.f|A,B,n|hs W
+6 1a - 1 2 msubwhflr.f|B,B,n|hs W
+6 1a - 1 3r msubwhflr.f.eq|B,B,C|hs W
+6 1a - 1 3u msubwhflr.f.eq|B,B,n|hs W
+6 1b - 0 0 cmpyhfmr|A,B,C|hs W
+6 1b - 0 1 cmpyhfmr|A,B,n|hs W
+6 1b - 0 2 cmpyhfmr|B,B,n|hs W
+6 1b - 0 3r cmpyhfmr.eq|B,B,C|hs W
+6 1b - 0 3u cmpyhfmr.eq|B,B,n|hs W
+6 1b - 1 0 cbflyhf0r|A,B,C|hs W
+6 1b - 1 1 cbflyhf0r|A,B,n|hs W
+6 1b - 1 2 cbflyhf0r|B,B,n|hs W
+6 1b - 1 3r cbflyhf0r.eq|B,B,C|hs W
+6 1b - 1 3u cbflyhf0r.eq|B,B,n|hs W
+6 1c - 0 0 mpywhl|A,B,C|hs W
+6 1c - 0 1 mpywhl|A,B,n|hs W
+6 1c - 0 2 mpywhl|B,B,n|hs W
+6 1c - 0 3r mpywhl.eq|B,B,C|hs W
+6 1c - 0 3u mpywhl.eq|B,B,n|hs W
+6 1c - 1 0 mpywhl.f|A,B,C|hs W
+6 1c - 1 1 mpywhl.f|A,B,n|hs W
+6 1c - 1 2 mpywhl.f|B,B,n|hs W
+6 1c - 1 3r mpywhl.f.eq|B,B,C|hs W
+6 1c - 1 3u mpywhl.f.eq|B,B,n|hs W
+6 1d - 0 0 macwhl|A,B,C|hs W
+6 1d - 0 1 macwhl|A,B,n|hs W
+6 1d - 0 2 macwhl|B,B,n|hs W
+6 1d - 0 3r macwhl.eq|B,B,C|hs W
+6 1d - 0 3u macwhl.eq|B,B,n|hs W
+6 1d - 1 0 macwhl.f|A,B,C|hs W
+6 1d - 1 1 macwhl.f|A,B,n|hs W
+6 1d - 1 2 macwhl.f|B,B,n|hs W
+6 1d - 1 3r macwhl.f.eq|B,B,C|hs W
+6 1d - 1 3u macwhl.f.eq|B,B,n|hs W
+6 1e - 0 0 mpywhul|A,B,C|hs W
+6 1e - 0 1 mpywhul|A,B,n|hs W
+6 1e - 0 2 mpywhul|B,B,n|hs W
+6 1e - 0 3r mpywhul.eq|B,B,C|hs W
+6 1e - 0 3u mpywhul.eq|B,B,n|hs W
+6 1e - 1 0 mpywhul.f|A,B,C|hs W
+6 1e - 1 1 mpywhul.f|A,B,n|hs W
+6 1e - 1 2 mpywhul.f|B,B,n|hs W
+6 1e - 1 3r mpywhul.f.eq|B,B,C|hs W
+6 1e - 1 3u mpywhul.f.eq|B,B,n|hs W
+6 1f - 0 0 macwhul|A,B,C|hs W
+6 1f - 0 1 macwhul|A,B,n|hs W
+6 1f - 0 2 macwhul|B,B,n|hs W
+6 1f - 0 3r macwhul.eq|B,B,C|hs W
+6 1f - 0 3u macwhul.eq|B,B,n|hs W
+6 1f - 1 0 macwhul.f|A,B,C|hs W
+6 1f - 1 1 macwhul.f|A,B,n|hs W
+6 1f - 1 2 macwhul.f|B,B,n|hs W
+6 1f - 1 3r macwhul.f.eq|B,B,C|hs W
+6 1f - 1 3u macwhul.f.eq|B,B,n|hs W
+6 20 - 0 0 mpywhfm|A,B,C|hs W
+6 20 - 0 1 mpywhfm|A,B,n|hs W
+6 20 - 0 2 mpywhfm|B,B,n|hs W
+6 20 - 0 3r mpywhfm.eq|B,B,C|hs W
+6 20 - 0 3u mpywhfm.eq|B,B,n|hs W
+6 20 - 1 0 mpywhfm.f|A,B,C|hs W
+6 20 - 1 1 mpywhfm.f|A,B,n|hs W
+6 20 - 1 2 mpywhfm.f|B,B,n|hs W
+6 20 - 1 3r mpywhfm.f.eq|B,B,C|hs W
+6 20 - 1 3u mpywhfm.f.eq|B,B,n|hs W
+6 21 - 0 0 mpywhfmr|A,B,C|hs W
+6 21 - 0 1 mpywhfmr|A,B,n|hs W
+6 21 - 0 2 mpywhfmr|B,B,n|hs W
+6 21 - 0 3r mpywhfmr.eq|B,B,C|hs W
+6 21 - 0 3u mpywhfmr.eq|B,B,n|hs W
+6 21 - 1 0 mpywhfmr.f|A,B,C|hs W
+6 21 - 1 1 mpywhfmr.f|A,B,n|hs W
+6 21 - 1 2 mpywhfmr.f|B,B,n|hs W
+6 21 - 1 3r mpywhfmr.f.eq|B,B,C|hs W
+6 21 - 1 3u mpywhfmr.f.eq|B,B,n|hs W
+6 22 - 0 0 macwhfm|A,B,C|hs W
+6 22 - 0 1 macwhfm|A,B,n|hs W
+6 22 - 0 2 macwhfm|B,B,n|hs W
+6 22 - 0 3r macwhfm.eq|B,B,C|hs W
+6 22 - 0 3u macwhfm.eq|B,B,n|hs W
+6 22 - 1 0 macwhfm.f|A,B,C|hs W
+6 22 - 1 1 macwhfm.f|A,B,n|hs W
+6 22 - 1 2 macwhfm.f|B,B,n|hs W
+6 22 - 1 3r macwhfm.f.eq|B,B,C|hs W
+6 22 - 1 3u macwhfm.f.eq|B,B,n|hs W
+6 23 - 0 0 macwhfmr|A,B,C|hs W
+6 23 - 0 1 macwhfmr|A,B,n|hs W
+6 23 - 0 2 macwhfmr|B,B,n|hs W
+6 23 - 0 3r macwhfmr.eq|B,B,C|hs W
+6 23 - 0 3u macwhfmr.eq|B,B,n|hs W
+6 23 - 1 0 macwhfmr.f|A,B,C|hs W
+6 23 - 1 1 macwhfmr.f|A,B,n|hs W
+6 23 - 1 2 macwhfmr.f|B,B,n|hs W
+6 23 - 1 3r macwhfmr.f.eq|B,B,C|hs W
+6 23 - 1 3u macwhfmr.f.eq|B,B,n|hs W
+6 24 - 0 0 mpywhfl|A,B,C|hs W
+6 24 - 0 1 mpywhfl|A,B,n|hs W
+6 24 - 0 2 mpywhfl|B,B,n|hs W
+6 24 - 0 3r mpywhfl.eq|B,B,C|hs W
+6 24 - 0 3u mpywhfl.eq|B,B,n|hs W
+6 24 - 1 0 mpywhfl.f|A,B,C|hs W
+6 24 - 1 1 mpywhfl.f|A,B,n|hs W
+6 24 - 1 2 mpywhfl.f|B,B,n|hs W
+6 24 - 1 3r mpywhfl.f.eq|B,B,C|hs W
+6 24 - 1 3u mpywhfl.f.eq|B,B,n|hs W
+6 25 - 0 0 mpywhflr|A,B,C|hs W
+6 25 - 0 1 mpywhflr|A,B,n|hs W
+6 25 - 0 2 mpywhflr|B,B,n|hs W
+6 25 - 0 3r mpywhflr.eq|B,B,C|hs W
+6 25 - 0 3u mpywhflr.eq|B,B,n|hs W
+6 25 - 1 0 mpywhflr.f|A,B,C|hs W
+6 25 - 1 1 mpywhflr.f|A,B,n|hs W
+6 25 - 1 2 mpywhflr.f|B,B,n|hs W
+6 25 - 1 3r mpywhflr.f.eq|B,B,C|hs W
+6 25 - 1 3u mpywhflr.f.eq|B,B,n|hs W
+6 26 - 0 0 macwhfl|A,B,C|hs W
+6 26 - 0 1 macwhfl|A,B,n|hs W
+6 26 - 0 2 macwhfl|B,B,n|hs W
+6 26 - 0 3r macwhfl.eq|B,B,C|hs W
+6 26 - 0 3u macwhfl.eq|B,B,n|hs W
+6 26 - 1 0 macwhfl.f|A,B,C|hs W
+6 26 - 1 1 macwhfl.f|A,B,n|hs W
+6 26 - 1 2 macwhfl.f|B,B,n|hs W
+6 26 - 1 3r macwhfl.f.eq|B,B,C|hs W
+6 26 - 1 3u macwhfl.f.eq|B,B,n|hs W
+6 27 - 0 0 macwhflr|A,B,C|hs W
+6 27 - 0 1 macwhflr|A,B,n|hs W
+6 27 - 0 2 macwhflr|B,B,n|hs W
+6 27 - 0 3r macwhflr.eq|B,B,C|hs W
+6 27 - 0 3u macwhflr.eq|B,B,n|hs W
+6 27 - 1 0 macwhflr.f|A,B,C|hs W
+6 27 - 1 1 macwhflr.f|A,B,n|hs W
+6 27 - 1 2 macwhflr.f|B,B,n|hs W
+6 27 - 1 3r macwhflr.f.eq|B,B,C|hs W
+6 27 - 1 3u macwhflr.f.eq|B,B,n|hs W
+6 28 - 0 0 macwhkl|A,B,C|hs W
+6 28 - 0 1 macwhkl|A,B,n|hs W
+6 28 - 0 2 macwhkl|B,B,n|hs W
+6 28 - 0 3r macwhkl.eq|B,B,C|hs W
+6 28 - 0 3u macwhkl.eq|B,B,n|hs W
+6 28 - 1 0 macwhkl.f|A,B,C|hs W
+6 28 - 1 1 macwhkl.f|A,B,n|hs W
+6 28 - 1 2 macwhkl.f|B,B,n|hs W
+6 28 - 1 3r macwhkl.f.eq|B,B,C|hs W
+6 28 - 1 3u macwhkl.f.eq|B,B,n|hs W
+6 29 - 0 0 macwhkul|A,B,C|hs W
+6 29 - 0 1 macwhkul|A,B,n|hs W
+6 29 - 0 2 macwhkul|B,B,n|hs W
+6 29 - 0 3r macwhkul.eq|B,B,C|hs W
+6 29 - 0 3u macwhkul.eq|B,B,n|hs W
+6 29 - 1 0 macwhkul.f|A,B,C|hs W
+6 29 - 1 1 macwhkul.f|A,B,n|hs W
+6 29 - 1 2 macwhkul.f|B,B,n|hs W
+6 29 - 1 3r macwhkul.f.eq|B,B,C|hs W
+6 29 - 1 3u macwhkul.f.eq|B,B,n|hs W
+6 2a - 0 0 mpywhkl|A,B,C|hs W
+6 2a - 0 1 mpywhkl|A,B,n|hs W
+6 2a - 0 2 mpywhkl|B,B,n|hs W
+6 2a - 0 3r mpywhkl.eq|B,B,C|hs W
+6 2a - 0 3u mpywhkl.eq|B,B,n|hs W
+6 2a - 1 0 mpywhkl.f|A,B,C|hs W
+6 2a - 1 1 mpywhkl.f|A,B,n|hs W
+6 2a - 1 2 mpywhkl.f|B,B,n|hs W
+6 2a - 1 3r mpywhkl.f.eq|B,B,C|hs W
+6 2a - 1 3u mpywhkl.f.eq|B,B,n|hs W
+6 2b - 0 0 mpywhkul|A,B,C|hs W
+6 2b - 0 1 mpywhkul|A,B,n|hs W
+6 2b - 0 2 mpywhkul|B,B,n|hs W
+6 2b - 0 3r mpywhkul.eq|B,B,C|hs W
+6 2b - 0 3u mpywhkul.eq|B,B,n|hs W
+6 2b - 1 0 mpywhkul.f|A,B,C|hs W
+6 2b - 1 1 mpywhkul.f|A,B,n|hs W
+6 2b - 1 2 mpywhkul.f|B,B,n|hs W
+6 2b - 1 3r mpywhkul.f.eq|B,B,C|hs W
+6 2b - 1 3u mpywhkul.f.eq|B,B,n|hs W
+6 2c - 0 0 msubwhfm|A,B,C|hs W
+6 2c - 0 1 msubwhfm|A,B,n|hs W
+6 2c - 0 2 msubwhfm|B,B,n|hs W
+6 2c - 0 3r msubwhfm.eq|B,B,C|hs W
+6 2c - 0 3u msubwhfm.eq|B,B,n|hs W
+6 2c - 1 0 msubwhfm.f|A,B,C|hs W
+6 2c - 1 1 msubwhfm.f|A,B,n|hs W
+6 2c - 1 2 msubwhfm.f|B,B,n|hs W
+6 2c - 1 3r msubwhfm.f.eq|B,B,C|hs W
+6 2c - 1 3u msubwhfm.f.eq|B,B,n|hs W
+6 2d - 0 0 msubwhfmr|A,B,C|hs W
+6 2d - 0 1 msubwhfmr|A,B,n|hs W
+6 2d - 0 2 msubwhfmr|B,B,n|hs W
+6 2d - 0 3r msubwhfmr.eq|B,B,C|hs W
+6 2d - 0 3u msubwhfmr.eq|B,B,n|hs W
+6 2d - 1 0 msubwhfmr.f|A,B,C|hs W
+6 2d - 1 1 msubwhfmr.f|A,B,n|hs W
+6 2d - 1 2 msubwhfmr.f|B,B,n|hs W
+6 2d - 1 3r msubwhfmr.f.eq|B,B,C|hs W
+6 2d - 1 3u msubwhfmr.f.eq|B,B,n|hs W
+6 2f sop00 0 0 fssqrt|B,C|hs
+6 2f sop00 0 1 fssqrt|B,n|hs
+6 2f sop01 0 0 fdsqrt|B,C|hs
+6 2f sop01 0 1 fdsqrt|B,n|hs
+6 2f sop19 0 1 cbflyhf1r|B,n|hs W
+6 2f sop39 0 0 cbflyhf1r|B,C|hs W
+6 2f zop00 0 0 sflag|C|em
+6 2f zop00 0 1 sflag|n|em
+6 30 - 0 0 fdmul|A,B,C|hs
+6 30 - 0 1 fdmul|A,B,n|hs
+6 30 - 0 2 fdmul|B,B,n|hs
+6 30 - 0 3r fdmul.eq|B,B,C|hs
+6 30 - 0 3u fdmul.eq|B,B,n|hs
+6 30 - 1 0 dmulh11.f|A,B,C|em W
+6 30 - 1 1 dmulh11.f|A,B,n|em W
+6 30 - 1 2 dmulh11.f|B,B,n|em W
+6 30 - 1 3r dmulh11.f.eq|B,B,C|em W
+6 30 - 1 3u dmulh11.f.eq|B,B,n|em W
+6 31 - 0 0 fdadd|A,B,C|hs
+6 31 - 0 1 fdadd|A,B,n|hs
+6 31 - 0 2 fdadd|B,B,n|hs
+6 31 - 0 3r fdadd.eq|B,B,C|hs
+6 31 - 0 3u fdadd.eq|B,B,n|hs
+6 31 - 1 0 qmpyhf.f|A,B,C|hs W
+6 31 - 1 1 qmpyhf.f|A,B,n|hs W
+6 31 - 1 2 qmpyhf.f|B,B,n|hs W
+6 31 - 1 3r qmpyhf.f.eq|B,B,C|hs W
+6 31 - 1 3u qmpyhf.f.eq|B,B,n|hs W
+6 32 - 0 0 fdsub|A,B,C|hs
+6 32 - 0 1 fdsub|A,B,n|hs
+6 32 - 0 2 fdsub|B,B,n|hs
+6 32 - 0 3r fdsub.eq|B,B,C|hs
+6 32 - 0 3u fdsub.eq|B,B,n|hs
+6 32 - 1 0 dmulh21.f|A,B,C|em W
+6 32 - 1 1 dmulh21.f|A,B,n|em W
+6 32 - 1 2 dmulh21.f|B,B,n|em W
+6 32 - 1 3r dmulh21.f.eq|B,B,C|em W
+6 32 - 1 3u dmulh21.f.eq|B,B,n|em W
+6 33 - 0 0 dmpywhf|A,B,C|hs W
+6 33 - 0 1 dmpywhf|A,B,n|hs W
+6 33 - 0 2 dmpywhf|B,B,n|hs W
+6 33 - 0 3r dmpywhf.eq|B,B,C|hs W
+6 33 - 0 3u dmpywhf.eq|B,B,n|hs W
+6 33 - 1 0 dmpywhf.f|A,B,C|hs W
+6 33 - 1 1 dmpywhf.f|A,B,n|hs W
+6 33 - 1 2 fdcmp|B,n|hs
+6 33 - 1 3r fdcmp.eq|B,C|hs
+6 33 - 1 3u fdcmp.eq|B,n|hs
+6 33 - 1 0z fdcmp|B,C|hs
+6 33 - 1 1z fdcmp|B,n|hs
+6 34 - 0 0 daddh11|A,B,C|em W
+6 34 - 0 1 daddh11|A,B,n|em W
+6 34 - 0 2 daddh11|B,B,n|em W
+6 34 - 0 3r daddh11.eq|B,B,C|em W
+6 34 - 0 3u daddh11.eq|B,B,n|em W
+6 34 - 1 0 daddh11.f|A,B,C|em W
+6 34 - 1 1 daddh11.f|A,B,n|em W
+6 34 - 1 2 fdcmpf|B,n|hs
+6 34 - 1 3r fdcmpf.eq|B,C|hs
+6 34 - 1 3u fdcmpf.eq|B,n|hs
+6 34 - 1 0z fdcmpf|B,C|hs
+6 34 - 1 1z fdcmpf|B,n|hs
+6 35 - 0 0 fdmadd|A,B,C|hs
+6 35 - 0 1 fdmadd|A,B,n|hs
+6 35 - 0 2 fdmadd|B,B,n|hs
+6 35 - 0 3r fdmadd.eq|B,B,C|hs
+6 35 - 0 3u fdmadd.eq|B,B,n|hs
+6 35 - 1 0 qmachf.f|A,B,C|hs W
+6 35 - 1 1 qmachf.f|A,B,n|hs W
+6 35 - 1 2 qmachf.f|B,B,n|hs W
+6 35 - 1 3r qmachf.f.eq|B,B,C|hs W
+6 35 - 1 3u qmachf.f.eq|B,B,n|hs W
+6 36 - 0 0 fdmsub|A,B,C|hs
+6 36 - 0 1 fdmsub|A,B,n|hs
+6 36 - 0 2 fdmsub|B,B,n|hs
+6 36 - 0 3r fdmsub.eq|B,B,C|hs
+6 36 - 0 3u fdmsub.eq|B,B,n|hs
+6 36 - 1 0 daddh21.f|A,B,C|em W
+6 36 - 1 1 daddh21.f|A,B,n|em W
+6 36 - 1 2 daddh21.f|B,B,n|em W
+6 36 - 1 3r daddh21.f.eq|B,B,C|em W
+6 36 - 1 3u daddh21.f.eq|B,B,n|em W
+6 37 - 0 0 fddiv|A,B,C|hs
+6 37 - 0 1 fddiv|A,B,n|hs
+6 37 - 0 2 fddiv|B,B,n|hs
+6 37 - 0 3r fddiv.eq|B,B,C|hs
+6 37 - 0 3u fddiv.eq|B,B,n|hs
+6 37 - 1 0 dmacwhf.f|A,B,C|hs W
+6 37 - 1 1 dmacwhf.f|A,B,n|hs W
+6 37 - 1 2 dmacwhf.f|B,B,n|hs W
+6 37 - 1 3r dmacwhf.f.eq|B,B,C|hs W
+6 37 - 1 3u dmacwhf.f.eq|B,B,n|hs W
+6 38 - 0 0 fcvt64|A,B,C|hs
+6 38 - 0 1 fcvt64|A,B,n|hs
+6 38 - 0 2 fcvt64|B,B,n|hs
+6 38 - 0 3r fcvt64.eq|B,B,C|hs
+6 38 - 0 3u fcvt64.eq|B,B,n|hs
+6 38 - 1 0 dsubh11.f|A,B,C|em W
+6 38 - 1 1 dsubh11.f|A,B,n|em W
+6 38 - 1 2 dsubh11.f|B,B,n|em W
+6 38 - 1 3r dsubh11.f.eq|B,B,C|em W
+6 38 - 1 3u dsubh11.f.eq|B,B,n|em W
+6 39 - 0 0 fcvt64_32|A,B,C|hs
+6 39 - 0 1 fcvt64_32|A,B,n|hs
+6 39 - 0 2 fcvt64_32|B,B,n|hs
+6 39 - 0 3r fcvt64_32.eq|B,B,C|hs
+6 39 - 0 3u fcvt64_32.eq|B,B,n|hs
+6 39 - 1 0 dsubh12.f|A,B,C|em W
+6 39 - 1 1 dsubh12.f|A,B,n|em W
+6 39 - 1 2 dsubh12.f|B,B,n|em W
+6 39 - 1 3r dsubh12.f.eq|B,B,C|em W
+6 39 - 1 3u dsubh12.f.eq|B,B,n|em W
+6 3a - 0 0 dsubh21|A,B,C|em W
+6 3a - 0 1 dsubh21|A,B,n|em W
+6 3a - 0 2 dsubh21|B,B,n|em W
+6 3a - 0 3r dsubh21.eq|B,B,C|em W
+6 3a - 0 3u dsubh21.eq|B,B,n|em W
+6 3a - 1 0 dsubh21.f|A,B,C|em W
+6 3a - 1 1 dsubh21.f|A,B,n|em W
+6 3a - 1 2 dsubh21.f|B,B,n|em W
+6 3a - 1 3r dsubh21.f.eq|B,B,C|em W
+6 3a - 1 3u dsubh21.f.eq|B,B,n|em W
+6 3b - 0 0 dsubh22|A,B,C|em W
+6 3b - 0 1 dsubh22|A,B,n|em W
+6 3b - 0 2 dsubh22|B,B,n|em W
+6 3b - 0 3r dsubh22.eq|B,B,C|em W
+6 3b - 0 3u dsubh22.eq|B,B,n|em W
+6 3b - 1 0 dsubh22.f|A,B,C|em W
+6 3b - 1 1 dsubh22.f|A,B,n|em W
+6 3b - 1 2 dsubh22.f|B,B,n|em W
+6 3b - 1 3r dsubh22.f.eq|B,B,C|em W
+6 3b - 1 3u dsubh22.f.eq|B,B,n|em W
+6 3c - 0 0 dexcl1|A,B,C|em W
+6 3c - 0 1 dexcl1|A,B,n|em W
+6 3c - 0 2 dexcl1|B,B,n|em W
+6 3c - 0 3r dexcl1.eq|B,B,C|em W
+6 3c - 0 3u dexcl1.eq|B,B,n|em W
+6 3c - 1 0 dexcl1.f|A,B,C|em W
+6 3c - 1 1 dexcl1.f|A,B,n|em W
+6 3c - 1 2 dexcl1.f|B,B,n|em W
+6 3c - 1 3r dexcl1.f.eq|B,B,C|em W
+6 3c - 1 3u dexcl1.f.eq|B,B,n|em W
+6 3d - 0 0 dexcl2|A,B,C|em W
+6 3d - 0 1 dexcl2|A,B,n|em W
+6 3d - 0 2 dexcl2|B,B,n|em W
+6 3d - 0 3r dexcl2.eq|B,B,C|em W
+6 3d - 0 3u dexcl2.eq|B,B,n|em W
+6 3d - 1 0 dexcl2.f|A,B,C|em W
+6 3d - 1 1 dexcl2.f|A,B,n|em W
+6 3d - 1 2 dexcl2.f|B,B,n|em W
+6 3d - 1 3r dexcl2.f.eq|B,B,C|em W
+6 3d - 1 3u dexcl2.f.eq|B,B,n|em W
+7 20 - 0 0 fmp_divf|A,B,C|hs W
+7 20 - 0 1 fmp_divf|A,B,n|hs W
+7 20 - 0 2 fmp_divf|B,B,n|hs W
+7 20 - 0 3r fmp_divf.eq|B,B,C|hs W
+7 20 - 0 3u fmp_divf.eq|B,B,n|hs W
+7 20 - 1 0 fmp_divf.f|A,B,C|hs W
+7 20 - 1 1 fmp_divf.f|A,B,n|hs W
+7 20 - 1 2 fmp_divf.f|B,B,n|hs W
+7 20 - 1 3r fmp_divf.f.eq|B,B,C|hs W
+7 20 - 1 3u fmp_divf.f.eq|B,B,n|hs W
+7 21 - 0 0 fmp_divf15|A,B,C|hs W
+7 21 - 0 1 fmp_divf15|A,B,n|hs W
+7 21 - 0 2 fmp_divf15|B,B,n|hs W
+7 21 - 0 3r fmp_divf15.eq|B,B,C|hs W
+7 21 - 0 3u fmp_divf15.eq|B,B,n|hs W
+7 21 - 1 0 fmp_divf15.f|A,B,C|hs W
+7 21 - 1 1 fmp_divf15.f|A,B,n|hs W
+7 21 - 1 2 fmp_divf15.f|B,B,n|hs W
+7 21 - 1 3r fmp_divf15.f.eq|B,B,C|hs W
+7 21 - 1 3u fmp_divf15.f.eq|B,B,n|hs W
+7 22 - 0 0 fmp_adds|A,B,C|hs W
+7 22 - 0 1 fmp_adds|A,B,n|hs W
+7 22 - 0 2 fmp_adds|B,B,n|hs W
+7 22 - 0 3r fmp_adds.eq|B,B,C|hs W
+7 22 - 0 3u fmp_adds.eq|B,B,n|hs W
+7 22 - 1 0 fmp_adds.f|A,B,C|hs W
+7 22 - 1 1 fmp_adds.f|A,B,n|hs W
+7 22 - 1 2 fmp_adds.f|B,B,n|hs W
+7 22 - 1 3r fmp_adds.f.eq|B,B,C|hs W
+7 22 - 1 3u fmp_adds.f.eq|B,B,n|hs W
+7 2a - 0 0 dsp_fp_div|A,B,C|em W
+7 2a - 0 1 dsp_fp_div|A,B,n|em W
+7 2a - 0 2 dsp_fp_div|B,B,n|em W
+7 2a - 0 3r dsp_fp_div.eq|B,B,C|em W
+7 2a - 0 3u dsp_fp_div.eq|B,B,n|em W
+7 2a - 1 0 dsp_fp_div.f|A,B,C|em W
+7 2a - 1 1 dsp_fp_div.f|A,B,n|em W
+7 2a - 1 2 dsp_fp_div.f|B,B,n|em W
+7 2a - 1 3r dsp_fp_div.eq.f|B,B,C|em W
+7 2a - 1 3u dsp_fp_div.eq.f|B,B,n|em W
+7 2b - 0 0 dsp_fp_cmp|A,B,C|em W
+7 2b - 0 1 dsp_fp_cmp|A,B,n|em W
+7 2b - 0 2 dsp_fp_cmp|B,B,n|em W
+7 2b - 0 3r dsp_fp_cmp.eq|B,B,C|em W
+7 2b - 0 3u dsp_fp_cmp.eq|B,B,n|em W
+7 2b - 1 0 dsp_fp_cmp.f|A,B,C|em W
+7 2b - 1 1 dsp_fp_cmp.f|A,B,n|em W
+7 2b - 1 2 dsp_fp_cmp.f|B,B,n|em W
+7 2b - 1 3r dsp_fp_cmp.eq.f|B,B,C|em W
+7 2b - 1 3u dsp_fp_cmp.eq.f|B,B,n|em W
+7 2f sop1e 0 0 fmp_cos|B,C|hs W
+7 2f sop1e 0 1 fmp_cos|B,n|hs W
+7 2f sop1e 1 0 fmp_cos.f|B,C|hs W
+7 2f sop1e 1 1 fmp_cos.f|B,n|hs W
+7 2f sop1f 0 0 fmp_sin|B,C|hs W
+7 2f sop1f 0 1 fmp_sin|B,n|hs W
+7 2f sop1f 1 0 fmp_sin.f|B,C|hs W
+7 2f sop1f 1 1 fmp_sin.f|B,n|hs W
+7 2f sop20 0 0 fmp_sqrtf|B,C|hs W
+7 2f sop20 0 1 fmp_sqrtf|B,n|hs W
+7 2f sop20 1 0 fmp_sqrtf.f|B,C|hs W
+7 2f sop20 1 1 fmp_sqrtf.f|B,n|hs W
+7 2f sop21 0 0 fmp_sqrtf15|B,C|hs W
+7 2f sop21 0 1 fmp_sqrtf15|B,n|hs W
+7 2f sop21 1 0 fmp_sqrtf15.f|B,C|hs W
+7 2f sop21 1 1 fmp_sqrtf15.f|B,n|hs W
+7 2f sop25 0 0 fmp_atan|B,C|hs W
+7 2f sop25 0 1 fmp_atan|B,n|hs W
+7 2f sop25 1 0 fmp_atan.f|B,C|hs W
+7 2f sop25 1 1 fmp_atan.f|B,n|hs W
+7 2f sop26 0 0 fmp_log2|B,C|hs W
+7 2f sop26 0 1 fmp_log2|B,n|hs W
+7 2f sop26 1 0 fmp_log2.f|B,C|hs W
+7 2f sop26 1 1 fmp_log2.f|B,n|hs W
+7 2f sop27 0 0 fmp_exp2|B,C|hs W
+7 2f sop27 0 1 fmp_exp2|B,n|hs W
+7 2f sop27 1 0 fmp_exp2.f|B,C|hs W
+7 2f sop27 1 1 fmp_exp2.f|B,n|hs W
+7 2f sop28 0 0 fmp_sath|B,C|hs W
+7 2f sop28 0 1 fmp_sath|B,n|hs W
+7 2f sop28 1 0 fmp_sath.f|B,C|hs W
+7 2f sop28 1 1 fmp_sath.f|B,n|hs W
+7 2f sop29 0 0 fmp_rndh|B,C|hs W
+7 2f sop29 0 1 fmp_rndh|B,n|hs W
+7 2f sop29 1 0 fmp_rndh.f|B,C|hs W
+7 2f sop29 1 1 fmp_rndh.f|B,n|hs W
+7 2f sop2a 0 0 fmp_recip|B,C|hs W
+7 2f sop2a 0 1 fmp_recip|B,n|hs W
+7 2f sop2a 1 0 fmp_recip.f|B,C|hs W
+7 2f sop2a 1 1 fmp_recip.f|B,n|hs W
+7 2f sop2b 0 0 fmp_recip15|B,C|hs W
+7 2f sop2b 0 1 fmp_recip15|B,n|hs W
+7 2f sop2b 1 0 fmp_recip15.f|B,C|hs W
+7 2f sop2b 1 1 fmp_recip15.f|B,n|hs W
+7 2f sop2c 0 0 fmp_cos15|B,C|hs W
+7 2f sop2c 0 1 fmp_cos15|B,n|hs W
+7 2f sop2c 1 0 fmp_cos15.f|B,C|hs W
+7 2f sop2c 1 1 fmp_cos15.f|B,n|hs W
+7 2f sop2d 0 0 fmp_sin15|B,C|hs W
+7 2f sop2d 0 1 fmp_sin15|B,n|hs W
+7 2f sop2d 1 0 fmp_sin15.f|B,C|hs W
+7 2f sop2d 1 1 fmp_sin15.f|B,n|hs W
+7 2f sop2e 0 0 fmp_atan15|B,C|hs W
+7 2f sop2e 0 1 fmp_atan15|B,n|hs W
+7 2f sop2e 1 0 fmp_atan15.f|B,C|hs W
+7 2f sop2e 1 1 fmp_atan15.f|B,n|hs W
+7 2f sop2f 0 0 fmp_exp215|B,C|hs W
+7 2f sop2f 0 1 fmp_exp215|B,n|hs W
+7 2f sop2f 1 0 fmp_exp215.f|B,C|hs W
+7 2f sop2f 1 1 fmp_exp215.f|B,n|hs W
+7 2f sop30 0 0 fmp_log215|B,C|hs W
+7 2f sop30 0 1 fmp_log215|B,n|hs W
+7 2f sop30 1 0 fmp_log215.f|B,C|hs W
+7 2f sop30 1 1 fmp_log215.f|B,n|hs W

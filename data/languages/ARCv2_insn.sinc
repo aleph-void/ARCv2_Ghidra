@@ -1,0 +1,904 @@
+# ARCv2 instructions other than the generated general operations: branches and calls (majors 0
+# and 1), loads and stores (majors 2 and 3), the special sub-opcodes of major 4 (jumps, loops,
+# lr/sr, register-register loads, ...) and the 16-bit instructions (majors 0x08-0x1f).
+#
+# Hand-written for Ghidra-Rare; the operation of the 16-bit enter_s/leave_s and the condition
+# tables follow Roman Korkikian's sony/ARCv2_Ghidra (Apache License 2.0). Encodings were checked
+# against GNU objdump 2.45 output (black box); see GHIDRA-RARE.md.
+
+
+# Auxiliary registers used by the instructions below (number * 4 in AUX_REGS_BASE)
+#   0x02 LP_START, 0x03 LP_END, 0x0a STATUS32, 0x290 JLI_BASE, 0x291 LDI_BASE, 0x292 EI_BASE
+
+# ---------------------------------------------------------------------------------------------
+# Zero-overhead loops: the instruction at LP_END (marked through the loopEnd context by "lp")
+# first decrements lp_count and branches back to LP_START while it is not zero. The loop start
+# is kept in the loopStart context so that the branch back is direct.
+lpstart: addr is loopStart [ addr = loopStart << 1; ] { export *[ram]:4 addr; }
+:^instruction is phase=0 & instruction [ phase = 1; ] {
+  build instruction;
+}
+:^instruction is phase=0 & loopEnd=1 & lpstart & instruction [ phase = 1; ] {
+  if (is_in_loop == 0) goto <end_loop>;
+  lp_count = lp_count - 1;
+  if (lp_count == 0) goto <end_loop>;
+  goto lpstart;
+<end_loop>
+  is_in_loop = 0;
+  build instruction;
+}
+
+with : phase=1 {
+
+# ---------------------------------------------------------------------------------------------
+# Branches, major 0: b<cc>[.d] s21 (bit 16 = 0), b[.d] s25 (bit 16 = 1). Targets are relative to
+# PCL (the instruction address with bits 1..0 clear).
+b21: tgt is l_s10lo & l_s10mid_s [ tgt = (inst_start & ~3) + ((l_s10mid_s << 11) | (l_s10lo << 1)); ] { export *[ram]:4 tgt; }
+b25: tgt is l_s10lo & l_s10mid & l_s4hi [ tgt = (inst_start & ~3) + ((l_s4hi << 21) | (l_s10mid << 11) | (l_s10lo << 1)); ] { export *[ram]:4 tgt; }
+bl21: tgt is l_s9lo & l_s10mid_s [ tgt = (inst_start & ~3) + ((l_s10mid_s << 11) | (l_s9lo << 2)); ] { export *[ram]:4 tgt; }
+bl25: tgt is l_s9lo & l_s10mid & l_s4hi [ tgt = (inst_start & ~3) + ((l_s4hi << 21) | (l_s10mid << 11) | (l_s9lo << 2)); ] { export *[ram]:4 tgt; }
+
+:b^ccn b21 is l_major=0 & l_bit16=0 & l_N=0 & ccn & b21 {
+  if (ccn) goto b21;
+}
+:b^ccn^".d" b21 is l_major=0 & l_bit16=0 & l_N=1 & ccn & b21 {
+  local t:1 = ccn;
+  delayslot(1);
+  if (t) goto b21;
+}
+:b b21 is l_major=0 & l_bit16=0 & l_N=0 & l_cond=0 & b21 {
+  goto b21;
+}
+:b.d b21 is l_major=0 & l_bit16=0 & l_N=1 & l_cond=0 & b21 {
+  delayslot(1);
+  goto b21;
+}
+:b b25 is l_major=0 & l_bit16=1 & l_N=0 & b25 {
+  goto b25;
+}
+:b.d b25 is l_major=0 & l_bit16=1 & l_N=1 & b25 {
+  delayslot(1);
+  goto b25;
+}
+
+# Calls, major 1 with bit 16 = 0: bl<cc>[.d] s21 (bit 17 = 0), bl[.d] s25 (bit 17 = 1)
+:bl^ccx bl21 is l_major=1 & l_bit16=0 & l_bit17=0 & l_N=0 & ccx & bl21 {
+  if (!ccx) goto inst_next;
+  blink = inst_next;
+  call bl21;
+}
+:bl^ccx^".d" bl21 is l_major=1 & l_bit16=0 & l_bit17=0 & l_N=1 & ccx & bl21 {
+  local t:1 = ccx;
+  delayslot(1);
+  if (!t) goto inst_next2;
+  blink = inst_next2;
+  call bl21;
+}
+:bl bl21 is l_major=1 & l_bit16=0 & l_bit17=0 & l_N=0 & l_cond=0 & bl21 {
+  blink = inst_next;
+  call bl21;
+}
+:bl.d bl21 is l_major=1 & l_bit16=0 & l_bit17=0 & l_N=1 & l_cond=0 & bl21 {
+  delayslot(1);
+  blink = inst_next2;
+  call bl21;
+}
+:bl bl25 is l_major=1 & l_bit16=0 & l_bit17=1 & l_N=0 & bl25 {
+  blink = inst_next;
+  call bl25;
+}
+:bl.d bl25 is l_major=1 & l_bit16=0 & l_bit17=1 & l_N=1 & bl25 {
+  delayslot(1);
+  blink = inst_next2;
+  call bl25;
+}
+
+# Compare and branch, major 1 with bit 16 = 1:
+#   br<cc>[.d].{t,nt} b,c,s9 (bit 4 = 0) / b,u6,s9 (bit 4 = 1); bbit0/bbit1 test bit c of b
+br9: tgt is l_s7lo & l_s8hi [ tgt = (inst_start & ~3) + ((l_s8hi << 8) | (l_s7lo << 1)); ] { export *[ram]:4 tgt; }
+brc: l_c_src is l_bit4=0 ... & l_c_src { export l_c_src; }
+brc: l_u6 is l_bit4=1 & l_u6 { export *[const]:4 l_u6; }
+brt: ".nt" is l_br_y=0 { }
+brt: ".t" is l_br_y=1 { }
+brcond: "eq" is (l_brop3=0) ... & l_b_src & brc { local t:1 = l_b_src == brc; export t; }
+brcond: "ne" is (l_brop3=1) ... & l_b_src & brc { local t:1 = l_b_src != brc; export t; }
+brcond: "lt" is (l_brop3=2) ... & l_b_src & brc { local t:1 = l_b_src s< brc; export t; }
+brcond: "ge" is (l_brop3=3) ... & l_b_src & brc { local t:1 = l_b_src s>= brc; export t; }
+brcond: "lo" is (l_brop3=4) ... & l_b_src & brc { local t:1 = l_b_src < brc; export t; }
+brcond: "hs" is (l_brop3=5) ... & l_b_src & brc { local t:1 = l_b_src >= brc; export t; }
+:br^brcond^brt l_b_src, brc, br9 is ((l_major=1 & l_bit16=1 & l_N=0 & brt & br9) ... & brcond & l_b_src & brc) {
+  if (brcond) goto br9;
+}
+brnl: is l_b_hi!=7 & l_bit4=1 { }
+brnl: is l_b_hi!=7 & l_bit4=0 & l_c!=62 { }
+brnl: is l_b_hi=7 & l_b_lo!=6 & l_bit4=1 { }
+brnl: is l_b_hi=7 & l_b_lo!=6 & l_bit4=0 & l_c!=62 { }
+:br^brcond^".d"^brt l_b_src, brc, br9 is ((l_major=1 & l_bit16=1 & l_N=1 & brnl & brt & br9) ... & brcond & l_b_src & brc) {
+  local t:1 = brcond;
+  delayslot(1);
+  if (t) goto br9;
+}
+:bbit0^brt l_b_src, brc, br9 is ((l_major=1 & l_bit16=1 & l_N=0 & l_brop3=6 & brt & br9) ... & l_b_src & brc) {
+  if (((l_b_src >> (brc & 31)) & 1) == 0) goto br9;
+}
+:bbit0.d^brt l_b_src, brc, br9 is ((l_major=1 & l_bit16=1 & l_N=1 & brnl & l_brop3=6 & brt & br9) ... & l_b_src & brc) {
+  local t:1 = ((l_b_src >> (brc & 31)) & 1) == 0;
+  delayslot(1);
+  if (t) goto br9;
+}
+:bbit1^brt l_b_src, brc, br9 is ((l_major=1 & l_bit16=1 & l_N=0 & l_brop3=7 & brt & br9) ... & l_b_src & brc) {
+  if (((l_b_src >> (brc & 31)) & 1) != 0) goto br9;
+}
+:bbit1.d^brt l_b_src, brc, br9 is ((l_major=1 & l_bit16=1 & l_N=1 & brnl & l_brop3=7 & brt & br9) ... & l_b_src & brc) {
+  local t:1 = ((l_b_src >> (brc & 31)) & 1) != 0;
+  delayslot(1);
+  if (t) goto br9;
+}
+
+# ---------------------------------------------------------------------------------------------
+# Load, major 2: ld<zz>[.di][.aa][.x] a,[b,s9]  (zz: 0 word, 1 byte, 2 halfword, 3 double)
+#   aa 0: [b+s9]   1 (.aw): b = b+s9, then [b]   2 (.ab): [b], then b = b+s9
+#   3 (.as): [b + (s9 << size)] (scaled by the access size; byte accesses are not scaled)
+s9: off is l_s8lo & l_s8hi [ off = (l_s8hi << 8) | l_s8lo; ] { export *[const]:4 off; }
+ldoff: "" is l_s8lo=0 & l_s8hi=0 { local o:4 = 0; export o; }
+ldoff: ","^s9 is s9 { export s9; }
+# prefetch prints a zero offset
+pfoff: ","^s9 is s9 { export s9; }
+
+ld_zz: "" is l_ld_zz=0 { }
+ld_zz: "b" is l_ld_zz=1 { }
+ld_zz: "h" is l_ld_zz=2 { }
+ld_zz: "d" is l_ld_zz=3 { }
+ld_di: "" is l_ld_di=0 { }
+ld_di: ".di" is l_ld_di=1 { }
+ld_aa: "" is l_ld_aa=0 { }
+ld_aa: ".aw" is l_ld_aa=1 { }
+ld_aa: ".ab" is l_ld_aa=2 { }
+ld_aa: ".as" is l_ld_aa=3 { }
+# a long-immediate base with offset 0: objdump prints no address mode
+ld_aa: "" is l_ld_aa=1 & l_b_hi=7 & l_b_lo=6 & l_s8lo=0 & l_s8hi=0 { }
+ld_aa: "" is l_ld_aa=2 & l_b_hi=7 & l_b_lo=6 & l_s8lo=0 & l_s8hi=0 { }
+ld_aa: "" is l_ld_aa=3 & l_b_hi=7 & l_b_lo=6 & l_s8lo=0 & l_s8hi=0 { }
+ld_x: "" is l_ld_x=0 { }
+ld_x: ".x" is l_ld_x=1 { }
+
+# scale of .as
+ld_sc: is l_ld_aa=3 & l_ld_zz=0 & s9 { local o:4 = s9 << 2; export o; }
+ld_sc: is l_ld_aa=3 & l_ld_zz=1 & s9 { export s9; }
+ld_sc: is l_ld_aa=3 & l_ld_zz=2 & s9 { local o:4 = s9 << 1; export o; }
+ld_sc: is l_ld_aa=3 & l_ld_zz=3 & s9 { local o:4 = s9 << 2; export o; }
+
+ld_ea: l_b_src^ldoff is (l_ld_aa=0 & ldoff) ... & l_b_src { local ea:4 = l_b_src + ldoff; export ea; }
+ld_ea: l_rb^ldoff is l_ld_aa=1 & l_rb & ldoff { l_rb = l_rb + ldoff; export l_rb; }
+ld_ea: l_rb^ldoff is l_ld_aa=2 & l_rb & ldoff { local ea:4 = l_rb; l_rb = l_rb + ldoff; export ea; }
+ld_ea: limm^ldoff is l_ld_aa=1 & l_b_hi=7 & l_b_lo=6 & ldoff ; limm { local ea:4 = limm + ldoff; export ea; }
+ld_ea: limm^ldoff is l_ld_aa=2 & l_b_hi=7 & l_b_lo=6 & ldoff ; limm { export limm; }
+ld_ea: l_b_src^ldoff is (l_ld_aa=3 & ldoff & ld_sc) ... & l_b_src { local ea:4 = l_b_src + ld_sc; export ea; }
+
+pf_ea: l_b_src^pfoff is (l_ld_aa=0 & pfoff) ... & l_b_src { local ea:4 = l_b_src + pfoff; export ea; }
+pf_ea: l_rb^pfoff is l_ld_aa=1 & l_rb & pfoff { l_rb = l_rb + pfoff; export l_rb; }
+pf_ea: l_rb^pfoff is l_ld_aa=2 & l_rb & pfoff { local ea:4 = l_rb; l_rb = l_rb + pfoff; export ea; }
+pf_ea: limm^pfoff is l_ld_aa=1 & l_b_hi=7 & l_b_lo=6 & pfoff ; limm { local ea:4 = limm + pfoff; export ea; }
+pf_ea: limm^pfoff is l_ld_aa=2 & l_b_hi=7 & l_b_lo=6 & pfoff ; limm { export limm; }
+pf_ea: l_b_src^pfoff is (l_ld_aa=3 & pfoff) ... & l_b_src { local ea:4 = l_b_src + (pfoff << 2); export ea; }
+pf_aa: ld_aa is ld_aa { }
+pf_aa: "" is l_ld_aa=1 & l_b_hi=7 & l_b_lo=6 { }
+pf_aa: "" is l_ld_aa=2 & l_b_hi=7 & l_b_lo=6 { }
+pf_aa: "" is l_ld_aa=3 & l_b_hi=7 & l_b_lo=6 { }
+
+:ld^ld_zz^ld_di^ld_aa^ld_x l_a_dst, [ld_ea] is (l_major=2 & l_ld_zz=0 & ld_zz & ld_di & ld_aa & ld_x & l_a_dst) ... & ld_ea {
+  l_a_dst = *[ram]:4 ld_ea;
+}
+:ld^ld_zz^ld_di^ld_aa^ld_x l_a_dst, [ld_ea] is (l_major=2 & l_ld_zz=1 & l_ld_x=0 & ld_zz & ld_di & ld_aa & ld_x & l_a_dst) ... & ld_ea {
+  l_a_dst = zext(*[ram]:1 ld_ea);
+}
+:ld^ld_zz^ld_di^ld_aa^ld_x l_a_dst, [ld_ea] is (l_major=2 & l_ld_zz=1 & l_ld_x=1 & ld_zz & ld_di & ld_aa & ld_x & l_a_dst) ... & ld_ea {
+  l_a_dst = sext(*[ram]:1 ld_ea);
+}
+:ld^ld_zz^ld_di^ld_aa^ld_x l_a_dst, [ld_ea] is (l_major=2 & l_ld_zz=2 & l_ld_x=0 & ld_zz & ld_di & ld_aa & ld_x & l_a_dst) ... & ld_ea {
+  l_a_dst = zext(*[ram]:2 ld_ea);
+}
+:ld^ld_zz^ld_di^ld_aa^ld_x l_a_dst, [ld_ea] is (l_major=2 & l_ld_zz=2 & l_ld_x=1 & ld_zz & ld_di & ld_aa & ld_x & l_a_dst) ... & ld_ea {
+  l_a_dst = sext(*[ram]:2 ld_ea);
+}
+:ld^ld_zz^ld_di^ld_aa^ld_x l_a_p, [ld_ea] is (l_major=2 & l_ld_zz=3 & l_ld_x=0 & ld_zz & ld_di & ld_aa & ld_x & l_a_p & l_a_e & l_a_o) ... & ld_ea {
+  local ea:4 = ld_ea;
+  l_a_e = *[ram]:4 ea;
+  l_a_o = *[ram]:4 (ea + 4);
+}
+:ld^ld_zz^ld_di^ld_aa^ld_x "0", [ld_ea] is (l_major=2 & l_ld_zz=3 & l_ld_x=0 & ld_zz & ld_di & ld_aa & ld_x & l_a=62) ... & ld_ea {
+  local ea:4 = ld_ea;
+}
+# a = 62 with a word access: cache hints (prefetch, prefetchw with .di, prealloc with .x)
+:prefetch^pf_aa [pf_ea] is (l_major=2 & l_ld_zz=0 & l_ld_di=0 & l_ld_x=0 & l_a=62 & pf_aa) ... & pf_ea {
+  prefetch(pf_ea);
+}
+:prefetchw^pf_aa [pf_ea] is (l_major=2 & l_ld_zz=0 & l_ld_di=1 & l_ld_x=0 & l_a=62 & pf_aa) ... & pf_ea {
+  prefetch(pf_ea);
+}
+:prealloc^pf_aa [pf_ea] is (l_major=2 & l_ld_zz=0 & l_ld_di=0 & l_ld_x=1 & l_a=62 & pf_aa) ... & pf_ea {
+  prefetch(pf_ea);
+}
+
+# ---------------------------------------------------------------------------------------------
+# Store, major 3: st<zz>[.di][.aa] c,[b,s9]; bit 0 = 1: the data is a signed 6-bit immediate
+st_zz: "" is l_st_zz=0 { }
+st_zz: "b" is l_st_zz=1 { }
+st_zz: "h" is l_st_zz=2 { }
+st_zz: "d" is l_st_zz=3 { }
+st_di: "" is l_st_di=0 { }
+st_di: ".di" is l_st_di=1 { }
+st_aa: "" is l_st_aa=0 { }
+st_aa: ".aw" is l_st_aa=1 { }
+st_aa: ".ab" is l_st_aa=2 { }
+st_aa: ".as" is l_st_aa=3 { }
+st_sc: is l_st_aa=3 & l_st_zz=0 & s9 { local o:4 = s9 << 2; export o; }
+st_sc: is l_st_aa=3 & l_st_zz=1 & s9 { export s9; }
+st_sc: is l_st_aa=3 & l_st_zz=2 & s9 { local o:4 = s9 << 1; export o; }
+st_sc: is l_st_aa=3 & l_st_zz=3 & s9 { local o:4 = s9 << 2; export o; }
+
+st_ea: l_b_src^ldoff is (l_st_aa=0 & ldoff) ... & l_b_src { local ea:4 = l_b_src + ldoff; export ea; }
+st_ea: l_rb^ldoff is l_st_aa=1 & l_rb & ldoff { l_rb = l_rb + ldoff; export l_rb; }
+st_ea: l_rb^ldoff is l_st_aa=2 & l_rb & ldoff { local ea:4 = l_rb; l_rb = l_rb + ldoff; export ea; }
+# long-immediate base: "st c,[limm]" (register data, offset 0, address mode ignored), "st limm,[limm,s9]"
+# (offset always printed) and "st w6,[limm,s9]"; no write-back
+st_ea: limm^pfoff is l_st_aa=0 & l_b_hi=7 & l_b_lo=6 & l_st_r=0 & l_c=62 & pfoff ; limm { local ea:4 = limm + pfoff; export ea; }
+st_ea: limm^pfoff is l_st_aa=1 & l_b_hi=7 & l_b_lo=6 & l_st_r=0 & l_c=62 & pfoff ; limm { local ea:4 = limm + pfoff; export ea; }
+st_ea: limm^pfoff is l_st_aa=2 & l_b_hi=7 & l_b_lo=6 & l_st_r=0 & l_c=62 & pfoff ; limm { export limm; }
+st_ea: limm^pfoff is l_st_aa=3 & l_b_hi=7 & l_b_lo=6 & l_st_r=0 & l_c=62 & pfoff & st_sc ; limm { local ea:4 = limm + st_sc; export ea; }
+st_ea: limm^ldoff is l_st_aa=1 & l_b_hi=7 & l_b_lo=6 & l_st_r=1 & ldoff ; limm { local ea:4 = limm + ldoff; export ea; }
+st_ea: limm^ldoff is l_st_aa=2 & l_b_hi=7 & l_b_lo=6 & l_st_r=1 & ldoff ; limm { export limm; }
+st_ea: l_b_src^pfoff is (l_st_aa=0 & l_st_r=0 & l_c=62 & pfoff) ... & l_b_src { local ea:4 = l_b_src + pfoff; export ea; }
+st_ea: l_rb^pfoff is l_st_aa=1 & l_st_r=0 & l_c=62 & l_rb & pfoff { l_rb = l_rb + pfoff; export l_rb; }
+st_ea: l_rb^pfoff is l_st_aa=2 & l_st_r=0 & l_c=62 & l_rb & pfoff { local ea:4 = l_rb; l_rb = l_rb + pfoff; export ea; }
+st_ea: l_b_src^pfoff is (l_st_aa=3 & l_st_r=0 & l_c=62 & pfoff & st_sc) ... & l_b_src { local ea:4 = l_b_src + st_sc; export ea; }
+st_aa2: st_aa is st_aa { }
+st_aa2: "" is l_b_hi=7 & l_b_lo=6 & l_st_r=1 & l_s8lo=0 & l_s8hi=0 { }
+st_ok: is l_b_hi!=7 { }
+st_ok: is l_b_hi=7 & l_b_lo!=6 { }
+st_ok: is l_b_hi=7 & l_b_lo=6 & l_st_r=1 { }
+st_ok: is l_b_hi=7 & l_b_lo=6 & l_c=62 { }
+st_ea: l_b_src^ldoff is (l_st_aa=3 & ldoff & st_sc) ... & l_b_src { local ea:4 = l_b_src + st_sc; export ea; }
+
+st_src: l_c_src is l_st_r=0 ... & l_c_src { export l_c_src; }
+st_src: l_w6 is l_st_r=1 & l_w6 { export *[const]:4 l_w6; }
+
+:st^st_zz^st_di l_c_r, [limm] is l_major=3 & l_b_hi=7 & l_b_lo=6 & l_st_r=0 & l_s8lo=0 & l_s8hi=0 & l_st_zz=0 & st_zz & st_di & l_c_r ; limm {
+  *[ram]:4 limm = l_c_r;
+}
+:st^st_zz^st_di l_c_r, [limm] is l_major=3 & l_b_hi=7 & l_b_lo=6 & l_st_r=0 & l_s8lo=0 & l_s8hi=0 & l_st_zz=1 & st_zz & st_di & l_c_r ; limm {
+  *[ram]:1 limm = l_c_r:1;
+}
+:st^st_zz^st_di l_c_r, [limm] is l_major=3 & l_b_hi=7 & l_b_lo=6 & l_st_r=0 & l_s8lo=0 & l_s8hi=0 & l_st_zz=2 & st_zz & st_di & l_c_r ; limm {
+  *[ram]:2 limm = l_c_r:2;
+}
+:st^st_zz^st_di l_c_p, [limm] is l_major=3 & l_b_hi=7 & l_b_lo=6 & l_st_r=0 & l_s8lo=0 & l_s8hi=0 & l_st_zz=3 & st_zz & st_di & l_c_p & l_c_e & l_c_o ; limm {
+  *[ram]:4 limm = l_c_e;
+  *[ram]:4 (limm + 4) = l_c_o;
+}
+:st^st_zz^st_di^st_aa2 st_src, [st_ea] is (l_major=3 & l_st_zz=0 & st_zz & st_di & st_aa2 & st_ok) ... & st_ea & st_src {
+  *[ram]:4 st_ea = st_src;
+}
+:st^st_zz^st_di^st_aa2 st_src, [st_ea] is (l_major=3 & l_st_zz=1 & st_zz & st_di & st_aa2 & st_ok) ... & st_ea & st_src {
+  *[ram]:1 st_ea = st_src:1;
+}
+:st^st_zz^st_di^st_aa2 st_src, [st_ea] is (l_major=3 & l_st_zz=2 & st_zz & st_di & st_aa2 & st_ok) ... & st_ea & st_src {
+  *[ram]:2 st_ea = st_src:2;
+}
+:st^st_zz^st_di^st_aa2 l_c_p, [st_ea] is (l_major=3 & l_st_zz=3 & l_st_r=0 & l_c!=62 & st_zz & st_di & st_aa2 & l_c_p & l_c_e & l_c_o & st_ok) ... & st_ea {
+  local ea:4 = st_ea;
+  *[ram]:4 ea = l_c_e;
+  *[ram]:4 (ea + 4) = l_c_o;
+}
+std_imm: l_w6 is l_st_r=1 & l_w6 { local v:4 = l_w6; export v; }
+std_imm: limm is l_st_r=0 & l_c=62 ; limm { export limm; }
+:st^st_zz^st_di^st_aa2 std_imm, [st_ea] is (l_major=3 & l_st_zz=3 & st_zz & st_di & st_aa2 & st_ok) ... & st_ea & std_imm {
+  # a 64-bit store of a sign-extended immediate
+  local ea:4 = st_ea;
+  local v:4 = std_imm;
+  *[ram]:4 ea = v;
+  *[ram]:4 (ea + 4) = v s>> 31;
+}
+
+# ---------------------------------------------------------------------------------------------
+# Major 4 special sub-opcodes
+
+# mov<.f><.cc> b,c (sub-opcode 0x0a)
+:mov l_b_dst, op_c is ((l_major=4 & l_sub6=0x0a & l_F=0 & l_fmt!=3 & l_b_dst) ... & op_c) {
+  l_b_dst = op_c;
+}
+:mov^ccd l_b_dst, op_c is ((l_major=4 & l_sub6=0x0a & l_F=0 & l_fmt=3 & ccd & l_b_dst) ... & op_c) {
+  if (!ccd) goto inst_next;
+  l_b_dst = op_c;
+}
+:mov.f l_b_dst, op_c is ((l_major=4 & l_sub6=0x0a & l_F=1 & l_fmt!=3 & l_b_dst) ... & op_c) {
+  local v:4 = op_c;
+  l_b_dst = v;
+  zn(v);
+}
+:mov.f^ccd l_b_dst, op_c is ((l_major=4 & l_sub6=0x0a & l_F=1 & l_fmt=3 & ccd & l_b_dst) ... & op_c) {
+  if (!ccd) goto inst_next;
+  local v:4 = op_c;
+  l_b_dst = v;
+  zn(v);
+}
+
+# neg[.f] a,b: rsub a,b,0 with a u6 of 0
+:neg l_a_dst, l_b_src is (l_major=4 & l_sub6=0x0e & l_F=0 & l_fmt=1 & l_u6=0 & l_a_dst) ... & l_b_src { l_a_dst = -l_b_src; }
+:neg.f l_a_dst, l_b_src is (l_major=4 & l_sub6=0x0e & l_F=1 & l_fmt=1 & l_u6=0 & l_a_dst) ... & l_b_src {
+  local vb:4 = l_b_src;
+  local vr:4 = -vb;
+  Z = vr == 0;
+  N = vr s< 0;
+  C = vb != 0;
+  V = vb == 0x80000000;
+  l_a_dst = vr;
+}
+
+:neg^ccd l_b_dst, l_b_src is (l_major=4 & l_sub6=0x0e & l_F=0 & l_fmt=3 & l_M=1 & l_u6=0 & ccd & l_b_dst) ... & l_b_src {
+  if (!ccd) goto inst_next;
+  l_b_dst = -l_b_src;
+}
+:neg.f^ccd l_b_dst, l_b_src is (l_major=4 & l_sub6=0x0e & l_F=1 & l_fmt=3 & l_M=1 & l_u6=0 & ccd & l_b_dst) ... & l_b_src {
+  if (!ccd) goto inst_next;
+  local vb:4 = l_b_src;
+  local vr:4 = -vb;
+  Z = vr == 0;
+  N = vr s< 0;
+  C = vb != 0;
+  V = vb == 0x80000000;
+  l_b_dst = vr;
+}
+
+# sjli u12 (EM SecureShield): call through the secure jump table (NSC_TABLE_BASE, aux 0x269)
+:sjli u12 is l_major=5 & l_sub6=0x20 & l_F=1 & l_fmt=2 & l_b_hi=0 & l_b_lo=0 & l_u6 & l_s6hi & l_a [ u12 = (l_a << 6) | l_u6; ] {
+  local base:4 = *[AUX_REGS_BASE]:4 0x9a4:4;
+  blink = inst_next;
+  call [base + (u12 << 2)];
+}
+
+# tst / cmp / rcmp / btst b,c (F = 1)
+:tst op_b, op_c is ((l_major=4 & l_sub6=0x0b & l_F=1 & l_fmt!=3) ... & op_b & op_c) {
+  local vr:4 = op_b & op_c; zn(vr);
+}
+:tst^ccd op_b, op_c is ((l_major=4 & l_sub6=0x0b & l_F=1 & l_fmt=3 & ccd) ... & op_b & op_c) {
+  if (!ccd) goto inst_next;
+  local vr:4 = op_b & op_c; zn(vr);
+}
+:btst op_b, op_c is ((l_major=4 & l_sub6=0x11 & l_F=1 & l_fmt!=3) ... & op_b & op_c) {
+  local vr:4 = op_b & (1:4 << (op_c & 31)); zn(vr);
+}
+:btst^ccd op_b, op_c is ((l_major=4 & l_sub6=0x11 & l_F=1 & l_fmt=3 & ccd) ... & op_b & op_c) {
+  if (!ccd) goto inst_next;
+  local vr:4 = op_b & (1:4 << (op_c & 31)); zn(vr);
+}
+:cmp op_b, op_c is ((l_major=4 & l_sub6=0x0c & l_F=1 & l_fmt!=3) ... & op_b & op_c) {
+  cmpflags(op_b, op_c);
+}
+:cmp^ccd op_b, op_c is ((l_major=4 & l_sub6=0x0c & l_F=1 & l_fmt=3 & ccd) ... & op_b & op_c) {
+  if (!ccd) goto inst_next;
+  cmpflags(op_b, op_c);
+}
+:rcmp op_b, op_c is ((l_major=4 & l_sub6=0x0d & l_F=1 & l_fmt!=3) ... & op_b & op_c) {
+  cmpflags(op_c, op_b);
+}
+:rcmp^ccd op_b, op_c is ((l_major=4 & l_sub6=0x0d & l_F=1 & l_fmt=3 & ccd) ... & op_b & op_c) {
+  if (!ccd) goto inst_next;
+  cmpflags(op_c, op_b);
+}
+
+# dbnz[.d] b,s13: decrement b and branch while it is not zero (sub-opcodes 0x0c/0x0d, format 2)
+s13t: tgt is l_u6 & l_s6hi [ tgt = (inst_start & ~3) + (((l_s6hi << 6) | l_u6) << 1); ] { export *[ram]:4 tgt; }
+:dbnz l_rb, s13t is l_major=4 & l_sub6=0x0c & l_F=0 & l_fmt=2 & (l_b_hi!=7 | l_b_lo!=6) & l_rb & s13t {
+  l_rb = l_rb - 1;
+  if (l_rb != 0) goto s13t;
+}
+:dbnz.d l_rb, s13t is l_major=4 & l_sub6=0x0d & l_F=0 & l_fmt=2 & (l_b_hi!=7 | l_b_lo!=6) & l_rb & s13t {
+  l_rb = l_rb - 1;
+  local t:1 = l_rb != 0;
+  delayslot(1);
+  if (t) goto s13t;
+}
+
+# Jumps (0x20 j, 0x21 j.d, 0x22 jl, 0x23 jl.d): [c], limm, u6, s12, and the <cc> forms. The F
+# bit is ignored.
+jsrc: "["^l_c_r^"]" is l_fmt=0 & l_c_r { export l_c_r; }
+jsrc: "[pcl]" is l_fmt=0 & l_c=63 { local v:4 = inst_start & 0xfffffffc; export v; }
+jsrc: l_u6 is l_fmt=1 & l_u6 { export *[const]:4 l_u6; }
+jsrc: s12 is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { export *[const]:4 s12; }
+jsrc: "["^l_c_r^"]" is l_fmt=3 & l_M=0 & l_c_r { export l_c_r; }
+jsrc: "[pcl]" is l_fmt=3 & l_M=0 & l_c=63 { local v:4 = inst_start & 0xfffffffc; export v; }
+jsrc: l_u6 is l_fmt=3 & l_M=1 & l_u6 { export *[const]:4 l_u6; }
+jlimm: limm is limm { export *[ram]:4 limm; }
+jsrcd: jsrc is (l_fmt=1 | l_fmt=2 | (l_fmt=3 & l_M=1)) & jsrc { export jsrc; }
+jsrcd: jsrc is (l_fmt=0 | (l_fmt=3 & l_M=0)) & l_c!=62 & jsrc { export jsrc; }
+
+:j jsrc is l_major=4 & l_sub6=0x20 & l_fmt!=3 & jsrc { goto [jsrc]; }
+:j "[blink]" is l_major=4 & l_sub6=0x20 & l_fmt=0 & l_c=31 { return [blink]; }
+:j^ccx jsrc is l_major=4 & l_sub6=0x20 & l_fmt=3 & ccx & jsrc {
+  if (!ccx) goto inst_next;
+  goto [jsrc];
+}
+:j^ccx "[blink]" is l_major=4 & l_sub6=0x20 & l_fmt=3 & l_M=0 & l_c=31 & ccx {
+  if (!ccx) goto inst_next;
+  return [blink];
+}
+:j jlimm is l_major=4 & l_sub6=0x20 & l_fmt=0 & l_c=62 ; jlimm { goto jlimm; }
+:j^ccx jlimm is l_major=4 & l_sub6=0x20 & l_fmt=3 & l_M=0 & l_c=62 & ccx ; jlimm { if (ccx) goto jlimm; }
+
+:j.d jsrcd is l_major=4 & l_sub6=0x21 & l_fmt!=3 & jsrcd {
+  local tgt:4 = jsrcd;
+  delayslot(1);
+  goto [tgt];
+}
+:j.d "[blink]" is l_major=4 & l_sub6=0x21 & l_fmt=0 & l_c=31 {
+  local tgt:4 = blink;
+  delayslot(1);
+  return [tgt];
+}
+:j^ccx^".d" jsrcd is l_major=4 & l_sub6=0x21 & l_fmt=3 & ccx & jsrcd {
+  local t:1 = ccx;
+  local tgt:4 = jsrcd;
+  delayslot(1);
+  if (!t) goto inst_next2;
+  goto [tgt];
+}
+:j^ccx^".d" "[blink]" is l_major=4 & l_sub6=0x21 & l_fmt=3 & l_M=0 & l_c=31 & ccx {
+  local t:1 = ccx;
+  local tgt:4 = blink;
+  delayslot(1);
+  if (!t) goto inst_next2;
+  return [tgt];
+}
+
+:jl jsrc is l_major=4 & l_sub6=0x22 & l_fmt!=3 & jsrc {
+  blink = inst_next;
+  call [jsrc];
+}
+:jl^ccx jsrc is l_major=4 & l_sub6=0x22 & l_fmt=3 & ccx & jsrc {
+  if (!ccx) goto inst_next;
+  blink = inst_next;
+  call [jsrc];
+}
+:jl jlimm is l_major=4 & l_sub6=0x22 & l_fmt=0 & l_c=62 ; jlimm {
+  blink = inst_next;
+  call jlimm;
+}
+:jl^ccx jlimm is l_major=4 & l_sub6=0x22 & l_fmt=3 & l_M=0 & l_c=62 & ccx ; jlimm {
+  if (!ccx) goto inst_next;
+  blink = inst_next;
+  call jlimm;
+}
+:jl.d jsrcd is l_major=4 & l_sub6=0x23 & l_fmt!=3 & jsrcd {
+  local tgt:4 = jsrcd;
+  delayslot(1);
+  blink = inst_next2;
+  call [tgt];
+}
+:jl^ccx^".d" jsrcd is l_major=4 & l_sub6=0x23 & l_fmt=3 & ccx & jsrcd {
+  local t:1 = ccx;
+  local tgt:4 = jsrcd;
+  delayslot(1);
+  if (!t) goto inst_next2;
+  blink = inst_next2;
+  call [tgt];
+}
+
+# bi [c] / bih [c]: branch to the next instruction + c * 4 (bih: c * 2), a branch table
+bisrc: "["^l_c_r^"]" is l_c_r { export l_c_r; }
+bisrc: "["^limm^"]" is l_c=62 ; limm { export limm; }
+:bi bisrc is (l_major=4 & l_sub6=0x24 & l_F=0 & l_fmt=0) ... & bisrc {
+  local tgt:4 = inst_next + (bisrc << 2);
+  goto [tgt];
+}
+:bih bisrc is (l_major=4 & l_sub6=0x25 & l_F=0 & l_fmt=0) ... & bisrc {
+  local tgt:4 = inst_next + (bisrc << 1);
+  goto [tgt];
+}
+
+# ldi b,[c]: load from the table at LDI_BASE (aux 0x291), index c
+ldisrc: "["^l_c_r^"]" is l_fmt=0 & l_c_r { export l_c_r; }
+ldisrc: "["^limm^"]" is l_fmt=0 & l_c=62 ; limm { export limm; }
+ldisrc: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { export *[const]:4 s12; }
+ldisrc: "["^l_u6^"]" is ((l_fmt=1 & l_a=0) | (l_fmt=3 & l_M=1)) & l_u6 { export *[const]:4 l_u6; }
+:ldi l_b_dst, ldisrc is (l_major=4 & l_sub6=0x26 & (l_fmt=0 | l_fmt=2 | (l_fmt=1 & l_a=0)) & l_b_dst) ... & ldisrc {
+  local base:4 = *[AUX_REGS_BASE]:4 0xa44:4;
+  l_b_dst = *[ram]:4 (base + (ldisrc << 2));
+}
+:ldi^ccd l_b_dst, ldisrc is (l_major=4 & l_sub6=0x26 & l_fmt=3 & l_M=1 & ccd & l_b_dst) ... & ldisrc {
+  if (!ccd) goto inst_next;
+  local base:4 = *[AUX_REGS_BASE]:4 0xa44:4;
+  l_b_dst = *[ram]:4 (base + (ldisrc << 2));
+}
+
+# Auxiliary register operand of lr/sr/aex (auxop): generated into ARCv2_ops.sinc
+
+:lr l_b_dst, auxop is (l_major=4 & l_sub6=0x2a & (l_fmt=0 | l_fmt=2 | (l_fmt=1 & l_a=0)) & l_b_dst) ... & auxop {
+  l_b_dst = auxop;
+}
+:sr l_b_src, auxop is (l_major=4 & l_sub6=0x2b & (l_fmt=0 | l_fmt=2 | (l_fmt=1 & l_a=0))) ... & l_b_src & auxop {
+  auxop = l_b_src;
+}
+:aex l_b_src, auxop is (l_major=4 & l_sub6=0x27 & l_fmt!=3) ... & l_b_src & auxop {
+  local t:4 = auxop;
+  auxop = l_b_src;
+  l_b_src = t;
+}
+:aex^ccd l_b_src, auxop is (l_major=4 & l_sub6=0x27 & l_fmt=3 & ccd) ... & l_b_src & auxop {
+  if (!ccd) goto inst_next;
+  local t:4 = auxop;
+  auxop = l_b_src;
+  l_b_src = t;
+}
+
+# lp: zero-overhead loop up to the target (lp s13 format 2, lp u7 format 1, lp<cc> u7 format 3)
+lp_end: tgt is l_fmt=2 & l_u6 & l_s6hi [ tgt = (inst_start & ~3) + (((l_s6hi << 6) | l_u6) << 1); ] { export *[ram]:4 tgt; }
+lp_end: tgt is l_fmt=1 & l_u6 [ tgt = (inst_start & ~3) + (l_u6 << 1); ] { export *[ram]:4 tgt; }
+lp_end: tgt is l_fmt=3 & l_M=1 & l_u6 [ tgt = (inst_start & ~3) + (l_u6 << 1); ] { export *[ram]:4 tgt; }
+:lp^ccx lp_end is l_major=4 & l_sub6=0x28 & l_fmt=3 & l_M=1 & ccx & lp_end
+    [ loopEnd = 1; globalset(lp_end, loopEnd); loopStart = (inst_start + 4) >> 1; globalset(lp_end, loopStart); ] {
+  is_in_loop = 0;
+  if (!ccx) goto lp_end;
+  *[AUX_REGS_BASE]:4 0x8:4 = inst_next;
+  *[AUX_REGS_BASE]:4 0xc:4 = &lp_end;
+  is_in_loop = 1;
+}
+:lp lp_end is l_major=4 & l_sub6=0x28 & (l_fmt=1 | l_fmt=2) & lp_end
+    [ loopEnd = 1; globalset(lp_end, loopEnd); loopStart = (inst_start + 4) >> 1; globalset(lp_end, loopStart); ] {
+  *[AUX_REGS_BASE]:4 0x8:4 = inst_next;
+  *[AUX_REGS_BASE]:4 0xc:4 = &lp_end;
+  is_in_loop = 1;
+}
+
+# flag / kflag: write STATUS32 (aux 0x0a); Z, N, C, V are its bits 11..8
+:flag op_c is (l_major=4 & l_sub6=0x29 & l_F=0 & l_fmt!=3) ... & op_c { set_status(op_c); }
+:flag^ccd op_c is (l_major=4 & l_sub6=0x29 & l_F=0 & l_fmt=3 & ccd) ... & op_c {
+  if (!ccd) goto inst_next;
+  set_status(op_c);
+}
+:kflag op_c is (l_major=4 & l_sub6=0x29 & l_F=1 & l_fmt!=3) ... & op_c { kflag(op_c); }
+:kflag^ccd op_c is (l_major=4 & l_sub6=0x29 & l_F=1 & l_fmt=3 & ccd) ... & op_c {
+  if (!ccd) goto inst_next;
+  kflag(op_c);
+}
+
+# Register-register loads (0x30-0x36): ld<zz>[.di][.aa][.x] a,[b,c]; aa in the format bits
+ldr_zz: "" is l_ldr_zz=0 { }
+ldr_zz: "b" is l_ldr_zz=1 { }
+ldr_zz: "h" is l_ldr_zz=2 { }
+ldr_zz: "d" is l_ldr_zz=3 { }
+ldr_x: "" is l_ldr_x=0 { }
+ldr_x: ".x" is l_ldr_x=1 { }
+ldr_di: "" is l_F=0 { }
+ldr_di: ".di" is l_F=1 { }
+ldr_aa: "" is l_fmt=0 { }
+ldr_aa: ".aw" is l_fmt=1 { }
+ldr_aa: ".ab" is l_fmt=2 { }
+ldr_aa: ".as" is l_fmt=3 { }
+pfr_aa: ldr_aa is ldr_aa { }
+pfr_aa: "" is (l_fmt=1 | l_fmt=2 | l_fmt=3) & l_b_hi=7 & l_b_lo=6 { }
+ldr_aa: "" is l_fmt=1 & l_ldr_zz=3 & l_b_hi=7 & l_b_lo=6 { }
+ldr_aa: "" is l_fmt=2 & l_ldr_zz=3 & l_b_hi=7 & l_b_lo=6 { }
+ldr_aa: "" is l_fmt=3 & l_ldr_zz=3 & l_b_hi=7 & l_b_lo=6 { }
+ldr_ea: l_b_src, l_c_src is l_fmt=0 ... & l_b_src & l_c_src { local ea:4 = l_b_src + l_c_src; export ea; }
+ldr_ea: l_rb, l_c_src is (l_fmt=1 & l_rb) ... & l_c_src { l_rb = l_rb + l_c_src; export l_rb; }
+ldr_ea: l_rb, l_c_src is (l_fmt=2 & l_rb) ... & l_c_src { local ea:4 = l_rb; l_rb = l_rb + l_c_src; export ea; }
+ldr_ea: limm, l_c_src is (l_fmt=1 & l_b_hi=7 & l_b_lo=6 ; limm) & l_c_src { local ea:4 = limm + l_c_src; export ea; }
+ldr_ea: limm, l_c_src is (l_fmt=2 & l_b_hi=7 & l_b_lo=6 ; limm) & l_c_src { export limm; }
+ldr_ea: l_b_src, l_c_src is (l_fmt=3 & l_ldr_zz=0) ... & l_b_src & l_c_src { local ea:4 = l_b_src + (l_c_src << 2); export ea; }
+ldr_ea: l_b_src, l_c_src is (l_fmt=3 & l_ldr_zz=1) ... & l_b_src & l_c_src { local ea:4 = l_b_src + l_c_src; export ea; }
+ldr_ea: l_b_src, l_c_src is (l_fmt=3 & l_ldr_zz=2) ... & l_b_src & l_c_src { local ea:4 = l_b_src + (l_c_src << 1); export ea; }
+ldr_ea: l_b_src, l_c_src is (l_fmt=3 & l_ldr_zz=3) ... & l_b_src & l_c_src { local ea:4 = l_b_src + (l_c_src << 2); export ea; }
+
+:ld^ldr_zz^ldr_di^ldr_aa^ldr_x l_a_dst, [ldr_ea] is (l_major=4 & l_ldr_sub=6 & l_ldr_zz=0 & ldr_zz & ldr_di & ldr_aa & ldr_x & l_a_dst) ... & ldr_ea {
+  l_a_dst = *[ram]:4 ldr_ea;
+}
+:ld^ldr_zz^ldr_di^ldr_aa^ldr_x l_a_dst, [ldr_ea] is (l_major=4 & l_ldr_sub=6 & l_ldr_zz=1 & l_ldr_x=0 & ldr_zz & ldr_di & ldr_aa & ldr_x & l_a_dst) ... & ldr_ea {
+  l_a_dst = zext(*[ram]:1 ldr_ea);
+}
+:ld^ldr_zz^ldr_di^ldr_aa^ldr_x l_a_dst, [ldr_ea] is (l_major=4 & l_ldr_sub=6 & l_ldr_zz=1 & l_ldr_x=1 & ldr_zz & ldr_di & ldr_aa & ldr_x & l_a_dst) ... & ldr_ea {
+  l_a_dst = sext(*[ram]:1 ldr_ea);
+}
+:ld^ldr_zz^ldr_di^ldr_aa^ldr_x l_a_dst, [ldr_ea] is (l_major=4 & l_ldr_sub=6 & l_ldr_zz=2 & l_ldr_x=0 & ldr_zz & ldr_di & ldr_aa & ldr_x & l_a_dst) ... & ldr_ea {
+  l_a_dst = zext(*[ram]:2 ldr_ea);
+}
+:ld^ldr_zz^ldr_di^ldr_aa^ldr_x l_a_dst, [ldr_ea] is (l_major=4 & l_ldr_sub=6 & l_ldr_zz=2 & l_ldr_x=1 & ldr_zz & ldr_di & ldr_aa & ldr_x & l_a_dst) ... & ldr_ea {
+  l_a_dst = sext(*[ram]:2 ldr_ea);
+}
+:ld^ldr_zz^ldr_di^ldr_aa^ldr_x l_a_p, [ldr_ea] is (l_major=4 & l_ldr_sub=6 & l_ldr_zz=3 & l_ldr_x=0 & ldr_zz & ldr_di & ldr_aa & ldr_x & l_a_p & l_a_e & l_a_o) ... & ldr_ea {
+  local ea:4 = ldr_ea;
+  l_a_e = *[ram]:4 ea;
+  l_a_o = *[ram]:4 (ea + 4);
+}
+:ld^ldr_zz^ldr_di^ldr_aa^ldr_x "0", [ldr_ea] is (l_major=4 & l_ldr_sub=6 & l_ldr_zz=3 & l_ldr_x=0 & ldr_zz & ldr_di & ldr_aa & ldr_x & l_a=62) ... & ldr_ea {
+  local ea:4 = ldr_ea;
+}
+:prefetch^pfr_aa [ldr_ea] is (l_major=4 & l_sub6=0x30 & l_F=0 & l_a=62 & pfr_aa) ... & ldr_ea { prefetch(ldr_ea); }
+:prefetchw^pfr_aa [ldr_ea] is (l_major=4 & l_sub6=0x30 & l_F=1 & l_a=62 & pfr_aa) ... & ldr_ea { prefetch(ldr_ea); }
+:prealloc^pfr_aa [ldr_ea] is (l_major=4 & l_sub6=0x31 & l_F=0 & l_a=62 & pfr_aa) ... & ldr_ea { prefetch(ldr_ea); }
+
+# Single-operand group, sub-opcode 0x2f: ex / llock / scond (atomic exchange, load-locked,
+# store-conditional); the F bit is .di
+sop_di: "" is l_F=0 { }
+sop_di: ".di" is l_F=1 { }
+sopmem: "["^l_c_src^"]" is l_fmt=0 ... & l_c_src { export l_c_src; }
+sopmem: "["^l_u6^"]" is l_fmt=1 & l_u6 { export *[const]:4 l_u6; }
+:ex^sop_di l_b_src, sopmem is (l_major=4 & l_sub6=0x2f & l_a=0x0c & (l_fmt=0 | l_fmt=1) & sop_di) ... & l_b_src & sopmem {
+  local a:4 = sopmem;
+  local t:4 = *[ram]:4 a;
+  *[ram]:4 a = l_b_src;
+  l_b_src = t;
+}
+:llock^sop_di l_b_dst, sopmem is (l_major=4 & l_sub6=0x2f & l_a=0x10 & (l_fmt=0 | l_fmt=1) & sop_di & l_b_dst) ... & sopmem {
+  l_b_dst = *[ram]:4 sopmem;
+  LF = 1;
+}
+:scond^sop_di l_b_src, sopmem is (l_major=4 & l_sub6=0x2f & l_a=0x11 & (l_fmt=0 | l_fmt=1) & sop_di) ... & l_b_src & sopmem {
+  # store if the lock flag is still set; Z reports success
+  Z = LF;
+  if (LF == 0) goto <fail>;
+  *[ram]:4 sopmem = l_b_src;
+<fail>
+  LF = 0;
+}
+:llockd^sop_di "0", sopmem is (l_major=4 & l_sub6=0x2f & l_a=0x12 & (l_fmt=0 | l_fmt=1) & sop_di & l_b_hi=7 & l_b_lo=6) ... & sopmem {
+  local a:4 = sopmem;
+  LF = 1;
+}
+:llockd^sop_di l_rb_e, sopmem is (l_major=4 & l_sub6=0x2f & l_a=0x12 & (l_fmt=0 | l_fmt=1) & sop_di & l_rb_p & l_rb_e & l_rb_o) ... & sopmem {
+  local a:4 = sopmem;
+  l_rb_e = *[ram]:4 a;
+  l_rb_o = *[ram]:4 (a + 4);
+  LF = 1;
+}
+:scondd^sop_di l_rb_e, sopmem is (l_major=4 & l_sub6=0x2f & l_a=0x13 & (l_fmt=0 | l_fmt=1) & sop_di & l_rb_p & l_rb_e & l_rb_o) ... & sopmem {
+  local a:4 = sopmem;
+  Z = LF;
+  if (LF == 0) goto <fail>;
+  *[ram]:4 a = l_rb_e;
+  *[ram]:4 (a + 4) = l_rb_o;
+<fail>
+  LF = 0;
+}
+
+# Zero-operand group (a = 0x3f, b selects): swi, sync, rtie, brk (u6 = 0)
+zop_ok: is l_fmt=1 & l_u6=0 & l_F=0 { }
+:swi is l_major=4 & l_sub6=0x2f & l_a=0x3f & l_b_hi=0 & l_b_lo=2 & zop_ok { swi(); }
+:sync is l_major=4 & l_sub6=0x2f & l_a=0x3f & l_b_hi=0 & l_b_lo=3 & zop_ok { sync(); }
+:rtie is l_major=4 & l_sub6=0x2f & l_a=0x3f & l_b_hi=0 & l_b_lo=4 & zop_ok {
+  # return from interrupt/exception: the return address and status come from hardware state
+  local tgt:4 = rtie();
+  return [tgt];
+}
+:brk is l_major=4 & l_sub6=0x2f & l_a=0x3f & l_b_hi=0 & l_b_lo=5 & zop_ok { brk(); }
+
+# ---------------------------------------------------------------------------------------------
+# 16-bit instructions
+
+# 0x08: mov_s g,h (bit 2 = 0); ld_s r0-r3,[h,u5] (bit 2 = 1)
+:mov_s s_g_dst, s_h_src is (s_major=0x08 & s_bit2=0 & s_g_dst) ... & s_h_src {
+  s_g_dst = s_h_src;
+}
+s8u: off is s_u5a & s_u5b [ off = ((s_u5a << 2) | s_u5b) << 2; ] { export *[const]:4 off; }
+:ld_s s_R2, [s_hn, s8u] is s_major=0x08 & s_bit2=1 & s_R2 & s_hn & s8u {
+  s_R2 = *[ram]:4 (s_hn + s8u);
+}
+
+# 0x09: ld_s.as a,[b,c] / sub_s a,b,c / add_s r0-r1,b,u6
+:ld_s.as s_a_r, [s_b_r, s_c_r] is s_major=0x09 & s_bit3=0 & s_bit4=0 & s_a_r & s_b_r & s_c_r {
+  s_a_r = *[ram]:4 (s_b_r + (s_c_r << 2));
+}
+:sub_s s_a_r, s_b_r, s_c_r is s_major=0x09 & s_bit3=0 & s_bit4=1 & s_a_r & s_b_r & s_c_r {
+  s_a_r = s_b_r - s_c_r;
+}
+s_r01: "r0" is s_bit7=0 { export r0; }
+s_r01: "r1" is s_bit7=1 { export r1; }
+u6s: v is s_sub6_5 & s_bit4 & s_a [ v = (((s_sub6_5 << 1) | s_bit4) << 3) | s_a; ] { export *[const]:4 v; }
+:add_s s_r01, s_b_r, u6s is s_major=0x09 & s_bit3=1 & s_r01 & s_b_r & u6s {
+  s_r01 = s_b_r + u6s;
+}
+
+# 0x0a: ld_s r1,[gp,s11] / st_s r0,[gp,s11] / ldi_s b,[u7]
+gpoff: off is s_s6hi & s_a [ off = ((s_s6hi << 3) | s_a) << 2; ] { export *[const]:4 off; }
+:ld_s "r1", [gp, gpoff] is s_major=0x0a & s_bit3=0 & s_bit4=0 & gpoff & gp {
+  r1 = *[ram]:4 (gp + gpoff);
+}
+:st_s "r0", [gp, gpoff] is s_major=0x0a & s_bit3=0 & s_bit4=1 & gpoff & gp {
+  *[ram]:4 (gp + gpoff) = r0;
+}
+u7ldi: v is s_sub7_5 & s_bit4 & s_a [ v = (((s_sub7_5 << 1) | s_bit4) << 3) | s_a; ] { export *[const]:4 v; }
+:ldi_s s_b_r, [u7ldi] is s_major=0x0a & s_bit3=1 & s_b_r & u7ldi {
+  local base:4 = *[AUX_REGS_BASE]:4 0xa44:4;
+  s_b_r = *[ram]:4 (base + (u7ldi << 2));
+}
+
+# 0x0b: jli_s u10 (call through the table at JLI_BASE, aux 0x290) / ei_s u10 (execute the
+# instruction at EI_BASE + u10 * 4, aux 0x292)
+:jli_s s_u10 is s_major=0x0b & s_bit10=0 & s_u10 {
+  local base:4 = *[AUX_REGS_BASE]:4 0xa40:4;
+  blink = inst_next;
+  call [base + (s_u10 << 2)];
+}
+:ei_s s_u10 is s_major=0x0b & s_bit10=1 & s_u10 {
+  ei(s_u10:4);
+}
+
+# 0x0c: ld_s/ldb_s/ldh_s a,[b,c] / add_s a,b,c
+:ld_s s_a_r, [s_b_r, s_c_r] is s_major=0x0c & s_op2=0 & s_a_r & s_b_r & s_c_r { s_a_r = *[ram]:4 (s_b_r + s_c_r); }
+:ldb_s s_a_r, [s_b_r, s_c_r] is s_major=0x0c & s_op2=1 & s_a_r & s_b_r & s_c_r { s_a_r = zext(*[ram]:1 (s_b_r + s_c_r)); }
+:ldh_s s_a_r, [s_b_r, s_c_r] is s_major=0x0c & s_op2=2 & s_a_r & s_b_r & s_c_r { s_a_r = zext(*[ram]:2 (s_b_r + s_c_r)); }
+:add_s s_a_r, s_b_r, s_c_r is s_major=0x0c & s_op2=3 & s_a_r & s_b_r & s_c_r { s_a_r = s_b_r + s_c_r; }
+
+# 0x0d: add_s/sub_s/asl_s/asr_s c,b,u3
+:add_s s_c_r, s_b_r, s_u3 is s_major=0x0d & s_op2=0 & s_c_r & s_b_r & s_u3 { s_c_r = s_b_r + s_u3; }
+:sub_s s_c_r, s_b_r, s_u3 is s_major=0x0d & s_op2=1 & s_c_r & s_b_r & s_u3 { s_c_r = s_b_r - s_u3; }
+:asl_s s_c_r, s_b_r, s_u3 is s_major=0x0d & s_op2=2 & s_c_r & s_b_r & s_u3 { s_c_r = s_b_r << s_u3; }
+:asr_s s_c_r, s_b_r, s_u3 is s_major=0x0d & s_op2=3 & s_c_r & s_b_r & s_u3 { s_c_r = s_b_r s>> s_u3; }
+
+# 0x0e: add_s b,b,h / add_s h,h,s3 / mov_s h,s3 / cmp_s b,h / cmp_s h,s3 / mov_s.ne b,h
+:add_s s_b_r, s_b_r2, s_h_src is (s_major=0x0e & s_op3=0 & s_b_r & s_b_r2) ... & s_h_src { s_b_r = s_b_r + s_h_src; }
+s3: v is s_op3hi [ v = s_op3hi - (((s_op3hi + 1) >> 3) << 3); ] { export *[const]:4 v; }
+:add_s s_h_dst, s_h_src, s3 is (s_major=0x0e & s_op3=1 & s3 & s_h_dst) ... & s_h_src { s_h_dst = s_h_src + s3; }
+:mov_s s_h_dst, s3 is s_major=0x0e & s_op3=3 & s3 & s_h_dst { s_h_dst = s3; }
+:cmp_s s_b_r, s_h_src is (s_major=0x0e & s_op3=4 & s_b_r) ... & s_h_src { cmpflags(s_b_r, s_h_src); }
+:cmp_s s_h_src, s3 is (s_major=0x0e & s_op3=5 & s3) ... & s_h_src { cmpflags(s_h_src, s3); }
+:mov_s.ne s_b_r, s_h_src is (s_major=0x0e & s_op3=7 & s_b_r) ... & s_h_src {
+  if (Z) goto inst_next;
+  s_b_r = s_h_src;
+}
+
+# 0x0f: general 16-bit operations (bits 4..0)
+:j_s [s_b_r] is s_major=0x0f & s_op5=0 & s_sub7_5=0 & s_b_r { goto [s_b_r]; }
+:j_s.d [s_b_r] is s_major=0x0f & s_op5=0 & s_sub7_5=1 & s_b_r {
+  local tgt:4 = s_b_r;
+  delayslot(1);
+  goto [tgt];
+}
+:jl_s [s_b_r] is s_major=0x0f & s_op5=0 & s_sub7_5=2 & s_b_r {
+  blink = inst_next;
+  call [s_b_r];
+}
+:jl_s.d [s_b_r] is s_major=0x0f & s_op5=0 & s_sub7_5=3 & s_b_r {
+  local tgt:4 = s_b_r;
+  delayslot(1);
+  blink = inst_next2;
+  call [tgt];
+}
+:sub_s.ne s_b_r, s_b_r2, s_b_r3 is s_major=0x0f & s_op5=0 & s_sub7_5=6 & s_b_r & s_b_r2 & s_b_r3 {
+  if (Z) goto inst_next;
+  s_b_r = 0;
+}
+:nop_s is s_major=0x0f & s_op5=0 & s_sub7_5=7 & s_b=0 { }
+:unimp_s is s_major=0x0f & s_op5=0 & s_sub7_5=7 & s_b=1 { unimp_s(); }
+:swi_s is s_major=0x0f & s_op5=0 & s_sub7_5=7 & s_b=2 { swi(); }
+:jeq_s [blink] is s_major=0x0f & s_op5=0 & s_sub7_5=7 & s_b=4 & blink {
+  if (!Z) goto inst_next;
+  return [blink];
+}
+:jne_s [blink] is s_major=0x0f & s_op5=0 & s_sub7_5=7 & s_b=5 & blink {
+  if (Z) goto inst_next;
+  return [blink];
+}
+:j_s [blink] is s_major=0x0f & s_op5=0 & s_sub7_5=7 & s_b=6 & blink { return [blink]; }
+:j_s.d [blink] is s_major=0x0f & s_op5=0 & s_sub7_5=7 & s_b=7 & blink {
+  local tgt:4 = blink;
+  delayslot(1);
+  return [tgt];
+}
+:sub_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x02 & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r - s_c_r; }
+:and_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x04 & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r & s_c_r; }
+:or_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x05 & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r | s_c_r; }
+:bic_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x06 & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r & ~s_c_r; }
+:xor_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x07 & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r ^ s_c_r; }
+:mpyw_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x09 & s_b_r & s_b_r2 & s_c_r { s_b_r = sext(s_b_r:2) * sext(s_c_r:2); }
+:mpyuw_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x0a & s_b_r & s_b_r2 & s_c_r { s_b_r = zext(s_b_r:2) * zext(s_c_r:2); }
+:tst_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x0b & s_b_r & s_c_r { local v:4 = s_b_r & s_c_r; zn(v); }
+:mpy_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x0c & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r * s_c_r; }
+:sexb_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x0d & s_b_r & s_c_r { s_b_r = sext(s_c_r:1); }
+:sexh_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x0e & s_b_r & s_c_r { s_b_r = sext(s_c_r:2); }
+:extb_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x0f & s_b_r & s_c_r { s_b_r = zext(s_c_r:1); }
+:exth_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x10 & s_b_r & s_c_r { s_b_r = zext(s_c_r:2); }
+:abs_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x11 & s_b_r & s_c_r {
+  local v:4 = s_c_r;
+  s_b_r = v;
+  if (v s>= 0) goto inst_next;
+  s_b_r = -v;
+}
+:not_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x12 & s_b_r & s_c_r { s_b_r = ~s_c_r; }
+:neg_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x13 & s_b_r & s_c_r { s_b_r = -s_c_r; }
+:add1_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x14 & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r + (s_c_r << 1); }
+:add2_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x15 & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r + (s_c_r << 2); }
+:add3_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x16 & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r + (s_c_r << 3); }
+:asl_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x18 & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r << (s_c_r & 31); }
+:lsr_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x19 & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r >> (s_c_r & 31); }
+:asr_s s_b_r, s_b_r2, s_c_r is s_major=0x0f & s_op5=0x1a & s_b_r & s_b_r2 & s_c_r { s_b_r = s_b_r s>> (s_c_r & 31); }
+:asl_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x1b & s_b_r & s_c_r { s_b_r = s_c_r << 1; }
+:asr_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x1c & s_b_r & s_c_r { s_b_r = s_c_r s>> 1; }
+:lsr_s s_b_r, s_c_r is s_major=0x0f & s_op5=0x1d & s_b_r & s_c_r { s_b_r = s_c_r >> 1; }
+:trap_s s_u6hi is s_major=0x0f & s_op5=0x1e & s_u6hi { trap_s(s_u6hi:4); }
+:swi_s s_u6hi is s_major=0x0f & s_op5=0x1f & s_u6hi { swi(s_u6hi:4); }
+:brk_s is s_major=0x0f & s_op5=0x1f & s_u6hi=63 { brk(); }
+
+# 0x10-0x16: ld_s/ldb_s/ldh_s/ldh_s.x/st_s/stb_s/sth_s c,[b,u5 scaled]
+u5w: off is s_u5 [ off = s_u5 << 2; ] { export *[const]:4 off; }
+u5h: off is s_u5 [ off = s_u5 << 1; ] { export *[const]:4 off; }
+:ld_s s_c_r, [s_b_r, u5w] is s_major=0x10 & s_c_r & s_b_r & u5w { s_c_r = *[ram]:4 (s_b_r + u5w); }
+:ldb_s s_c_r, [s_b_r, s_u5] is s_major=0x11 & s_c_r & s_b_r & s_u5 { s_c_r = zext(*[ram]:1 (s_b_r + s_u5)); }
+:ldh_s s_c_r, [s_b_r, u5h] is s_major=0x12 & s_c_r & s_b_r & u5h { s_c_r = zext(*[ram]:2 (s_b_r + u5h)); }
+:ldh_s.x s_c_r, [s_b_r, u5h] is s_major=0x13 & s_c_r & s_b_r & u5h { s_c_r = sext(*[ram]:2 (s_b_r + u5h)); }
+:st_s s_c_r, [s_b_r, u5w] is s_major=0x14 & s_c_r & s_b_r & u5w { *[ram]:4 (s_b_r + u5w) = s_c_r; }
+:stb_s s_c_r, [s_b_r, s_u5] is s_major=0x15 & s_c_r & s_b_r & s_u5 { *[ram]:1 (s_b_r + s_u5) = s_c_r:1; }
+:sth_s s_c_r, [s_b_r, u5h] is s_major=0x16 & s_c_r & s_b_r & u5h { *[ram]:2 (s_b_r + u5h) = s_c_r:2; }
+
+# 0x17: shifts and bit operations b,b,u5
+:asl_s s_b_r, s_b_r2, s_u5 is s_major=0x17 & s_sub7_5=0 & s_b_r & s_b_r2 & s_u5 { s_b_r = s_b_r << s_u5; }
+:lsr_s s_b_r, s_b_r2, s_u5 is s_major=0x17 & s_sub7_5=1 & s_b_r & s_b_r2 & s_u5 { s_b_r = s_b_r >> s_u5; }
+:asr_s s_b_r, s_b_r2, s_u5 is s_major=0x17 & s_sub7_5=2 & s_b_r & s_b_r2 & s_u5 { s_b_r = s_b_r s>> s_u5; }
+:sub_s s_b_r, s_b_r2, s_u5 is s_major=0x17 & s_sub7_5=3 & s_b_r & s_b_r2 & s_u5 { s_b_r = s_b_r - s_u5; }
+:bset_s s_b_r, s_b_r2, s_u5 is s_major=0x17 & s_sub7_5=4 & s_b_r & s_b_r2 & s_u5 { s_b_r = s_b_r | (1:4 << s_u5); }
+:bclr_s s_b_r, s_b_r2, s_u5 is s_major=0x17 & s_sub7_5=5 & s_b_r & s_b_r2 & s_u5 { s_b_r = s_b_r & ~(1:4 << s_u5); }
+:bmsk_s s_b_r, s_b_r2, s_u5 is s_major=0x17 & s_sub7_5=6 & s_b_r & s_b_r2 & s_u5 { s_b_r = s_b_r & ((2:4 << s_u5) - 1); }
+:btst_s s_b_r, s_u5 is s_major=0x17 & s_sub7_5=7 & s_b_r & s_u5 { local v:4 = s_b_r & (1:4 << s_u5); zn(v); }
+
+# 0x18: stack-pointer based operations
+:ld_s s_b_r, [sp, u5w] is s_major=0x18 & s_sub7_5=0 & s_b_r & sp & u5w { s_b_r = *[ram]:4 (sp + u5w); }
+:ldb_s s_b_r, [sp, u5w] is s_major=0x18 & s_sub7_5=1 & s_b_r & sp & u5w { s_b_r = zext(*[ram]:1 (sp + u5w)); }
+:st_s s_b_r, [sp, u5w] is s_major=0x18 & s_sub7_5=2 & s_b_r & sp & u5w { *[ram]:4 (sp + u5w) = s_b_r; }
+:stb_s s_b_r, [sp, u5w] is s_major=0x18 & s_sub7_5=3 & s_b_r & sp & u5w { *[ram]:1 (sp + u5w) = s_b_r:1; }
+:add_s s_b_r, sp, u5w is s_major=0x18 & s_sub7_5=4 & s_b_r & sp & u5w { s_b_r = sp + u5w; }
+:add_s sp, "sp", u5w is s_major=0x18 & s_sub7_5=5 & s_b=0 & sp & u5w { sp = sp + u5w; }
+:sub_s sp, "sp", u5w is s_major=0x18 & s_sub7_5=5 & s_b=1 & sp & u5w { sp = sp - u5w; }
+:pop_s s_b_r is s_major=0x18 & s_sub7_5=6 & s_u5=1 & s_b_r { pop4(s_b_r); }
+:pop_s blink is s_major=0x18 & s_sub7_5=6 & s_u5=0x11 & blink { pop4(blink); }
+:push_s s_b_r is s_major=0x18 & s_sub7_5=7 & s_u5=1 & s_b_r { push4(s_b_r); }
+:push_s blink is s_major=0x18 & s_sub7_5=7 & s_u5=0x11 & blink { push4(blink); }
+
+# enter_s / leave_s: generated into ARCv2_ops.sinc
+
+# 0x19: gp-relative loads and add (s9 scaled)
+gps9w: off is s_s9 [ off = s_s9 << 2; ] { export *[const]:4 off; }
+gps9h: off is s_s9 [ off = s_s9 << 1; ] { export *[const]:4 off; }
+:ld_s r0, [gp, gps9w] is s_major=0x19 & s_sub10_9=0 & r0 & gp & gps9w { r0 = *[ram]:4 (gp + gps9w); }
+:ldb_s r0, [gp, s_s9] is s_major=0x19 & s_sub10_9=1 & r0 & gp & s_s9 { r0 = zext(*[ram]:1 (gp + s_s9)); }
+:ldh_s r0, [gp, gps9h] is s_major=0x19 & s_sub10_9=2 & r0 & gp & gps9h { r0 = zext(*[ram]:2 (gp + gps9h)); }
+:add_s r0, gp, gps9w is s_major=0x19 & s_sub10_9=3 & r0 & gp & gps9w { r0 = gp + gps9w; }
+
+# 0x1a: ld_s b,[pcl,u10]
+pclu10: off is s_u8 [ off = s_u8 << 2; ] { export *[const]:4 off; }
+pcladdr: a is s_u8 [ a = (inst_start & ~3) + (s_u8 << 2); ] { export *[ram]:4 a; }
+:ld_s s_b_r, [pcl, pclu10] is s_major=0x1a & s_b_r & pcl & pclu10 & pcladdr { s_b_r = pcladdr; }
+
+# 0x1b: mov_s b,u8; 0x1c: add_s b,b,u7 / cmp_s b,u7
+:mov_s s_b_r, s_u8 is s_major=0x1b & s_b_r & s_u8 { s_b_r = s_u8; }
+:add_s s_b_r, s_b_r2, s_u7 is s_major=0x1c & s_bit7=0 & s_b_r & s_b_r2 & s_u7 { s_b_r = s_b_r + s_u7; }
+:cmp_s s_b_r, s_u7 is s_major=0x1c & s_bit7=1 & s_b_r & s_u7 { local v:4 = s_u7; cmpflags(s_b_r, v); }
+
+# 0x1d: breq_s/brne_s b,0,s8
+s8t: tgt is s_s7 [ tgt = (inst_start & ~3) + (s_s7 << 1); ] { export *[ram]:4 tgt; }
+:breq_s s_b_r, 0, s8t is s_major=0x1d & s_bit7=0 & s_b_r & s8t { if (s_b_r == 0) goto s8t; }
+:brne_s s_b_r, 0, s8t is s_major=0x1d & s_bit7=1 & s_b_r & s8t { if (s_b_r != 0) goto s8t; }
+
+# 0x1e: b_s/beq_s/bne_s s10, b<cc>_s s7
+s10t: tgt is s_s10 [ tgt = (inst_start & ~3) + (s_s10 << 1); ] { export *[ram]:4 tgt; }
+s7t: tgt is s_s6 [ tgt = (inst_start & ~3) + (s_s6 << 1); ] { export *[ram]:4 tgt; }
+:b_s s10t is s_major=0x1e & s_sub10_9=0 & s10t { goto s10t; }
+:beq_s s10t is s_major=0x1e & s_sub10_9=1 & s10t { if (Z) goto s10t; }
+:bne_s s10t is s_major=0x1e & s_sub10_9=2 & s10t { if (!Z) goto s10t; }
+bcc_s: "gt_s" is s_cc3=0 { local t:1 = !Z && (N == V); export t; }
+bcc_s: "ge_s" is s_cc3=1 { local t:1 = N == V; export t; }
+bcc_s: "lt_s" is s_cc3=2 { local t:1 = N != V; export t; }
+bcc_s: "le_s" is s_cc3=3 { local t:1 = Z || (N != V); export t; }
+bcc_s: "hi_s" is s_cc3=4 { local t:1 = !C && !Z; export t; }
+bcc_s: "hs_s" is s_cc3=5 { local t:1 = !C; export t; }
+bcc_s: "lo_s" is s_cc3=6 { export C; }
+bcc_s: "ls_s" is s_cc3=7 { local t:1 = C || Z; export t; }
+:b^bcc_s s7t is s_major=0x1e & s_sub10_9=3 & bcc_s & s7t { if (bcc_s) goto s7t; }
+
+# 0x1f: bl_s s13
+s13c: tgt is s_s11 [ tgt = (inst_start & ~3) + (s_s11 << 2); ] { export *[ram]:4 tgt; }
+:bl_s s13c is s_major=0x1f & s13c {
+  blink = inst_next;
+  call s13c;
+}
+
+} # end of "with : phase=1"

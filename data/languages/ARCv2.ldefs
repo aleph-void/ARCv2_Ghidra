@@ -6,11 +6,23 @@
             endian="little"
             size="32"
             variant="default"
-            version="0.1"
+            version="1.0"
             slafile="ARCv2.sla"
             processorspec="ARCv2.pspec"
             id="ARCv2:LE:32:default">
-    <description>ARCv2 microcontroller</description>
+    <description>ARCv2 (Synopsys ARC EM/HS), little-endian</description>
+    <compiler name="default" spec="ARCv2.cspec" id="default"/>
+    <external_name tool="DWARF.register.mapping.file" name="ARCv2.dwarf"/>
+  </language>
+  <language processor="ARCv2"
+            endian="big"
+            size="32"
+            variant="default"
+            version="1.0"
+            slafile="ARCv2_be.sla"
+            processorspec="ARCv2.pspec"
+            id="ARCv2:BE:32:default">
+    <description>ARCv2 (Synopsys ARC EM/HS), big-endian</description>
     <compiler name="default" spec="ARCv2.cspec" id="default"/>
     <external_name tool="DWARF.register.mapping.file" name="ARCv2.dwarf"/>
   </language>

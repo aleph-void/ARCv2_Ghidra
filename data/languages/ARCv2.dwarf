@@ -8,11 +8,9 @@
 		<register_mapping dwarf="29" ghidra="ilink"/>
 		<register_mapping dwarf="30" ghidra="r30"/>
 		<register_mapping dwarf="31" ghidra="blink"/>
-		<register_mapping dwarf="32" ghidra="r32" auto_count="26"/> <!-- r32..r57 -->
-		<register_mapping dwarf="58" ghidra="acch"/>
-		<register_mapping dwarf="59" ghidra="accl"/>
-		<register_mapping dwarf="60" ghidra="r60_lp_count"/>
-		<register_mapping dwarf="61" ghidra="r61reserved"/>
+		<register_mapping dwarf="32" ghidra="r32" auto_count="28"/> <!-- r32..r59 (r58/r59: accumulator) -->
+		<register_mapping dwarf="60" ghidra="lp_count"/>
+		<register_mapping dwarf="61" ghidra="r61"/>
 		<!-- r61 is reserved and r62 is the long immediate data indicator -->
 		<register_mapping dwarf="63" ghidra="pcl"/>
 	</register_mappings>
