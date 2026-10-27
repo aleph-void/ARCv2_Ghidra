@@ -671,6 +671,11 @@ zop_ok: is l_fmt=1 & l_u6=0 & l_F=0 { }
   return [tgt];
 }
 :brk is l_major=4 & l_sub6=0x2f & l_a=0x3f & l_b_hi=0 & l_b_lo=5 & zop_ok { brk(); }
+# dmb u3 (data memory barrier; the low 3 bits of u6 select the kind, objdump omits 0)
+:dmb is l_major=4 & l_sub6=0x2f & l_F=0 & l_fmt=1 & l_a=0x3f & l_b_hi=1 & l_b_lo=3 & l_c_lo=0 { dmb(0:1); }
+:dmb l_c_lo is l_major=4 & l_sub6=0x2f & l_F=0 & l_fmt=1 & l_a=0x3f & l_b_hi=1 & l_b_lo=3 & l_c_lo { dmb(l_c_lo:1); }
+# nop: mov 0,0 (format 1, a = 0)
+:nop is l_major=4 & l_sub6=0x0a & l_F=0 & l_fmt=1 & l_b_hi=7 & l_b_lo=6 & l_u6=0 & l_a=0 { }
 
 # ---------------------------------------------------------------------------------------------
 # 16-bit instructions

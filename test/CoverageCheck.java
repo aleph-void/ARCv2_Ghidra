@@ -39,6 +39,33 @@ public class CoverageCheck extends GhidraScript {
 		}
 	}
 
+	private static boolean apply(PatternBlock ib, byte[] bytes, boolean checkOnly) {
+		if (ib == null) {
+			return true;
+		}
+		int off = ib.getOffset();
+		int[] m = ib.getMaskVector(), v = ib.getValueVector();
+		for (int w = 0; w < m.length; w++) {
+			for (int b = 0; b < 4; b++) {
+				int i = off + w * 4 + b;
+				if (i >= bytes.length) {
+					continue;
+				}
+				int mb = (m[w] >>> (24 - 8 * b)) & 0xff;
+				int vb = (v[w] >>> (24 - 8 * b)) & 0xff;
+				if (checkOnly) {
+					if (((bytes[i] ^ vb) & mb) != 0) {
+						return false;
+					}
+				}
+				else {
+					bytes[i] = (byte) ((bytes[i] & ~mb) | (vb & mb));
+				}
+			}
+		}
+		return true;
+	}
+
 	private static String key(Constructor c) {
 		return c.getParent().getName() + " " + c.getSourceFile() + ":" + c.getLineno();
 	}
@@ -76,6 +103,8 @@ public class CoverageCheck extends GhidraScript {
 		Map<String, Constructor> all = new TreeMap<>();
 		List<DisjointPattern> rootPats = new ArrayList<>();
 		List<Constructor> rootCons = new ArrayList<>();
+		List<DisjointPattern> subPats = new ArrayList<>();
+		List<Constructor> subCons = new ArrayList<>();
 		for (Symbol sym : lang.getSymbolTable().getSymbolList()) {
 			if (sym instanceof SubtableSymbol st) {
 				for (int i = 0; i < st.getNumConstructors(); i++) {
@@ -83,6 +112,9 @@ public class CoverageCheck extends GhidraScript {
 				}
 				if (st.getName().equals("instruction")) {
 					collect(st.getDecisionNode(), rootPats, rootCons);
+				}
+				else {
+					collect(st.getDecisionNode(), subPats, subCons);
 				}
 			}
 		}
@@ -154,6 +186,51 @@ public class CoverageCheck extends GhidraScript {
 				}
 			}
 		}
+		// Second pass: subtable constructors that random filling did not reach (equality constraints
+		// on whole fields, such as named auxiliary registers): overlay each of their patterns on
+		// root patterns (subtable operands start at the instruction start in this language) and
+		// decode until the constructor is seen.
+		int targeted = 0;
+		for (int k = 0; k < subPats.size(); k++) {
+			if (seen.contains(key(subCons.get(k)))) {
+				continue;
+			}
+			PatternBlock sb = subPats.get(k).getInstructionBlock();
+			List<Integer> order = new ArrayList<>();
+			for (int p = 0; p < rootPats.size(); p++) {
+				order.add(p);
+			}
+			Collections.shuffle(order, rnd);
+			for (int p : order) {
+				if (seen.contains(key(subCons.get(k)))) {
+					break;
+				}
+				for (int t = 0; t < 4; t++) {
+					byte[] bytes = new byte[16];
+					rnd.nextBytes(bytes);
+					apply(rootPats.get(p).getInstructionBlock(), bytes, false);
+					if (!apply(sb, bytes, true)) {
+						apply(sb, bytes, false);
+						if (!apply(rootPats.get(p).getInstructionBlock(), bytes, true)) {
+							break;
+						}
+					}
+					ProcessorContextImpl ctx = new ProcessorContextImpl(lang);
+					if (ctxBits > 0) {
+						ctx.setRegisterValue(new RegisterValue(ctxReg, ctxDefault));
+					}
+					try {
+						SleighInstructionPrototype proto = (SleighInstructionPrototype) lang.parse(
+							new ByteMemBufferImpl(addr, bytes, lang.isBigEndian()), ctx, false);
+						walk(proto.getRootState(), seen);
+						targeted++;
+					}
+					catch (Exception e) {
+						failed++;
+					}
+				}
+			}
+		}
 		int unreached = 0;
 		for (Map.Entry<String, Constructor> e : all.entrySet()) {
 			if (!seen.contains(e.getKey())) {
@@ -163,8 +240,8 @@ public class CoverageCheck extends GhidraScript {
 			}
 		}
 		out.printf("coverage: %d constructors, %d reached, %d unreached; %d root patterns, " +
-			"%d decodes, %d rejected%n", all.size(), all.size() - unreached, unreached,
-			rootPats.size(), decoded, failed);
+			"%d decodes (%d targeted), %d rejected%n", all.size(), all.size() - unreached, unreached,
+			rootPats.size(), decoded + targeted, targeted, failed);
 		out.close();
 	}
 }

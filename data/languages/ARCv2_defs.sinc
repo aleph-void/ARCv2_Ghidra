@@ -425,6 +425,23 @@ op_a: l_a_dst is (l_fmt=0 | l_fmt=1) & l_a_dst { export l_a_dst; }
 op_a: l_b_dst is (l_fmt=2 | l_fmt=3) & l_b_dst { export l_b_dst; }
 
 op_b: l_b_src is l_b_src { export l_b_src; }
+
+# The odd register of a 64-bit result (a+1, or b+1 in formats 2/3); objdump prints only the
+# first register of these operations (mpyd, FPU double precision)
+op_ahi: o is (l_fmt=0 | l_fmt=1) & l_a [ o = (l_a + 1) << 2; ] { export *[register]:4 o; }
+op_ahi: is (l_fmt=0 | l_fmt=1) & l_a=62 { local t:4 = 0; export t; }
+op_ahi: o is (l_fmt=2 | l_fmt=3) & l_b_hi & l_b_lo [ o = (((l_b_hi << 3) | l_b_lo) + 1) << 2; ] { export *[register]:4 o; }
+op_ahi: is (l_fmt=2 | l_fmt=3) & l_b_hi=7 & l_b_lo=6 { local t:4 = 0; export t; }
+op_bhi: o is l_b_hi & l_b_lo [ o = (((l_b_hi << 3) | l_b_lo) + 1) << 2; ] { export *[register]:4 o; }
+op_bhi: is l_b_hi=7 & l_b_lo=6 { local t:4 = 0; export t; }
+# 64-bit sources from a register and the next one; an immediate is the high word (low word 0)
+op_bd: l_rb is l_rb & op_bhi { local v:8 = (zext(op_bhi) << 32) | zext(l_rb); export v; }
+op_bd: is l_b_hi=7 & l_b_lo=6 ; limm { local v:8 = zext(limm) << 32; export v; }
+op_chi: o is l_c [ o = (l_c + 1) << 2; ] { export *[register]:4 o; }
+op_cd: l_c_r is (l_fmt=0 | (l_fmt=3 & l_M=0)) & l_c_r & op_chi { local v:8 = (zext(op_chi) << 32) | zext(l_c_r); export v; }
+op_cd: is (l_fmt=0 | (l_fmt=3 & l_M=0)) & l_c=62 ; limm { local v:8 = zext(limm) << 32; export v; }
+op_cd: is (l_fmt=1 | (l_fmt=3 & l_M=1)) & l_u6 { local v:8 = zext(l_u6:4) << 32; export v; }
+op_cd: s12 is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { local v:8 = zext(s12:4) << 32; export v; }
 # operations objdump decodes without any long immediate or discarded destination
 op_nd: is l_fmt=0 & l_a!=62 & l_c!=62 & l_b_hi!=7 { }
 op_nd: is l_fmt=0 & l_a!=62 & l_c!=62 & l_b_hi=7 & l_b_lo!=6 { }
@@ -449,10 +466,6 @@ op_cp: s12 is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { local v:
 op_cp: l_c_pv is (l_fmt=3 & l_M=0) ... & l_c_pv { export l_c_pv; }
 op_cp: l_u6 is l_fmt=3 & l_M=1 & l_u6 { local v:8 = l_u6; export v; }
 # the c operand printed as a single register although the operation reads a pair
-op_cp1: l_c_e is l_fmt=0 & l_c_e & l_c_o { local v:8 = (zext(l_c_o) << 32) | zext(l_c_e); export v; }
-op_cp1: limm is l_fmt=0 & l_c=62 ; limm { local v:8 = sext(limm); export v; }
-op_cp1: l_u6 is l_fmt=1 & l_u6 { local v:8 = l_u6; export v; }
-op_cp1: s12 is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { local v:8 = s12; export v; }
 op_cp1: l_c_r is l_fmt=3 & l_M=0 & l_c_r { local v:8 = zext(l_c_r); export v; }
 op_cp1: limm is l_fmt=3 & l_M=0 & l_c=62 ; limm { local v:8 = sext(limm); export v; }
 op_cp1: l_u6 is l_fmt=3 & l_M=1 & l_u6 { local v:8 = l_u6; export v; }
@@ -562,7 +575,6 @@ ccd: ".e28" is l_cond=28 { local t:1 = ext_condition(28:1); export t; }
 ccd: ".e29" is l_cond=29 { local t:1 = ext_condition(29:1); export t; }
 ccd: ".e30" is l_cond=30 { local t:1 = ext_condition(30:1); export t; }
 ccd: ".e31" is l_cond=31 { local t:1 = ext_condition(31:1); export t; }
-ccn: "" is l_cond=0 { local t:1 = 1; export t; }
 ccn: "eq" is l_cond=1 { export Z; }
 ccn: "ne" is l_cond=2 { local t:1 = !Z; export t; }
 ccn: "p" is l_cond=3 { local t:1 = !N; export t; }

@@ -22,8 +22,11 @@ public class EmuCheck extends GhidraScript {
 		for (int i = 0; i < 26; i++) {
 			z.add("r" + i);
 		}
-		z.addAll(java.util.List.of("gp", "fp", "sp", "ilink1", "ilink2", "blink", "lp_count", "mlo",
-			"mmid", "mhi", "r56", "Z", "N", "C", "V", "S", "LF", "is_in_loop"));
+		for (int i = 32; i < 60; i++) {
+			z.add("r" + i);
+		}
+		z.addAll(java.util.List.of("gp", "fp", "sp", "ilink", "r30", "blink", "lp_count", "Z", "N", "C",
+			"V", "LF", "is_in_loop"));
 		ZERO = z.toArray(new String[0]);
 	}
 

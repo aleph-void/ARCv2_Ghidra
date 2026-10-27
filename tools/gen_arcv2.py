@@ -262,6 +262,23 @@ op_a: l_a_dst is (l_fmt=0 | l_fmt=1) & l_a_dst { export l_a_dst; }
 op_a: l_b_dst is (l_fmt=2 | l_fmt=3) & l_b_dst { export l_b_dst; }
 
 op_b: l_b_src is l_b_src { export l_b_src; }
+
+# The odd register of a 64-bit result (a+1, or b+1 in formats 2/3); objdump prints only the
+# first register of these operations (mpyd, FPU double precision)
+op_ahi: o is (l_fmt=0 | l_fmt=1) & l_a [ o = (l_a + 1) << 2; ] { export *[register]:4 o; }
+op_ahi: is (l_fmt=0 | l_fmt=1) & l_a=62 { local t:4 = 0; export t; }
+op_ahi: o is (l_fmt=2 | l_fmt=3) & l_b_hi & l_b_lo [ o = (((l_b_hi << 3) | l_b_lo) + 1) << 2; ] { export *[register]:4 o; }
+op_ahi: is (l_fmt=2 | l_fmt=3) & l_b_hi=7 & l_b_lo=6 { local t:4 = 0; export t; }
+op_bhi: o is l_b_hi & l_b_lo [ o = (((l_b_hi << 3) | l_b_lo) + 1) << 2; ] { export *[register]:4 o; }
+op_bhi: is l_b_hi=7 & l_b_lo=6 { local t:4 = 0; export t; }
+# 64-bit sources from a register and the next one; an immediate is the high word (low word 0)
+op_bd: l_rb is l_rb & op_bhi { local v:8 = (zext(op_bhi) << 32) | zext(l_rb); export v; }
+op_bd: is l_b_hi=7 & l_b_lo=6 ; limm { local v:8 = zext(limm) << 32; export v; }
+op_chi: o is l_c [ o = (l_c + 1) << 2; ] { export *[register]:4 o; }
+op_cd: l_c_r is (l_fmt=0 | (l_fmt=3 & l_M=0)) & l_c_r & op_chi { local v:8 = (zext(op_chi) << 32) | zext(l_c_r); export v; }
+op_cd: is (l_fmt=0 | (l_fmt=3 & l_M=0)) & l_c=62 ; limm { local v:8 = zext(limm) << 32; export v; }
+op_cd: is (l_fmt=1 | (l_fmt=3 & l_M=1)) & l_u6 { local v:8 = zext(l_u6:4) << 32; export v; }
+op_cd: s12 is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { local v:8 = zext(s12:4) << 32; export v; }
 # operations objdump decodes without any long immediate or discarded destination
 op_nd: is l_fmt=0 & l_a!=62 & l_c!=62 & l_b_hi!=7 { }
 op_nd: is l_fmt=0 & l_a!=62 & l_c!=62 & l_b_hi=7 & l_b_lo!=6 { }
@@ -286,10 +303,6 @@ op_cp: s12 is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { local v:
 op_cp: l_c_pv is (l_fmt=3 & l_M=0) ... & l_c_pv { export l_c_pv; }
 op_cp: l_u6 is l_fmt=3 & l_M=1 & l_u6 { local v:8 = l_u6; export v; }
 # the c operand printed as a single register although the operation reads a pair
-op_cp1: l_c_e is l_fmt=0 & l_c_e & l_c_o { local v:8 = (zext(l_c_o) << 32) | zext(l_c_e); export v; }
-op_cp1: limm is l_fmt=0 & l_c=62 ; limm { local v:8 = sext(limm); export v; }
-op_cp1: l_u6 is l_fmt=1 & l_u6 { local v:8 = l_u6; export v; }
-op_cp1: s12 is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { local v:8 = s12; export v; }
 op_cp1: l_c_r is l_fmt=3 & l_M=0 & l_c_r { local v:8 = zext(l_c_r); export v; }
 op_cp1: limm is l_fmt=3 & l_M=0 & l_c=62 ; limm { local v:8 = sext(limm); export v; }
 op_cp1: l_u6 is l_fmt=3 & l_M=1 & l_u6 { local v:8 = l_u6; export v; }
@@ -370,6 +383,8 @@ macro zn(v) {
     w("# and 24 and prints nothing for the others, Ghidra prints \"e<number>\".")
     for tab, dot in (("ccd", "."), ("ccn", "")):
         for i, (n, s) in enumerate(zip(CONDS, COND_SEM)):
+            if tab == "ccn" and i == 0:
+                continue   # b/bl with condition 0 are separate (unconditional) constructors
             disp = (dot + n) if n else ""
             if s in ("Z", "N", "C", "V"):
                 w('%s: "%s" is l_cond=%d { export %s; }' % (tab, disp, i, s))
@@ -496,7 +511,7 @@ SEM3 = {
 # 64-bit results (a register pair): res computes w:8 from vb, vc (32-bit) or pb, pc (64-bit)
 SEMP = {
     "mpyd": ("w = sext(vb) * sext(vc);", ZN.replace("vr", "w") + "\n  V = 0;"),
-    "mpydu": ("w = zext(vb) * zext(vc);", ZN.replace("vr", "w") + "\n  V = 0;"),
+    "mpydu": ("w = zext(vb) * zext(vc);", "Z = w == 0;\n  N = 0;\n  V = 0;"),
     # FPU double precision on register pairs
     "fdmul": ("w = pb f* pc;", ""),
     "fdadd": ("w = pb f+ pc;", ""),
@@ -644,7 +659,7 @@ def gen_general(groups):
                 gen_flag2(r, base, fsuf, ccfirst)
             elif k == "sop" and sel.startswith("sop"):
                 gen_sop(r, base, fsuf)
-            elif k in ("z1", "z0") and sel.startswith("zop"):
+            elif k in ("z1", "z0") and sel.startswith("zop") and base != "dmb":
                 gen_zop(r, base)
             else:
                 special.add((maj, sub, sel, F, base, k))
@@ -684,7 +699,19 @@ def gen_alu3(r, base, fsuf, ccfirst, kind):
     mn = base + fsuf
     mncc = (base + "^ccd" + ('^"%s"' % fsuf if fsuf else "")) if ccfirst else (mn + "^ccd")
     useF = fsuf == ".f"
-    if kind == "3":
+    if kind == "3" and base in SEMP:
+        res, flags = SEMP[base]
+        body = ("local pb:8 = op_bd;\n  local pc:8 = op_cd;\n  " if "pb" in res else
+                "local vb:4 = op_b;\n  local vc:4 = op_c;\n  ") + "local w:8;\n  " + res
+        if useF and flags:
+            body += "\n  " + flags
+        body += "\n  op_a = w:4;\n  op_ahi = w(4);"
+        disp = "op_a, op_b, op_c"
+        cons = [("((%s & %s & op_a & op_ahi) ... & op_b & op_c & op_bd & op_cd)" % (g, p), disp, body) for p in pats]
+        if ccp:
+            cons.append(("((%s & %s & ccd & op_a & op_ahi) ... & op_b & op_c & op_bd & op_cd)" % (g, ccp), disp,
+                         "if (!ccd) goto inst_next;\n  " + body))
+    elif kind == "3":
         sem = SEM3.get(base)
         if sem:
             res, flags = sem
@@ -761,10 +788,12 @@ def gen_sop(r, base, fsuf):
     for fmt, src in sop_src(r["forms"]):
         cv = "l_c_src" if src == "l_c_src" else "csrc"
         pre = "" if src == "l_c_src" else ""
-        if base in SEM2P and False:
-            body = "local pc:8 = (zext(l_c_o) << 32) | zext(l_c_e);\n  local w:8;\n  %s\n  l_rb_e = w:4;\n  l_rb_o = w(4);" % SEM2P[base]
-            pat = "%s & %s & l_rb_e & l_rb_o & l_c_e & l_c_o" % (g, fmt)
-            w(":%s%s l_rb_e, l_c_e is %s {" % (base, fsuf, pat))
+        if base in SEM2P:
+            body = "local pc:8 = op_cd;\n  local w:8;\n  %s\n  l_b_dst = w:4;\n  op_bhi = w(4);" % SEM2P[base]
+            if src == "l_c_src":
+                w(":%s%s l_b_dst, l_c_src is (%s & %s & l_b_dst & op_bhi) ... & l_c_src & op_cd {" % (base, fsuf, g, fmt))
+            else:
+                w(":%s%s l_b_dst, l_u6 is (%s & %s & l_b_dst & l_u6 & op_bhi) ... & op_cd {" % (base, fsuf, g, fmt))
             w("  " + body)
             w("}")
             continue
