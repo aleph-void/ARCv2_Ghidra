@@ -61,9 +61,9 @@ for l in LE BE; do
 	done
 	wait
 	tot=$(grep -h '^coverage' cov_${l}_1.txt | sed 's/coverage: \([0-9]*\) constructors.*/\1/')
-	un=$(cat cov_${l}_*.txt | grep '^unreached' | sort | uniq -c | awk '$1==2' | wc -l)
+	un=$( (cat cov_${l}_*.txt | grep '^unreached' || true) | sort | uniq -c | awk '$1==2' | wc -l)
 	echo "-- ARCv2:$l:32:default: $tot constructors, $((tot - un)) reached by at least one of 2 seeds"
-	cat cov_${l}_*.txt | grep '^unreached' | sort | uniq -c | awk '$1==2 {print "   " $0}'
+	(cat cov_${l}_*.txt | grep '^unreached' || true) | sort | uniq -c | awk '$1==2 {print "   " $0}'
 	[[ $un == 0 ]] || rc=1
 done
 

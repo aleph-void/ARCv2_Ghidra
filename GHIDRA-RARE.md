@@ -91,7 +91,7 @@ Explained classes (all corpora, one byte order):
 | 2 | objdump bug (below): `0,limm,u6` of sub-opcodes 0x20-0x2e of majors 5-7 |
 
 Every-entry test (`CoverageCheck.java`, root patterns filled at random, then the patterns of
-unreached subtable constructors overlaid on root patterns): **2,187/2,187 constructors reached** in
+unreached subtable constructors overlaid on root patterns): **2,205/2,205 constructors reached** in
 each language.
 
 ### Semantics (emulator)
