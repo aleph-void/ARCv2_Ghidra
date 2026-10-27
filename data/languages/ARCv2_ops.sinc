@@ -86,10 +86,6 @@ define pcodeop op_fcvt32;
 define pcodeop op_fcvt32_64;
 define pcodeop op_fcvt64;
 define pcodeop op_fcvt64_32;
-define pcodeop op_fdcmp;
-define pcodeop op_fdcmpf;
-define pcodeop op_fdmadd;
-define pcodeop op_fdmsub;
 define pcodeop op_flagacc;
 define pcodeop op_fmp_adds;
 define pcodeop op_fmp_adds_f;
@@ -129,10 +125,6 @@ define pcodeop op_fmp_sqrtf;
 define pcodeop op_fmp_sqrtf15;
 define pcodeop op_fmp_sqrtf15_f;
 define pcodeop op_fmp_sqrtf_f;
-define pcodeop op_fscmp;
-define pcodeop op_fscmpf;
-define pcodeop op_fsmadd;
-define pcodeop op_fsmsub;
 define pcodeop op_getacc;
 define pcodeop op_mac;
 define pcodeop op_mac_f;
@@ -7202,17 +7194,37 @@ auxop: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { 
   op_a = op_vmsub2hfr(op_b, op_c);
 }
 :fscmp op_b, op_c is ((l_major=6 & l_sub6=0x03 & l_F=1 & l_fmt=2) ... & op_b & op_c) {
-  op_fscmp(op_b, op_c);
+  local b:4 = op_b;
+  local c:4 = op_c;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
 :fscmp op_b, op_c is ((l_major=6 & l_sub6=0x03 & l_F=1 & l_fmt=0 & l_a=0) ... & op_b & op_c) {
-  op_fscmp(op_b, op_c);
+  local b:4 = op_b;
+  local c:4 = op_c;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
 :fscmp op_b, op_c is ((l_major=6 & l_sub6=0x03 & l_F=1 & l_fmt=1 & l_a=0) ... & op_b & op_c) {
-  op_fscmp(op_b, op_c);
+  local b:4 = op_b;
+  local c:4 = op_c;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
 :fscmp^ccd op_b, op_c is ((l_major=6 & l_sub6=0x03 & l_F=1 & l_fmt=3 & ccd) ... & op_b & op_c) {
   if (!ccd) goto inst_next;
-  op_fscmp(op_b, op_c);
+  local b:4 = op_b;
+  local c:4 = op_c;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
 :vmsub2hf op_a, op_b, op_c is ((l_major=6 & l_sub6=0x04 & l_F=0 & l_fmt!=3 & op_a) ... & op_b & op_c) {
   op_a = op_vmsub2hf(op_b, op_c);
@@ -7222,24 +7234,52 @@ auxop: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { 
   op_a = op_vmsub2hf(op_b, op_c);
 }
 :fscmpf op_b, op_c is ((l_major=6 & l_sub6=0x04 & l_F=1 & l_fmt=2) ... & op_b & op_c) {
-  op_fscmpf(op_b, op_c);
+  local b:4 = op_b;
+  local c:4 = op_c;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
 :fscmpf op_b, op_c is ((l_major=6 & l_sub6=0x04 & l_F=1 & l_fmt=0 & l_a=0) ... & op_b & op_c) {
-  op_fscmpf(op_b, op_c);
+  local b:4 = op_b;
+  local c:4 = op_c;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
 :fscmpf op_b, op_c is ((l_major=6 & l_sub6=0x04 & l_F=1 & l_fmt=1 & l_a=0) ... & op_b & op_c) {
-  op_fscmpf(op_b, op_c);
+  local b:4 = op_b;
+  local c:4 = op_c;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
 :fscmpf^ccd op_b, op_c is ((l_major=6 & l_sub6=0x04 & l_F=1 & l_fmt=3 & ccd) ... & op_b & op_c) {
   if (!ccd) goto inst_next;
-  op_fscmpf(op_b, op_c);
+  local b:4 = op_b;
+  local c:4 = op_c;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
 :fsmadd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x05 & l_F=0 & l_fmt!=3 & op_a) ... & op_b & op_c) {
-  op_a = op_fsmadd(op_b, op_c);
+  local vb:4 = op_b;
+  local vc:4 = op_c;
+  local vr:4;
+  vr = (vb f* vc) f+ r58;
+  op_a = vr;
 }
 :fsmadd^ccd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x05 & l_F=0 & l_fmt=3 & ccd & op_a) ... & op_b & op_c) {
   if (!ccd) goto inst_next;
-  op_a = op_fsmadd(op_b, op_c);
+  local vb:4 = op_b;
+  local vc:4 = op_c;
+  local vr:4;
+  vr = (vb f* vc) f+ r58;
+  op_a = vr;
 }
 :cmpychfr op_a, op_b, op_c is ((l_major=6 & l_sub6=0x05 & l_F=1 & l_fmt!=3 & op_a) ... & op_b & op_c) {
   op_a = op_cmpychfr(op_b, op_c);
@@ -7249,11 +7289,19 @@ auxop: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { 
   op_a = op_cmpychfr(op_b, op_c);
 }
 :fsmsub op_a, op_b, op_c is ((l_major=6 & l_sub6=0x06 & l_F=0 & l_fmt!=3 & op_a) ... & op_b & op_c) {
-  op_a = op_fsmsub(op_b, op_c);
+  local vb:4 = op_b;
+  local vc:4 = op_c;
+  local vr:4;
+  vr = r58 f- (vb f* vc);
+  op_a = vr;
 }
 :fsmsub^ccd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x06 & l_F=0 & l_fmt=3 & ccd & op_a) ... & op_b & op_c) {
   if (!ccd) goto inst_next;
-  op_a = op_fsmsub(op_b, op_c);
+  local vb:4 = op_b;
+  local vc:4 = op_c;
+  local vr:4;
+  vr = r58 f- (vb f* vc);
+  op_a = vr;
 }
 :cmachnfr op_a, op_b, op_c is ((l_major=6 & l_sub6=0x06 & l_F=1 & l_fmt!=3 & op_a) ... & op_b & op_c) {
   op_a = op_cmachnfr(op_b, op_c);
@@ -7291,6 +7339,28 @@ auxop: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { 
   if (!ccd) goto inst_next;
   op_a = op_fcvt32(op_b, op_c);
 }
+:fcvt32 op_a, op_b, "0" is ((l_major=6 & l_sub6=0x08 & l_F=0 & l_fmt=1 & l_u6=0 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:4 = op_b;
+  local x:8 = zext(s);
+  local r:4 = int2float(x);
+  op_a = r;
+}
+:fcvt32 op_a, op_b, "0x2" is ((l_major=6 & l_sub6=0x08 & l_F=0 & l_fmt=1 & l_u6=2 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:4 = op_b;
+  local r:4 = int2float(s);
+  op_a = r;
+}
+:fcvt32 op_a, op_b, "0x9" is ((l_major=6 & l_sub6=0x08 & l_F=0 & l_fmt=1 & l_u6=9 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:4 = op_b;
+  local x:8 = trunc(s);
+  local r:4 = x:4;
+  op_a = r;
+}
+:fcvt32 op_a, op_b, "0xb" is ((l_major=6 & l_sub6=0x08 & l_F=0 & l_fmt=1 & l_u6=11 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:4 = op_b;
+  local r:4 = trunc(s);
+  op_a = r;
+}
 :cmacchnfr op_a, op_b, op_c is ((l_major=6 & l_sub6=0x08 & l_F=1 & l_fmt!=3 & op_a) ... & op_b & op_c) {
   op_a = op_cmacchnfr(op_b, op_c);
 }
@@ -7304,6 +7374,38 @@ auxop: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { 
 :fcvt32_64^ccd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x09 & l_F=0 & l_fmt=3 & ccd & op_a) ... & op_b & op_c) {
   if (!ccd) goto inst_next;
   op_a = op_fcvt32_64(op_b, op_c);
+}
+:fcvt32_64 op_a, op_b, "0" is ((l_major=6 & l_sub6=0x09 & l_F=0 & l_fmt=1 & l_u6=0 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:4 = op_b;
+  local x:8 = zext(s);
+  local r:8 = int2float(x);
+  op_a = r:4;
+  op_ahi = r(4);
+}
+:fcvt32_64 op_a, op_b, "0x2" is ((l_major=6 & l_sub6=0x09 & l_F=0 & l_fmt=1 & l_u6=2 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:4 = op_b;
+  local r:8 = int2float(s);
+  op_a = r:4;
+  op_ahi = r(4);
+}
+:fcvt32_64 op_a, op_b, "0x4" is ((l_major=6 & l_sub6=0x09 & l_F=0 & l_fmt=1 & l_u6=4 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:4 = op_b;
+  local r:8 = float2float(s);
+  op_a = r:4;
+  op_ahi = r(4);
+}
+:fcvt32_64 op_a, op_b, "0x9" is ((l_major=6 & l_sub6=0x09 & l_F=0 & l_fmt=1 & l_u6=9 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:4 = op_b;
+  local x:8 = trunc(s);
+  local r:8 = x:8;
+  op_a = r:4;
+  op_ahi = r(4);
+}
+:fcvt32_64 op_a, op_b, "0xb" is ((l_major=6 & l_sub6=0x09 & l_F=0 & l_fmt=1 & l_u6=11 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:4 = op_b;
+  local r:8 = trunc(s);
+  op_a = r:4;
+  op_ahi = r(4);
 }
 :cmacchfr op_a, op_b, op_c is ((l_major=6 & l_sub6=0x09 & l_F=1 & l_fmt!=3 & op_a) ... & op_b & op_c) {
   op_a = op_cmacchfr(op_b, op_c);
@@ -7941,18 +8043,38 @@ auxop: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { 
 :dmpywhf.f op_a, op_b, op_c is ((l_major=6 & l_sub6=0x33 & l_F=1 & l_fmt=1 & op_a) ... & op_b & op_c) {
   op_a = op_dmpywhf_f(op_b, op_c);
 }
-:fdcmp op_b, op_c is ((l_major=6 & l_sub6=0x33 & l_F=1 & l_fmt=2) ... & op_b & op_c) {
-  op_fdcmp(op_b, op_c);
+:fdcmp op_b, op_c is ((l_major=6 & l_sub6=0x33 & l_F=1 & l_fmt=2) ... & op_b & op_c & op_bd & op_cd) {
+  local b:8 = op_bd;
+  local c:8 = op_cd;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
-:fdcmp op_b, op_c is ((l_major=6 & l_sub6=0x33 & l_F=1 & l_fmt=0 & l_a=0) ... & op_b & op_c) {
-  op_fdcmp(op_b, op_c);
+:fdcmp op_b, op_c is ((l_major=6 & l_sub6=0x33 & l_F=1 & l_fmt=0 & l_a=0) ... & op_b & op_c & op_bd & op_cd) {
+  local b:8 = op_bd;
+  local c:8 = op_cd;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
-:fdcmp op_b, op_c is ((l_major=6 & l_sub6=0x33 & l_F=1 & l_fmt=1 & l_a=0) ... & op_b & op_c) {
-  op_fdcmp(op_b, op_c);
+:fdcmp op_b, op_c is ((l_major=6 & l_sub6=0x33 & l_F=1 & l_fmt=1 & l_a=0) ... & op_b & op_c & op_bd & op_cd) {
+  local b:8 = op_bd;
+  local c:8 = op_cd;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
-:fdcmp^ccd op_b, op_c is ((l_major=6 & l_sub6=0x33 & l_F=1 & l_fmt=3 & ccd) ... & op_b & op_c) {
+:fdcmp^ccd op_b, op_c is ((l_major=6 & l_sub6=0x33 & l_F=1 & l_fmt=3 & ccd) ... & op_b & op_c & op_bd & op_cd) {
   if (!ccd) goto inst_next;
-  op_fdcmp(op_b, op_c);
+  local b:8 = op_bd;
+  local c:8 = op_cd;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
 :daddh11 op_a, op_b, op_c is ((l_major=6 & l_sub6=0x34 & l_F=0 & l_fmt!=3 & op_a) ... & op_b & op_c) {
   op_a = op_daddh11(op_b, op_c);
@@ -7967,25 +8089,57 @@ auxop: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { 
 :daddh11.f op_a, op_b, op_c is ((l_major=6 & l_sub6=0x34 & l_F=1 & l_fmt=1 & op_a) ... & op_b & op_c) {
   op_a = op_daddh11_f(op_b, op_c);
 }
-:fdcmpf op_b, op_c is ((l_major=6 & l_sub6=0x34 & l_F=1 & l_fmt=2) ... & op_b & op_c) {
-  op_fdcmpf(op_b, op_c);
+:fdcmpf op_b, op_c is ((l_major=6 & l_sub6=0x34 & l_F=1 & l_fmt=2) ... & op_b & op_c & op_bd & op_cd) {
+  local b:8 = op_bd;
+  local c:8 = op_cd;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
-:fdcmpf op_b, op_c is ((l_major=6 & l_sub6=0x34 & l_F=1 & l_fmt=0 & l_a=0) ... & op_b & op_c) {
-  op_fdcmpf(op_b, op_c);
+:fdcmpf op_b, op_c is ((l_major=6 & l_sub6=0x34 & l_F=1 & l_fmt=0 & l_a=0) ... & op_b & op_c & op_bd & op_cd) {
+  local b:8 = op_bd;
+  local c:8 = op_cd;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
-:fdcmpf op_b, op_c is ((l_major=6 & l_sub6=0x34 & l_F=1 & l_fmt=1 & l_a=0) ... & op_b & op_c) {
-  op_fdcmpf(op_b, op_c);
+:fdcmpf op_b, op_c is ((l_major=6 & l_sub6=0x34 & l_F=1 & l_fmt=1 & l_a=0) ... & op_b & op_c & op_bd & op_cd) {
+  local b:8 = op_bd;
+  local c:8 = op_cd;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
-:fdcmpf^ccd op_b, op_c is ((l_major=6 & l_sub6=0x34 & l_F=1 & l_fmt=3 & ccd) ... & op_b & op_c) {
+:fdcmpf^ccd op_b, op_c is ((l_major=6 & l_sub6=0x34 & l_F=1 & l_fmt=3 & ccd) ... & op_b & op_c & op_bd & op_cd) {
   if (!ccd) goto inst_next;
-  op_fdcmpf(op_b, op_c);
+  local b:8 = op_bd;
+  local c:8 = op_cd;
+  V = nan(b) || nan(c);
+  Z = b f== c;
+  N = b f< c;
+  C = b f< c;
 }
-:fdmadd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x35 & l_F=0 & l_fmt!=3 & op_a) ... & op_b & op_c) {
-  op_a = op_fdmadd(op_b, op_c);
+:fdmadd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x35 & l_F=0 & l_fmt!=3 & op_a & op_ahi) ... & op_b & op_c & op_bd & op_cd) {
+  local pb:8 = op_bd;
+  local pc:8 = op_cd;
+  local w:8;
+  local acc:8 = (zext(r59) << 32) | zext(r58);
+  w = (pb f* pc) f+ acc;
+  op_a = w:4;
+  op_ahi = w(4);
 }
-:fdmadd^ccd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x35 & l_F=0 & l_fmt=3 & ccd & op_a) ... & op_b & op_c) {
+:fdmadd^ccd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x35 & l_F=0 & l_fmt=3 & ccd & op_a & op_ahi) ... & op_b & op_c & op_bd & op_cd) {
   if (!ccd) goto inst_next;
-  op_a = op_fdmadd(op_b, op_c);
+  local pb:8 = op_bd;
+  local pc:8 = op_cd;
+  local w:8;
+  local acc:8 = (zext(r59) << 32) | zext(r58);
+  w = (pb f* pc) f+ acc;
+  op_a = w:4;
+  op_ahi = w(4);
 }
 :qmachf.f op_a, op_b, op_c is ((l_major=6 & l_sub6=0x35 & l_F=1 & l_fmt!=3 & op_a) ... & op_b & op_c) {
   op_a = op_qmachf_f(op_b, op_c);
@@ -7994,12 +8148,24 @@ auxop: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { 
   if (!ccd) goto inst_next;
   op_a = op_qmachf_f(op_b, op_c);
 }
-:fdmsub op_a, op_b, op_c is ((l_major=6 & l_sub6=0x36 & l_F=0 & l_fmt!=3 & op_a) ... & op_b & op_c) {
-  op_a = op_fdmsub(op_b, op_c);
+:fdmsub op_a, op_b, op_c is ((l_major=6 & l_sub6=0x36 & l_F=0 & l_fmt!=3 & op_a & op_ahi) ... & op_b & op_c & op_bd & op_cd) {
+  local pb:8 = op_bd;
+  local pc:8 = op_cd;
+  local w:8;
+  local acc:8 = (zext(r59) << 32) | zext(r58);
+  w = acc f- (pb f* pc);
+  op_a = w:4;
+  op_ahi = w(4);
 }
-:fdmsub^ccd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x36 & l_F=0 & l_fmt=3 & ccd & op_a) ... & op_b & op_c) {
+:fdmsub^ccd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x36 & l_F=0 & l_fmt=3 & ccd & op_a & op_ahi) ... & op_b & op_c & op_bd & op_cd) {
   if (!ccd) goto inst_next;
-  op_a = op_fdmsub(op_b, op_c);
+  local pb:8 = op_bd;
+  local pc:8 = op_cd;
+  local w:8;
+  local acc:8 = (zext(r59) << 32) | zext(r58);
+  w = acc f- (pb f* pc);
+  op_a = w:4;
+  op_ahi = w(4);
 }
 :daddh21.f op_a, op_b, op_c is ((l_major=6 & l_sub6=0x36 & l_F=1 & l_fmt!=3 & op_a) ... & op_b & op_c) {
   op_a = op_daddh21_f(op_b, op_c);
@@ -8039,6 +8205,32 @@ auxop: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { 
   if (!ccd) goto inst_next;
   op_a = op_fcvt64(op_b, op_c);
 }
+:fcvt64 op_a, op_b, "0" is ((l_major=6 & l_sub6=0x38 & l_F=0 & l_fmt=1 & l_u6=0 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:8 = op_bd;
+  local x:8 = zext(s);
+  local r:8 = int2float(x);
+  op_a = r:4;
+  op_ahi = r(4);
+}
+:fcvt64 op_a, op_b, "0x2" is ((l_major=6 & l_sub6=0x38 & l_F=0 & l_fmt=1 & l_u6=2 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:8 = op_bd;
+  local r:8 = int2float(s);
+  op_a = r:4;
+  op_ahi = r(4);
+}
+:fcvt64 op_a, op_b, "0x9" is ((l_major=6 & l_sub6=0x38 & l_F=0 & l_fmt=1 & l_u6=9 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:8 = op_bd;
+  local x:8 = trunc(s);
+  local r:8 = x:8;
+  op_a = r:4;
+  op_ahi = r(4);
+}
+:fcvt64 op_a, op_b, "0xb" is ((l_major=6 & l_sub6=0x38 & l_F=0 & l_fmt=1 & l_u6=11 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:8 = op_bd;
+  local r:8 = trunc(s);
+  op_a = r:4;
+  op_ahi = r(4);
+}
 :dsubh11.f op_a, op_b, op_c is ((l_major=6 & l_sub6=0x38 & l_F=1 & l_fmt!=3 & op_a) ... & op_b & op_c) {
   op_a = op_dsubh11_f(op_b, op_c);
 }
@@ -8052,6 +8244,33 @@ auxop: "["^s12^"]" is l_fmt=2 & l_u6 & l_s6hi [ s12 = (l_s6hi << 6) | l_u6; ] { 
 :fcvt64_32^ccd op_a, op_b, op_c is ((l_major=6 & l_sub6=0x39 & l_F=0 & l_fmt=3 & ccd & op_a) ... & op_b & op_c) {
   if (!ccd) goto inst_next;
   op_a = op_fcvt64_32(op_b, op_c);
+}
+:fcvt64_32 op_a, op_b, "0" is ((l_major=6 & l_sub6=0x39 & l_F=0 & l_fmt=1 & l_u6=0 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:8 = op_bd;
+  local x:8 = zext(s);
+  local r:4 = int2float(x);
+  op_a = r;
+}
+:fcvt64_32 op_a, op_b, "0x2" is ((l_major=6 & l_sub6=0x39 & l_F=0 & l_fmt=1 & l_u6=2 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:8 = op_bd;
+  local r:4 = int2float(s);
+  op_a = r;
+}
+:fcvt64_32 op_a, op_b, "0x4" is ((l_major=6 & l_sub6=0x39 & l_F=0 & l_fmt=1 & l_u6=4 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:8 = op_bd;
+  local r:4 = float2float(s);
+  op_a = r;
+}
+:fcvt64_32 op_a, op_b, "0x9" is ((l_major=6 & l_sub6=0x39 & l_F=0 & l_fmt=1 & l_u6=9 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:8 = op_bd;
+  local x:8 = trunc(s);
+  local r:4 = x:4;
+  op_a = r;
+}
+:fcvt64_32 op_a, op_b, "0xb" is ((l_major=6 & l_sub6=0x39 & l_F=0 & l_fmt=1 & l_u6=11 & op_a & op_ahi) ... & op_b & op_bd) {
+  local s:8 = op_bd;
+  local r:4 = trunc(s);
+  op_a = r;
 }
 :dsubh12.f op_a, op_b, op_c is ((l_major=6 & l_sub6=0x39 & l_F=1 & l_fmt!=3 & op_a) ... & op_b & op_c) {
   op_a = op_dsubh12_f(op_b, op_c);

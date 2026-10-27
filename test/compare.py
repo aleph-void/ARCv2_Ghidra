@@ -99,8 +99,6 @@ def explain(gt, ot, gbad, obad, w):
     if gm == om == "vadd2" and re.sub(r"\.e\d+", "", gt).rsplit(",", 1)[0] == ot.rsplit(",", 1)[0] \
             and w is not None and (w >> 22) & 3 == 3 and ((w >> 24) & 7, (w >> 12) & 7) == (6, 7):
         return "vadd2 format 3 with a long-immediate b: objdump prints c as a register pair (as one register otherwise)"
-    if w == 0x2cf7ac53 and gm == "mac":
-        return "Ghidra core: instruction prototype cache collision (0x2c8e1c53 mac and 0x2cf7ac53 dmacwhu.f hash alike)"
     if (gbad != obad) and "cbflyhf1r" in (om, gm):
         return "cbflyhf1r in an unusual operand form: objdump's guessed DSP class (Ghidra decodes the two documented forms)"
     if gbad and not obad and w is not None and (w >> 27) in (5, 6, 7) and 0x20 <= (w >> 16) & 63 <= 0x2e \

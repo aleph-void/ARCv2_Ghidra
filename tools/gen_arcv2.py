@@ -506,6 +506,9 @@ SEM3 = {
     "fsadd": ("vr = vb f+ vc;", ""),
     "fssub": ("vr = vb f- vc;", ""),
     "fsdiv": ("vr = vb f/ vc;", ""),
+    # fused multiply-add with the accumulator r58 (GCC loads the addend into r58: black box)
+    "fsmadd": ("vr = (vb f* vc) f+ r58;", ""),
+    "fsmsub": ("vr = r58 f- (vb f* vc);", ""),
 }
 
 # 64-bit results (a register pair): res computes w:8 from vb, vc (32-bit) or pb, pc (64-bit)
@@ -517,7 +520,41 @@ SEMP = {
     "fdadd": ("w = pb f+ pc;", ""),
     "fdsub": ("w = pb f- pc;", ""),
     "fddiv": ("w = pb f/ pc;", ""),
+    "fdmadd": ("local acc:8 = (zext(r59) << 32) | zext(r58);\n  w = (pb f* pc) f+ acc;", ""),
+    "fdmsub": ("local acc:8 = (zext(r59) << 32) | zext(r58);\n  w = acc f- (pb f* pc);", ""),
 }
+
+# FPU compares: Z = equal, N = C = less than, V = unordered (the conditions GCC uses after them:
+# black box)
+FCMP = {"fscmp": 4, "fscmpf": 4, "fdcmp": 8, "fdcmpf": 8}
+
+# FPU conversions: the u6 operand selects the conversion (GCC's codes, black box): 0 unsigned
+# integer -> float, 2 signed integer -> float, 4 float -> float of the other precision, 9 float
+# -> unsigned integer (truncating), 11 float -> signed integer (truncating). Other codes stay
+# pcodeops. (source size, result size)
+FCVT = {"fcvt32": (4, 4), "fcvt32_64": (4, 8), "fcvt64_32": (8, 4), "fcvt64": (8, 8)}
+
+
+def fcvt_body(base, code):
+    ss, rs = FCVT[base]
+    src = "local s:%d = %s;" % (ss, "op_b" if ss == 4 else "op_bd")
+    if code == 0:
+        e = "local x:%d = zext(s);\n  local r:%d = int2float(x);" % (2 * ss if ss == 4 else 8, rs)
+    elif code == 2:
+        e = "local r:%d = int2float(s);" % rs
+    elif code == 4:
+        if ss == rs:
+            return None
+        e = "local r:%d = float2float(s);" % rs
+    elif code == 9:
+        e = "local x:8 = trunc(s);\n  local r:%d = x:%d;" % (rs, rs)
+    elif code == 11:
+        e = "local r:%d = trunc(s);" % rs
+    else:
+        return None
+    body = src + "\n  " + e + "\n  "
+    body += "op_a = r;" if rs == 4 else "op_a = r:4;\n  op_ahi = r(4);"
+    return body
 
 # two-operand: b,c (dest b) in the single-operand group (sub-opcode 0x2f)
 SEM2 = {
@@ -756,20 +793,38 @@ def gen_alu3(r, base, fsuf, ccfirst, kind):
         w(":%s %s is %s {" % (m, disp, pat))
         w("  " + body)
         w("}")
+    if base in FCVT and "1" in r["forms"] and not useF:
+        for code in (0, 2, 4, 9, 11):
+            body = fcvt_body(base, code)
+            if body:
+                w(":%s op_a, op_b, \"%s\" is ((%s & l_fmt=1 & l_u6=%d & op_a & op_ahi) ... & op_b & op_bd) {"
+                  % (mn, hex(code) if code else "0", g, code))
+                w("  " + body)
+                w("}")
 
 
 def gen_flag2(r, base, fsuf, ccfirst):
     g = guard(r)
-    op = pcop(base)
     pats, ccp = form_pats(r["forms"])
+    if base in FCMP:
+        if FCMP[base] == 4:
+            body = "local b:4 = op_b;\n  local c:4 = op_c;"
+            extra = ""
+        else:
+            body = "local b:8 = op_bd;\n  local c:8 = op_cd;"
+            extra = " & op_bd & op_cd"
+        body += "\n  V = nan(b) || nan(c);\n  Z = b f== c;\n  N = b f< c;\n  C = b f< c;"
+    else:
+        body = "%s(op_b, op_c);" % pcop(base)
+        extra = ""
     for p in pats:
-        w(":%s op_b, op_c is ((%s & %s) ... & op_b & op_c) {" % (base, g, p))
-        w("  %s(op_b, op_c);" % op)
+        w(":%s op_b, op_c is ((%s & %s) ... & op_b & op_c%s) {" % (base, g, p, extra))
+        w("  " + body)
         w("}")
     if ccp:
-        w(":%s^ccd op_b, op_c is ((%s & %s & ccd) ... & op_b & op_c) {" % (base, g, ccp))
+        w(":%s^ccd op_b, op_c is ((%s & %s & ccd) ... & op_b & op_c%s) {" % (base, g, ccp, extra))
         w("  if (!ccd) goto inst_next;")
-        w("  %s(op_b, op_c);" % op)
+        w("  " + body)
         w("}")
 
 

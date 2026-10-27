@@ -132,6 +132,16 @@ T = [
     ("fpu_double", "fdadd r4,r6,r8\n fdmul r10,r6,r8\n fdsqrt r12,r8",
      {"r6": 0, "r7": 0x3ff00000, "r8": 0, "r9": 0x40000000},
      {"r4": 0, "r5": 0x40080000, "r10": 0, "r11": 0x40000000, "r12": 0x667f3bcd, "r13": 0x3ff6a09e}),
+    # fused multiply-add with the accumulator r58 (r58:r59 for double), compares, conversions
+    ("fpu_madd_cmp", "fsmadd r3,r1,r2\n fsmsub r4,r1,r2\n fdmadd r14,r10,r12\n fscmp r1,r2",
+     {"r58": 0x3f800000, "r1": 0x40000000, "r2": 0x40400000,
+      "r10": 0, "r11": 0x40000000, "r12": 0, "r13": 0x40080000},   # acc 1.0 (float), 2.0, 3.0
+     # r58:r59 as a double is 0x3f800000 (a denormal, lost in rounding): 2.0 * 3.0 + acc = 6.0
+     {"r3": 0x40e00000, "r4": 0xc0a00000, "r14": 0, "r15": 0x40180000,
+      "Z": 0, "N": 1, "C": 1, "V": 0}),
+    ("fpu_convert", "fcvt32 r3,r1,0x2\n fcvt32 r4,r2,0xb\n fcvt32 r5,r1,0\n fcvt32_64 r6,r2,0x4\n"
+     " fcvt64_32 r8,r6,0xb", {"r1": 7, "r2": 0xc0a00000},   # 7, -5.0
+     {"r3": 0x40e00000, "r4": 0xfffffffb, "r5": 0x40e00000, "r6": 0, "r7": 0xc0140000, "r8": 0xfffffffb}),
     ("mpyd", "mpyd r4,r1,r2\n mpydu r6,r1,r2", {"r1": 0xfffffffe, "r2": 0x40000000},
      {"r4": 0x80000000, "r5": 0xffffffff, "r6": 0x80000000, "r7": 0x3fffffff}),
 ]
